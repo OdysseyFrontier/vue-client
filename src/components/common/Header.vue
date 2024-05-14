@@ -13,19 +13,14 @@ const memberInfo = memberStore.memberinfo;
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
-        <a href="${root}/" class="logo d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center">
           <img src="/src/assets/logo.png" alt="" />
-          <span class="d-none d-lg-block">EnjoyTrip</span>
+          <span class="d-none d-lg-block">OdysseyFrontiers</span>
         </a>
-        <i class="bi bi-list toggle-sidebar-btn"></i>
         
-        
-
+        <i class="bi bi-list toggle-sidebar-btn navbar-toggler-icon" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation"></i>
       </div>
       <!-- End Logo -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
       <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
@@ -42,8 +37,8 @@ const memberInfo = memberStore.memberinfo;
               />
               <span class="d-none d-md-block dropdown-toggle ps-2"
                 >{{memberInfo.memberName }}</span
-              > </a
-            ><!-- End Profile Iamge Icon -->
+              > </a>
+              <!-- End Profile Iamge Icon -->
 
             <ul
               class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
@@ -59,7 +54,7 @@ const memberInfo = memberStore.memberinfo;
 			  <li>
                 <a
                   class="dropdown-item d-flex align-items-center"
-                  href="${root}/member/mypage"
+                  href="/member/mypage"
                 >
                   <i class="bi bi-person"></i>
                   <span>마이페이지</span>
@@ -71,13 +66,12 @@ const memberInfo = memberStore.memberinfo;
               </li>              
 
               <li>
-                <a
+                <RouterLink to="/"
                   class="dropdown-item d-flex align-items-center " aria-current="page"
-                  href="${root}/"
                 >
                   <i class="bi bi-house"></i>
                   <span>home</span>
-                </a>
+                </RouterLink>
               </li>
               <li>
                 <hr class="dropdown-divider" />
@@ -96,7 +90,7 @@ const memberInfo = memberStore.memberinfo;
               <li>
                 <a
                   class="dropdown-item d-flex align-items-center"
-                  href="${root}/member/logout"
+                  href="/member/logout"
                 >
                   <i class="bi bi-box-arrow-right"></i>
                   <span>로그아웃</span>
@@ -116,7 +110,7 @@ const memberInfo = memberStore.memberinfo;
     <aside id="sidebar" class="collapse navbar-collapse sidebar">
       <ul class="sidebar-nav navbar-nav" id="sidebar-nav">
        <li class="nav-item">
-          <a class="nav-link collapsed" href="${root}/">
+          <a class="nav-link collapsed" href="/">
             <i class="bi bi-grid"></i>
             <span>home</span>
           </a>
@@ -124,22 +118,19 @@ const memberInfo = memberStore.memberinfo;
         <!-- End home Nav -->
 
         <li class="nav-item">
-          <a class="nav-link ${mc}" href="${root}/board?action=list">
+          <RouterLink :to="{name: 'shareBoard'}" class="nav-link ${mc}" href="/board?action=list">
             <i class="bi bi-clipboard"></i>
-            <span>여행정보공유</span>
-          </a>
+            <span>여행 정보 공유 게시판</span>
+          </RouterLink>
         </li>
 
         <!-- End 여행정보공유 Nav -->
-       
-       
-       
-       
+
        
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-          <a class="nav-link ${bc}" href="${root}/member/mypage">
+          <a class="nav-link ${bc}" href="/member/mypage">
             <i class="bi bi-person"></i>
             <span>마이페이지</span>
           </a>
@@ -156,7 +147,7 @@ const memberInfo = memberStore.memberinfo;
 
 
         <li class="nav-item">
-          <a class="nav-link collapsed" href="${root}/member/delete">
+          <a class="nav-link collapsed" href="/member/delete">
             <i class="bi bi-person-dash"></i>
             <span>회원탈퇴</span>
           </a>
