@@ -4,7 +4,7 @@ const local = localAxios();
 
 
     function listArticle(param, success, fail) {
-        local.get(`/shareboard`, { params: param }).then(success).catch(fail);
+        local.get(`/board/list`, { params: param }).then(success).catch(fail);
     }
     
     function detailArticle(articleno, success, fail) {

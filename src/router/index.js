@@ -21,6 +21,11 @@ const router = createRouter({
       path: '/shareBoard',
       name: 'shareBoard',
       component: () => import('@/components/board/shareBoardList.vue')
+    },
+    {
+      path: '/hotplace',
+      name: 'hotplace',
+      component: () => import('@/components/board/hotplaceList.vue')
     }
   ]
 })
