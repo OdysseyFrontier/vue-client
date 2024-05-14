@@ -7,6 +7,7 @@ import Header from "./components/common/Header.vue";
 
 <template>
   
+  
   <Header />
 
   <!-- <header>

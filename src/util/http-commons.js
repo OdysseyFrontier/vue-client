@@ -10,16 +10,10 @@ function localAxios() {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
-
-  
   return instance;
 }
 
-
-
 export { localAxios };
-
-
 
 // import axios from "axios";
 
