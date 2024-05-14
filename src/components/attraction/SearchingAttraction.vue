@@ -2,16 +2,22 @@
 import { ref, onMounted } from 'vue';
 import { getSidos, getGuguns, getSearchAttraction } from '@/api/attraction';
 
-const sido = ref();
-const gugun = ref();
+const sidos = ref([]);
+const guguns = ref([]);
+
+const selectedSidoCode = ref("0");
+const selectedGugunCode = ref("0");
+const selectedContentTypeId = ref("0");
+const keyword = ref("");
 const searchAttractionList = ref([]);
+
 
 const fetchSidos = () => {
     getSidos(
         ({ data }) => {
             console.log(data);
-            console.log(data.json());
-            data.json().addOption("search-sido", data);
+            sidos.value = data;
+            console.log(sidos.value);
         },
         (error) => {
             console.log(error);
@@ -19,11 +25,15 @@ const fetchSidos = () => {
     );
 }
 
-const fetchGuguns = (sido) => {
+const fetchGuguns = () => {
+    if (selectedSidoCode.value === "0") {
+        guguns.value = [];
+        return;
+    }
     getGuguns(
-        sido,
+        selectedSidoCode.value,
         ({ data }) => {
-            data.json(data).addOption("search-gugun", data);
+            guguns.value = data;
         },
         (error) => {
             console.log(error);
@@ -31,20 +41,24 @@ const fetchGuguns = (sido) => {
     );
 }
 
-const fetchSearchAttraction = (contentTypeId, sidoCode, gugunCode, keywordString, nowLoc) => {
+const fetchSearchAttraction = (nowLoc) => {
     getSearchAttraction(
-        contentTypeId,
-        sidoCode,
-        gugunCode,
-        keywordString,
+        selectedContentTypeId.value,
+        selectedSidoCode.value,
+        selectedGugunCode.value,
+        keyword.value,
         nowLoc,
         ({ data }) => {
-            searchAttractionList = data;
+            searchAttractionList.value = data;
         },
         (error) => {
             console.log(error);
         }
     )
+}
+
+const searchAttractions = () => {
+    fetchSearchAttraction();
 }
 
 onMounted(() => {
@@ -63,11 +77,16 @@ onMounted(() => {
                         전국 관광지 정보
                     </h1>
                     <form class="d-flex my-3" onsubmit="return false;" role="search">
-                        <select id="search-sido" class="form-select me-2">
+                        <select v-model="selectedSidoCode" id="search-sido" class="form-select me-2"
+                            @change="fetchGuguns">
                             <option value="0" name="sidoCode" selected>검색 할 지역 선택</option>
+                            <option v-for="(sido) in sidos" :key="sido.sidoCode" :value="sido.sidoCode">{{ sido.sidoName
+                                }}</option>
                         </select>
                         <select id="search-gugun" class="form-select me-2">
                             <option value="0" name="gugunCode" selected>검색할 시/군/구 선택</option>
+                            <option v-for="gugun in guguns" :key="gugun.gugunCode" :value="gugun.gugunCode">{{
+                                gugun.gugunName }}</option>
                         </select>
                         <select id="search-content-id" class="form-select me-2">
                             <option value="0" name="contentTypeId" selected>관광지 유형</option>

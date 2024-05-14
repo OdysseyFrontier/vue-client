@@ -1,7 +1,14 @@
 <script setup>
-import { GoogleMap, Marker } from 'vue3-google-map';
 
-const { GOOGLE_MAP_API_KEY } = import.meta.env
+import { GoogleMap } from 'vue3-google-map'
+
+const { VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
+const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
+
+// GOOGLE_MAP_API_KEY = AIzaSyDHeUJPtnDJ_NHtP9HvnzVvbKTcHNqa9WQ
+
+console.log(VITE_ARTICLE_LIST_SIZE)
+console.log(VITE_GOOGLE_MAP_API_KEY);
 
 const init_center = { lat: 36.1061824, lng: 128.4227797 }
 
@@ -34,11 +41,17 @@ const init_center = { lat: 36.1061824, lng: 128.4227797 }
 </script>
 
 <template>
-  <GoogleMap id="map" api-key=GOOGLE_MAP_API_KEY style="width: 100%; height: 500px;" :zoom="15" :center="init_center">
+  <GoogleMap 
+  :api-key="VITE_GOOGLE_MAP_API_KEY"
+  id="map" 
+  style="width: 100%; height: 500px;" 
+  :zoom="17" 
+  :center="init_center">
 
     <!-- <Marker :options="{ position: init_center }" /> -->
   </GoogleMap>
-</template>
+  {{VITE_GOOGLE_MAP_API_KEY}}
 
+</template>
 
 <style scoped></style>
