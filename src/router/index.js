@@ -28,6 +28,11 @@ const router = createRouter({
       component: () => import('@/components/board/shareBoardList.vue')
     },
     {
+      path: '/boardDetail',
+      name: 'boardDetail',
+      component: () => import('@/components/board/boardDetail.vue')
+    },
+    {
       path: '/hotplace',
       name: 'hotplace',
       component: () => import('@/components/board/hotplaceList.vue')
