@@ -369,7 +369,9 @@ const moveWrite = () => {
                         @pageChange="onPageChange"
                     ></VPageNavigation>
 
-
+                    <div class="clearfix align-right">
+                        <button href="javascript:funReg()" class="table-btn btn-write">글쓰기</button>
+                    </div>
                     <!-- 컨텐츠 내용 -->
                 </div>
             </div><!-- 컨텐츠 -->
@@ -481,10 +483,6 @@ const moveWrite = () => {
 #wrap.admin-login.admin1:before{border-color: red;}
 #wrap.admin-login.admin2:before{border-color: #f4bb79;}
  */
-
-
-
-
 
 
 
@@ -635,11 +633,11 @@ button, textarea, input, select {
 	font-family: 'Noto Sans KR', sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
-html, body{
+html, template{
 	/* height: 100%; */
 	overflow: auto;
 }
-body {
+template {
     width:100%;
     /* height:100%; */
 	line-height: 1.5;
@@ -666,7 +664,7 @@ button, input[type="button"] {cursor: pointer;}
 a{padding:0; margin:0; text-decoration:none; color:#464646;}
 /* a:link, a:visited { color:#666; text-decoration:none;} */
 a:hover, a:active { color:#444;  text-decoration:none; }
-
+textarea { resize: vertical; }
 select{
 	padding:0 30px 0 10px;	
 	background-image: url('/src/assets/arrow_open.png');
@@ -714,7 +712,6 @@ button:focus-visible{outline:2px dashed #222;box-sizing:border-box;outline-offse
 .mt30{margin-top:30px !important;}
 .mt55{margin-top:55px !important;}
 .mb55{margin-bottom:55px !important;}
-
 
 
 
@@ -1177,4 +1174,33 @@ img {
 }
 
 
+
+
+.table-btn {
+    display: inline-block;
+    padding: 13px 40px;
+    font-size: 18px;
+    color:#fff;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transition: all 0.5s;
+} 
+.btn-wrap .table-btn{margin-left:10px; min-width:80px;}
+.btn-wrap .table-btn:first-child{margin-left:0;}
+
+.btn-write {background-color:#1e96c4;}
+.btn-write:hover {color:#fff; background-color: #137297;}
+
+
+@media screen and (max-width:1023px) {
+	
+    .table-btn {padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 0.3rem;}
+    .btn-wrap .table-btn {margin-left: 0.5rem;}
+
+}	
+
+.align-right{text-align:right !important;}
+.clearfix:after{display: block; content: ''; clear: both;}
 </style>
