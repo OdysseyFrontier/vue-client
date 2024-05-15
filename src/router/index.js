@@ -18,6 +18,11 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
+      path: '/attraction',
+      name: 'attraction',
+      component: () => import('../views/AttractionView.vue') 
+    },
+    {
       path: '/shareBoard',
       name: 'shareBoard',
       component: () => import('@/components/board/shareBoardList.vue')
@@ -27,6 +32,7 @@ const router = createRouter({
       name: 'hotplace',
       component: () => import('@/components/board/hotplaceList.vue')
     }
+
   ]
 })
 

@@ -117,12 +117,22 @@ const memberInfo = memberStore.memberinfo;
         </li>
         <!-- End home Nav -->
 
+                <!-- 관광지 조회 Nav -->
+
+
         <li class="nav-item">
           <RouterLink :to="{name: 'shareBoard'}" class="nav-link ${mc}" href="/board?action=list">
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
           </RouterLink>
         </li>
+
+        <li class="nav-item">
+          <RouterLink :to="{name: 'attraction'}" class="nav-link ${mc}">
+            <i class="bi bi-search"></i>
+            <span>관광지 검색</span>
+          </RouterLink>      
+        </li>        
 
         <!-- End 여행정보공유 Nav -->
 
