@@ -4,7 +4,10 @@ import { useRouter } from "vue-router";
 import { listArticle } from "@/api/board.js";
 import BoardListItem from '@/components/board/item/BoardListItem.vue'
 import VPageNavigation from "@/components/common/VPageNavigation.vue";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("board");
 
 const articles = ref([])
 const currentPage = ref(1)
@@ -93,11 +96,9 @@ const moveWrite = () => {
 
 
 <template>
-    <br>
-    <br>
 
     <div>
-        <h1>여행 정보 공유 게시판</h1>
+        <!-- <h1>여행 정보 공유 게시판</h1> -->
         <form id="bbsFVo" name="bbsFVo" action="/site/portal/ex/bbs/List.do?cbIdx=1135" method="post">
             <input id="pageIndex" name="pageIndex" type="hidden" value="1">
             <input id="bcIdx" name="bcIdx" type="hidden" value="307301">
@@ -108,7 +109,7 @@ const moveWrite = () => {
             <div id="content" class="contents board board-list">
 
 
-                <h2 class="current"><span>공지사항</span></h2> 
+                <!-- <h2 class="current"><span>공지사항</span></h2>  -->
                 <!-- 컨텐츠 내용 -->
                 <div class="inner">
 

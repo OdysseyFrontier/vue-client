@@ -3,9 +3,8 @@
 </script>
 
 <template>
-<br>
-    <br>
-  <div>
+
+  <div> 
     <div data-v-8bbbebd4="" class="pt-4 container-fluid">
       <div data-v-8bbbebd4="" class="text-center mb-4 col">
         <h2 data-v-8bbbebd4="" class="text-secondary">

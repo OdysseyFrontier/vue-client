@@ -49,7 +49,6 @@
 </script>
 
 <template>
-
     <div id="wrap">
     <!-- container -->
     <div id="container">
@@ -66,7 +65,7 @@
                     <tr>
                         <th>
                             <div class="clearfix">
-                                    <p class="table-division width-auto" :class="article.type">{{article.type}}</p>  
+                                    <p class="table-division width-auto" :class="article.type">{{article.type === "notice"? "공지사항" : "커뮤니티"}}</p>  
                                     <p class="table-title mb10">{{article.subject}}</p>
                             </div>
                        <span>{{article.name}}</span>
