@@ -1,9 +1,38 @@
 <script setup>
-import { useSidebarStore } from "@/stores/sidebar.js";
+  import { useSidebarStore } from "@/stores/sidebar.js";
 
-const sidebarStore = useSidebarStore();
-sidebarStore.changesSidebarState("login");
+  const sidebarStore = useSidebarStore();
+  sidebarStore.changesSidebarState("login");
 
+
+  import { ref } from "vue"
+  import { storeToRefs } from "pinia"
+  import { useRouter } from "vue-router"
+  import { useMemberStore } from "@/stores/member"
+
+  const router = useRouter()
+
+  const memberStore = useMemberStore()
+
+const { isLogin, isLoginError } = storeToRefs(memberStore)
+const { memberLogin, getMemberInfo } = memberStore
+
+const loginMember = ref({
+  emailId: "",
+  emailDomain:"",
+  password: "",
+})
+
+const login = async () => {
+  await memberLogin(loginMember.value)
+  let token = sessionStorage.getItem("accessToken")
+  console.log(token)
+  console.log("isLogin: " + isLogin.value)
+  if (isLogin.value) {
+    getMemberInfo(token)
+    router.replace("/")
+  }
+}
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 setTimeout(()=>{(function () {
@@ -70,10 +99,32 @@ setTimeout(()=>{(function () {
                             class="form-control"
                             id="yourUsername"
                             value="${cookie.memberId.value}"
+                            v-model="loginMember.emailId"
                             required
                           />
                           <div class="invalid-feedback">
                             아이디를 입력해주세요.
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="col-12">
+                        <label for="eamilDomain" class="form-label"
+                          >이메일 도메인</label
+                        >
+                        <div class="input-group has-validation">
+                          <input
+                            type="text"
+                            name="eamilDomain"
+                            class="form-control"
+                            id="eamilDomain"
+                            value=""
+                            v-model="loginMember.emailDomain"
+                            required
+                          />
+                          <div class="invalid-feedback">
+                            이메일 도메인을 입력해주세요.
                           </div>
                         </div>
                       </div>
@@ -84,10 +135,12 @@ setTimeout(()=>{(function () {
                         >
                         <input
                           type="password"
-                          name="memberPassword"
+                          name="password"
                           class="form-control"
                           id="yourPassword"
                           value=""
+                          v-model="loginMember.password"
+                          @keyup.enter="login"
                           required
                         />
                         <div class="invalid-feedback">
@@ -113,7 +166,7 @@ setTimeout(()=>{(function () {
             <div class="text-danger mb-2">{{msg}}</div>   
                       
                       <div class="col-12">
-                        <button class="btn btn-primary w-100" type="submit">
+                        <button class="btn btn-primary w-100" @click.prevent="login" type="submit">
                           로그인
                         </button>
                       </div>

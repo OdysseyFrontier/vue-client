@@ -6,7 +6,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 const memberStore = useMemberStore();
 const sidebarStore = useSidebarStore();
 
-const memberInfo = memberStore.memberinfo;
+const memberInfo = memberStore.memberInfo;
 
 const sidebarList = ref(sidebarStore.sidebarList);
 </script>
@@ -27,7 +27,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
       </div>
       <!-- End Logo -->
 
-      <nav class="header-nav ms-auto">
+      <nav class="header-nav ms-auto" v-if="memberInfo !== null">
         <ul class="d-flex align-items-center">
           <li class="nav-item dropdown pe-3">
             <a
