@@ -9,12 +9,15 @@
         <span class="table-division" :class="article.type">{{article.type === "notice"? "행사" : "커뮤니티"}}</span>
         </td>
         <td class="title lock_wrap subject">
-        <a
+            <router-link :to="{name:'boardDetail', params: {boardno: article.boardNo} }">
+                {{article.subject}}
+            </router-link>
+        <!-- <a
             href="/site/portal/ex/bbs/View.do?cbIdx=1135&amp;bcIdx=307179&amp;pageIndex=1&amp;tgtTypeCd=&amp;searchKey=&amp;searchKey2="
             class="btn_bbsDetail"
         >
             {{article.subject}}
-        </a>
+        </a> -->
         </td>
         <td>
         <a href=""
@@ -25,6 +28,7 @@
 </template>
 
 <style scoped>
+@charset "utf-8";
 
 .table-division {margin: 0 auto; width: 115px; border-radius: 5px; background-color:#fff;}
 .table-division1 {color:#41626f !important; border:1px solid #41626f !important;} /*이벤트*/
@@ -32,7 +36,6 @@
 .notice {color:#c74b10 !important; border:1px solid #c74b10 !important;} /*행사*/
 .table-division4 {color:#744a35 !important; border:1px solid #744a35 !important;}
 
-    @charset "utf-8";
 /* font */
 /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap'); */
 /* font-family: 'Noto Sans', sans-serif; */

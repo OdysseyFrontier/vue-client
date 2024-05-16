@@ -7,8 +7,8 @@ const local = localAxios();
         local.get(`/board/list`, { params: param }).then(success).catch(fail);
     }
     
-    function detailArticle(articleno, success, fail) {
-        local.get(`/shareboard/${articleno}`).then(success).catch(fail);
+    function detailArticle(boardno, success, fail) {
+        local.get(`/board/${boardno}`).then(success).catch(fail);
     }
     
     function registArticle(article, success, fail) {
@@ -24,8 +24,8 @@ const local = localAxios();
         local.put(`/shareboard`, JSON.stringify(article)).then(success).catch(fail);
     }
     
-    function deleteArticle(articleno, success, fail) {
-        local.delete(`/shareboard/${articleno}`).then(success).catch(fail);
+    function deleteArticle(boardno, success, fail) {
+        local.delete(`/shareboard/${boardno}`).then(success).catch(fail);
     }
 
 export {
