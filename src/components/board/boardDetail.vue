@@ -1,5 +1,51 @@
 <script setup>
+    import { ref, onMounted } from "vue";
+    import { useRoute, useRouter } from "vue-router";
+    import { detailArticle, deleteArticle } from "@/api/board";
 
+    const route = useRoute();
+    const router = useRouter();
+
+    const { boardno } = route.params;
+
+    const article = ref({});
+
+    onMounted(() => {
+        getArticle();
+    });
+
+    const getArticle = () => {
+        detailArticle(
+            boardno,
+            ({ data }) => {
+            article.value = data;
+            },
+            (error) => {
+            console.error(error);
+            }
+        );
+    };
+
+
+    function moveList() {
+        router.push({ name: "shareBoard" });
+    }
+
+    function moveModify() {
+        router.push({ name: "article-modify", params: { boardno } });
+    }
+
+    function onDeleteArticle() {
+        deleteArticle(
+            boardno,
+            (response) => {
+            if (response.status == 200) moveList();
+            },
+            (error) => {
+            console.error(error);
+            }
+        );
+    }
 </script>
 
 <template>
@@ -13,36 +59,36 @@
     <!-- 컨텐츠 내용 -->
     <div class="inner">
         <div class="table-wrap">
-            <h4>질문내용</h4>
+            <h4>내용</h4>
             <table class="table-type2 table-1">
                 <caption>고객문의 질문 상세 내용 - 제목 작성자 등록일자, 내용으로 구성</caption>
                 <thead>
                     <tr>
                         <th>
                             <div class="clearfix">
-                                    <p class="table-division table-division3 width-auto">서비스운영</p>  
-                                    <p class="table-title mb10">[2024년 4월] 관광투자유치 월간동향</p>
+                                    <p class="table-division width-auto" :class="article.type">{{article.type}}</p>  
+                                    <p class="table-title mb10">{{article.subject}}</p>
                             </div>
-                       <span>joa***</span>
+                       <span>{{article.name}}</span>
                        <span class="ml10">|</span>
-                       <span class="ml10">2024.04.19 11:27</span>            
+                       <span class="ml10">{{article.registerTime}}</span>  
+                       <span class="ml10">|</span>
+                       <span class="ml10">{{article.hit}}</span>           
                    </th>
                </tr>
            </thead>
            <tbody>
                <tr>
                    <td colspan="2" class="table-content">
-                     <!-- <p>안녕하세요 <br/>이용 가이드북을 pdf로 다운로드 하고자 하나, <br/>이용 가이드북 이용방법 소개글과 다르게 다운로드 받을 수 있는 버튼이 없어 부득이하게 문의글을 올립니다.<br/>(소개글에는 왼쪽 아래 버튼 중 가장 첫번째에 다운로드 버튼이 있으나, 현재 이용 가이드북에는 가장 첫번째에 홈으로 가기가 배치되어있습니다..)<br/>pdf로 다운로드 받을 수 있는 경로를 안내받거나 혹은 첨부파일로 pdf를 제공받고 싶습니다.</p>  -->  
-                     <p>
-                            안녕하세요 <br>이용 가이드북을 pdf로 다운로드 하고자 하나, <br>이용 가이드북 이용방법 소개글과 다르게 다운로드 받을 수 있는 버튼이 없어 부득이하게 문의글을 올립니다.<br>(소개글에는 왼쪽 아래 버튼 중 가장 첫번째에 다운로드 버튼이 있으나, 현재 이용 가이드북에는 가장 첫번째에 홈으로 가기가 배치되어있습니다..)<br>pdf로 다운로드 받을 수 있는 경로를 안내받거나 혹은 첨부파일로 pdf를 제공받고 싶습니다.
-                        </p>
+                     <!-- <p>안녕하세요 <br/>이용 가이드북을 pdf로 다운로드 하고자 하나, <br/>이용 가이드북 이용방법 소개글과 다르게 다운로드 받을 수 있는 버튼이 없어 부득이하게 문의글을 올립니다.<br/>(소개글에는 왼쪽 아래 버튼 중 가장 첫번째에 다운로드 버튼이 있으나, 현재 이용 가이드북에는 가장 첫번째에 홈으로 가기가 배치되어있습니다..)<br/>pdf로 다운로드 받을 수 있는 경로를 안내받거나 혹은 첨부파일로 pdf를 제공받고 싶습니다.</p>  -->
+                        <p>{{article.content}}</p>
                     </td>
                 </tr>
             </tbody>
         </table>
         <div class="clearfix btn-wrap align-right mt30">
-            <a href="#" class="table-btn btn-write btn_bbsList">수정</a>
-            <a href="#" class="table-btn btn-exit btn_bbsList">삭제</a>
+            <button href="#" class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
+            <button href="#" class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
             <button class="table-btn btn-exit btn_bbsList">삭제</button>
         </div>
         
@@ -87,7 +133,7 @@
         
         
         <div class="clearfix btn-wrap align-right mt30">
-            <a href="#" class="table-btn btn-exit btn_bbsList">목록</a>
+            <button href="#" class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
         </div>
     </div>
         </div>
@@ -143,9 +189,9 @@
 
 
 .table-division {margin: 0 auto; width: 115px; border-radius: 5px; background-color:#fff;}
-.table-division1 {color:#41626f !important; border:1px solid #41626f !important;}
-.table-division2 {color:#007bab !important; border:1px solid #007bab !important;}
-.table-division3 {color:#c74b10 !important; border:1px solid #c74b10 !important;}
+.table-division1 {color:#41626f !important; border:1px solid #41626f !important;} /*이벤트*/
+.community {color:#007bab !important; border:1px solid #007bab !important;} /*서비스운영*/
+.notice {color:#c74b10 !important; border:1px solid #c74b10 !important;} /*행사*/
 .table-division4 {color:#744a35 !important; border:1px solid #744a35 !important;}
 
 

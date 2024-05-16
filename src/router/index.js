@@ -25,10 +25,10 @@ const router = createRouter({
     {
       path: '/shareBoard',
       name: 'shareBoard',
-      component: () => import('@/components/board/shareBoardList.vue')
+      component: () => import('@/components/board/shareBoardList.vue'),
     },
     {
-      path: '/boardDetail',
+      path: '/boardDetail/:boardno',
       name: 'boardDetail',
       component: () => import('@/components/board/boardDetail.vue')
     },
