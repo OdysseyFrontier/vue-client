@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/attraction',
       name: 'attraction',
-      component: () => import('../views/AttractionView.vue') 
+      component: () => import('../views/AttractionView.vue')
     },
     {
       path: '/shareBoard',

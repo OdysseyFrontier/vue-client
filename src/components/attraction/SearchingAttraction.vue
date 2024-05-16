@@ -2,22 +2,25 @@
 import { ref, onMounted } from 'vue';
 import { getSidos, getGuguns, getSearchAttraction } from '@/api/attraction';
 
+import { useAttractionStore } from '@/stores/attraction';
+
+const store = useAttractionStore();
+
 const sidos = ref([]);
 const guguns = ref([]);
+
 
 const selectedSidoCode = ref("0");
 const selectedGugunCode = ref("0");
 const selectedContentTypeId = ref("0");
 const keyword = ref("");
-const searchAttractionList = ref([]);
+const nowLoc = ref({ lat: 36.1061824, lng: 128.4227797 })
 
 
 const fetchSidos = () => {
     getSidos(
         ({ data }) => {
-            console.log(data);
             sidos.value = data;
-            console.log(sidos.value);
         },
         (error) => {
             console.log(error);
@@ -41,15 +44,15 @@ const fetchGuguns = () => {
     );
 }
 
-const fetchSearchAttraction = (nowLoc) => {
+const fetchSearchAttraction = () => {
     getSearchAttraction(
         selectedContentTypeId.value,
         selectedSidoCode.value,
         selectedGugunCode.value,
         keyword.value,
-        nowLoc,
+        nowLoc.value,
         ({ data }) => {
-            searchAttractionList.value = data;
+            store.setSearchAttractionList(data);
         },
         (error) => {
             console.log(error);
@@ -57,9 +60,6 @@ const fetchSearchAttraction = (nowLoc) => {
     )
 }
 
-const searchAttractions = () => {
-    fetchSearchAttraction();
-}
 
 onMounted(() => {
     // 페이지가 마운트된 후 실행될 함수
@@ -83,13 +83,13 @@ onMounted(() => {
                             <option v-for="(sido) in sidos" :key="sido.sidoCode" :value="sido.sidoCode">{{ sido.sidoName
                                 }}</option>
                         </select>
-                        <select id="search-gugun" class="form-select me-2">
+                        <select v-model="selectedGugunCode" id="search-gugun" class="form-select me-2">
                             <option value="0" name="gugunCode" selected>검색할 시/군/구 선택</option>
                             <option v-for="gugun in guguns" :key="gugun.gugunCode" :value="gugun.gugunCode">{{
                                 gugun.gugunName }}</option>
                         </select>
-                        <select id="search-content-id" class="form-select me-2">
-                            <option value="0" name="contentTypeId" selected>관광지 유형</option>
+                        <select id="search-content-id" class="form-select me-2" v-model="selectedContentTypeId">
+                            <option value="0" selected>모든 관광지 유형</option>
                             <option value="12">관광지</option>
                             <option value="14">문화시설</option>
                             <option value="15">축제 / 공연 / 행사</option>
@@ -100,8 +100,8 @@ onMounted(() => {
                             <option value="39">음식점</option>
                         </select>
                         <input id="search-keyword" name="keyword" class="form-control me-2" type="search"
-                            placeholder="검색어" aria-label="검색어" />
-                        <button id="btn-search" class="btn btn-info" type="button">
+                            v-model="keyword" placeholder="검색어" aria-label="검색어" />
+                        <button id="btn-search" class="btn btn-info" type="button" @click="fetchSearchAttraction">
                             검색
                         </button>
                     </form>
