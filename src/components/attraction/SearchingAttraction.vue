@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getSidos, getGuguns, getSearchAttraction } from '@/api/attraction';
+import { getSidos, getGuguns, getSearchAttraction, getSearchCategory } from '@/api/attraction';
 
 import { useAttractionStore } from '@/stores/attraction';
 
@@ -64,6 +64,15 @@ const fetchSearchAttraction = () => {
 onMounted(() => {
     // 페이지가 마운트된 후 실행될 함수
     fetchSidos();
+    getSearchCategory(
+        0,
+        ({ data }) => {
+            store.setSearchAttractionList(data);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
 });
 
 </script>

@@ -5,7 +5,7 @@ const { VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
 
 import { useAttractionStore } from '@/stores/attraction';
 
-const store = useAttractionStore();
+// const store = useAttractionStore();
 
 const init_center = ref({ lat: 36.1061824, lng: 128.4227797 })
 const zoom = ref(15)
@@ -16,7 +16,6 @@ watchEffect(() => {
 
   const searchAttractionList = useAttractionStore().searchAttractionList;
 
-  console.log(searchAttractionList.value)
   // searchAttractionList가 비어 있는 경우 처리
   if (!useAttractionStore().searchAttractionList || useAttractionStore().searchAttractionList.length == 0) {
     return;
@@ -74,7 +73,7 @@ watchEffect(() => {
 //       priceTag.className = "price-tag";
 //       priceTag.textContent = "$2.5M";
 
-//       // -- Advanced markers —— DON'T WORK ?!
+//       // -- Advanced markers ——
 //       // from https://developers.google.com/maps/documentation/javascript/advanced-markers/html-markers#simple_html_marker
 //       const newMarker = new google.maps.marker.AdvancedMarkerView({
 //         map: map.value,
@@ -93,7 +92,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY" id="map" style="width: 100%; height: 1000px;" :zoom="zoom"
+  <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY" id="map" style="width: 100%; height: rem;" :zoom="zoom"
     :center="init_center">
 
     <MarkerCluster>
