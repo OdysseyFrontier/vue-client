@@ -1,11 +1,10 @@
 <script setup>
-
 </script>
 
 <template>
-    <footer class="footer bg-black small text-center text-white-50">
+    <footer class="footer small text-center text-white-50 bg-bod" style="background-color: #f7f7f7">
       <div class="container px-4 px-lg-5">
-        Copyright &copy; EnjoyTrip_구미4반_김소연_조시현
+        <p style="color:#222222;">Copyright &copy; EnjoyTrip_구미4반_김소연_조시현</p>
       </div>
     </footer>
 </template>
