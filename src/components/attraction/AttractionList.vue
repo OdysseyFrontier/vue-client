@@ -12,7 +12,7 @@ watchEffect(() => {
     // searchAttractionList 값 가져오기
     console.log(useAttractionStore().searchAttractionList);
     // searchAttractionList가 비어 있는 경우 처리
-    if (!useAttractionStore().searchAttractionList || useAttractionStore().searchAttractionList.length == 0) {
+    if (!useAttractionStore().searchAttractionList) {
         return;
     }
 

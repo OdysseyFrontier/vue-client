@@ -10,6 +10,7 @@ export const useAttractionStore = defineStore('attraction', () => {
     function setSearchAttractionList(attractions) {
         searchAttractionList.value = attractions;
         console.log(searchAttractionList.value);
+        console.log(searchAttractionList.value.length)
     }
 
     // Return the state and actions so they can be used in components

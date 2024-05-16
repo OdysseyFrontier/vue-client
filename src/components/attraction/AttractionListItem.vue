@@ -9,7 +9,6 @@ const defaultAttractionImg = "src/assets/attraction/defaultAttractionImg.png";
 
 const truncateDescription = (description) => {
     const maxLength = 20; // 최대 길이 설정
-    console.log(description);
     if (!description) return "등록된 설명이 없습니다."
     if (description.length > maxLength) {
         return description.slice(0, maxLength) + '...';
