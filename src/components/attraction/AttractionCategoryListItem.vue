@@ -5,7 +5,7 @@ import { getSearchCategory } from '@/api/attraction';
 
 
 const props = defineProps({
-    attractionCategory: String
+    attractionCategory: Object
 });
 
 const store = useAttractionStore();

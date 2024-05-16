@@ -17,7 +17,7 @@ watchEffect(() => {
   const searchAttractionList = useAttractionStore().searchAttractionList;
 
   // searchAttractionList가 비어 있는 경우 처리
-  if (!useAttractionStore().searchAttractionList) {
+  if (!useAttractionStore().searchAttractionList || useAttractionStore().searchAttractionList.length == 0) {
     return;
   }
 
