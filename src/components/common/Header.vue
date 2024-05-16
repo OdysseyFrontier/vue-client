@@ -1,17 +1,22 @@
 <script setup>
+import {ref} from 'vue'
 import { useMemberStore } from "@/stores/member.js";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
 const memberStore = useMemberStore();
+const sidebarStore = useSidebarStore();
 
 const memberInfo = memberStore.memberinfo;
+
+const sidebarList = ref(sidebarStore.sidebarList);
 </script>
 
 <template>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
 
-  <div>
+  <div class="fixed-top">
     <!-- ======= Header ======= -->
-    <header id="header" class="header fixed-top d-flex align-items-center">
+    <header id="header" class="header  d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
         <a href="/" class="logo d-flex align-items-center">
           <img src="/src/assets/logo.png" alt="" />
@@ -106,11 +111,12 @@ const memberInfo = memberStore.memberinfo;
     </header>
     <!-- End Header -->
 
+
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="collapse navbar-collapse sidebar">
       <ul class="sidebar-nav navbar-nav" id="sidebar-nav">
        <li class="nav-item">
-          <a class="nav-link collapsed" href="/">
+          <a class="nav-link" :class="sidebarList.home" href="/">
             <i class="bi bi-grid"></i>
             <span>home</span>
           </a>
@@ -121,14 +127,14 @@ const memberInfo = memberStore.memberinfo;
 
 
         <li class="nav-item">
-          <RouterLink :to="{name: 'shareBoard'}" class="nav-link ${mc}" href="/board?action=list">
+          <RouterLink :to="{name: 'shareBoard'}" class="nav-link" :class="sidebarList.board" href="/board?action=list">
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{name: 'attraction'}" class="nav-link ${mc}">
+          <RouterLink :to="{name: 'attraction'}" class="nav-link" :class="sidebarList.attraction">
             <i class="bi bi-search"></i>
             <span>관광지 검색</span>
           </RouterLink>      
@@ -137,10 +143,12 @@ const memberInfo = memberStore.memberinfo;
         <!-- End 여행정보공유 Nav -->
 
        
+       
         <li class="nav-heading">Pages</li>
 
+
         <li class="nav-item">
-          <a class="nav-link ${bc}" href="/member/mypage">
+          <a class="nav-link collapsed" href="/member/mypage">
             <i class="bi bi-person"></i>
             <span>마이페이지</span>
           </a>
@@ -156,6 +164,29 @@ const memberInfo = memberStore.memberinfo;
         <!-- End F.A.Q Page Nav -->
 
 
+<li class="nav-item">
+          <RouterLink :to="{name: 'memberLogin'}" class="nav-link" :class="sidebarList.login">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>로그인</span>
+          </RouterLink>      
+        </li>
+        <!-- End Login Page Nav -->
+
+        <li class="nav-item">
+          <RouterLink :to="{name: 'memberJoin'}" class="nav-link" :class="sidebarList.join">
+            <i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+</svg></i>
+<!-- <i class="bi bi-person-add"></i> -->
+            <span>회원가입</span>
+          </RouterLink>      
+        </li>
+        <!-- End Join Page Nav -->
+        
+
+
         <li class="nav-item">
           <a class="nav-link collapsed" href="/member/delete">
             <i class="bi bi-person-dash"></i>
@@ -167,6 +198,8 @@ const memberInfo = memberStore.memberinfo;
     </aside>
     <!-- End Sidebar-->
   </div>
+
+  <div style="height: 50px;"></div>
 </template>
     
 
@@ -200,6 +233,7 @@ const memberInfo = memberStore.memberinfo;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
   background-color: #fff;
   padding-left: 20px;
+  height: 50px;
   /* Toggle Sidebar Button */
   /* Search Bar */
 }
@@ -342,5 +376,169 @@ const memberInfo = memberStore.memberinfo;
 
 .header-nav .profile .dropdown-item:hover {
   background-color: #f6f9ff;
+}
+
+
+/* 추가 */
+/*--------------------------------------------------------------
+# Sidebar
+--------------------------------------------------------------*/
+.sidebar {
+  /* top: 10; */
+  left: 0;
+  bottom: 0;
+  /* width: 300px; */
+  /* z-index: 996; */
+  /* transition: all 0.3s; */
+  /* padding: 20px; */
+  padding-right: 20px;
+  padding-left: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #aab7cf transparent;
+  box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
+  background-color: #fff;
+}
+
+@media (max-width: 1199px) {
+  .sidebar {
+    left: -300px;
+  }
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: #fff;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #aab7cf;
+}
+
+@media (min-width: 1200px) {
+  #main,
+  #footer {
+    margin-left: 300px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .toggle-sidebar .sidebar {
+    left: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .toggle-sidebar #main,
+  .toggle-sidebar #footer {
+    margin-left: 0;
+  }
+
+  .toggle-sidebar .sidebar {
+    left: -300px;
+  }
+}
+
+.sidebar-nav {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebar-nav li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* .sidebar-nav .nav-item {
+  margin-bottom: 5px;
+} */
+
+.sidebar-nav .nav-heading {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #899bbd;
+  font-weight: 600;
+  /* margin: 10px 0 5px 15px; */
+}
+
+.sidebar-nav .nav-link {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4154f1;
+  transition: 0.3;
+  background: #f6f9ff;
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+
+.sidebar-nav .nav-link i {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #4154f1;
+}
+
+.sidebar-nav .nav-link.collapsed {
+  color: #012970;
+  background: #fff;
+}
+
+.sidebar-nav .nav-link.collapsed i {
+  color: #899bbd;
+}
+
+.sidebar-nav .nav-link:hover {
+  color: #4154f1;
+  background: #f6f9ff;
+}
+
+.sidebar-nav .nav-link:hover i {
+  color: #4154f1;
+}
+
+.sidebar-nav .nav-link .bi-chevron-down {
+  margin-right: 0;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sidebar-nav .nav-link:not(.collapsed) .bi-chevron-down {
+  transform: rotate(180deg);
+}
+
+.sidebar-nav .nav-content {
+  padding: 5px 0 0 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebar-nav .nav-content a {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #012970;
+  transition: 0.3;
+  padding: 10px 0 10px 40px;
+  transition: 0.3s;
+}
+
+.sidebar-nav .nav-content a i {
+  font-size: 6px;
+  margin-right: 8px;
+  line-height: 0;
+  border-radius: 50%;
+}
+
+.sidebar-nav .nav-content a:hover,
+.sidebar-nav .nav-content a.active {
+  color: #4154f1;
+}
+
+.sidebar-nav .nav-content a.active i {
+  background-color: #4154f1;
 }
 </style>

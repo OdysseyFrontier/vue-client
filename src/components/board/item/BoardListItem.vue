@@ -6,7 +6,7 @@
     <tr>
         <td>{{ article.boardNo }}</td>
         <td>
-        <span class="table-division" :class="article.type">{{article.type === "notice"? "행사" : "커뮤니티"}}</span>
+        <span class="table-division" :class="article.type">{{article.type === "notice"? "공지사항" : "커뮤니티"}}</span>
         </td>
         <td class="title lock_wrap subject">
             <router-link :to="{name:'boardDetail', params: {boardno: article.boardNo} }">

@@ -36,7 +36,35 @@ const router = createRouter({
       path: '/hotplace',
       name: 'hotplace',
       component: () => import('@/components/board/hotplaceList.vue')
-    }
+    },
+    {
+      path: "/member",
+      name: "member",
+      component: () => import("@/views/MemberView.vue"),
+      children: [
+        {
+          path: "login",
+          name: "memberLogin",
+          component: () => import("@/components/member/MemberLogin.vue"),
+        },
+        {
+          path: "join",
+          name: "memberJoin",
+          component: () => import("@/components/member/MemberJoin.vue"),
+        },
+        // {
+        //   path: "mypage",
+        //   name: "user-mypage",
+        //   beforeEnter: onlyAuthUser,
+        //   component: () => import("@/components/users/UserMyPage.vue"),
+        // },
+        // {
+        //   path: "modify/:userid",
+        //   name: "user-modify",
+        //   component: () => import("@/components/users/UserModify.vue"),
+        // },
+      ],
+    },
 
   ]
 })
