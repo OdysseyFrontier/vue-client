@@ -13,6 +13,7 @@
 <style scoped>
 
 .footer {
+  bottom: 0px;
   padding: 20px 0;
   font-size: 14px;
   transition: all 0.3s;
