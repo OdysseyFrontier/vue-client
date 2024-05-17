@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // { path: '/:pathMatch(.*)', component: NotFoundComponent },
     {
       path: '/',
       name: 'home',
@@ -25,17 +26,41 @@ const router = createRouter({
     {
       path: '/attraction',
       name: 'attraction',
-      component: () => import('../views/AttractionView.vue')
+      component: () => import('@/views/AttractionView.vue')
     },
     {
-      path: '/shareBoard',
-      name: 'shareBoard',
-      component: () => import('@/components/board/shareBoardList.vue'),
+      path: '/board',
+      name: 'board',
+      component: () => import('@/views/boardView.vue'),
+      children: [
+        {
+          path: 'list',
+          name: 'shareBoard',
+          component: () => import('@/components/board/shareBoardList.vue'),
+        },
+        {
+          path: 'boardDetail/:boardno',
+          name: 'boardDetail',
+          component: () => import('@/components/board/boardDetail.vue')
+        },
+        {
+          path: "write",
+          name: "boardWrite",
+          // beforeEnter: onlyAuthUser,
+          component: () => import("@/components/board/boardWrite.vue"),
+        },
+        {
+          path: "modify/:boardno",
+          name: "boardModify",
+          // beforeEnter: onlyAuthUser,
+          component: () => import("@/components/board/boardModify.vue"),
+        },
+      ]
     },
     {
-      path: '/boardDetail/:boardno',
-      name: 'boardDetail',
-      component: () => import('@/components/board/boardDetail.vue')
+      path: '/form/:type',
+      name: 'form',
+      component: () => import('@/components/board/item/boardForm.vue')
     },
     {
       path: '/hotplace',

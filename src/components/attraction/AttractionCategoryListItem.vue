@@ -33,12 +33,38 @@ const searchCategory = () => {
 </script>
 
 <template>
-    <div class="card">
+    <!-- <div class="card"> -->
         <!-- <img :src="attractionCategory.firstImage || defaultAttractionImg" class=" card-img-top" alt="..."> -->
         <!-- 좋아요 위치 -->
-        <label :for="attractionCategory.code"></label>
-        <button @click="searchCategory" :id="attractionCategory.code" class="btn btn-primary">
-            {{ attractionCategory.name }} 검색
+        <!-- <label :for="attractionCategory.code"></label> -->
+        <button @click="searchCategory" :id="attractionCategory.code" class="btn btn-primary mx-1">
+            {{ attractionCategory.name }}
         </button>
-    </div>
+    <!-- </div> -->
 </template>
+
+<style scoped>
+/* @media screen and (max-width:1023px) {
+	button{
+		font-size:12px;
+	}
+
+	select {padding: 0 2rem 0 0.8rem;}
+
+	.ml10 {margin-left: 0.7rem !important;}
+
+}
+@media screen and (max-width:720px) {
+	button{
+		font-size:15px;
+	}
+}
+
+@media screen and (max-width:580px) {
+	button {
+		font-size:15px;
+	}
+} */
+
+
+</style>

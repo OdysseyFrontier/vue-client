@@ -98,7 +98,7 @@ setTimeout(()=>{(function () {
                             name="memberId"
                             class="form-control"
                             id="yourUsername"
-                            value="${cookie.memberId.value}"
+                            value=""
                             v-model="loginMember.emailId"
                             required
                           />
