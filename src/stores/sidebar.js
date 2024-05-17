@@ -6,6 +6,7 @@ export const useSidebarStore = defineStore('sidebar', () => {
     home: "",
     board: "collapsed",
     attraction: "collapsed",
+    plan: "collapsed",
     mypage: "collapsed",
     login: "collapsed",
     join: "collapsed",

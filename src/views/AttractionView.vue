@@ -1,8 +1,8 @@
 <script setup>
-// import { useSidebarStore } from "@/stores/sidebar.js";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
-// const sidebarStore = useSidebarStore();
-// sidebarStore.changesSidebarState("attraction");
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("attraction");
 
 import SearchingAttraction from "@/components/attraction/SearchingAttraction.vue";
 import AttractionCategory from "@/components/attraction/AttractionCategoryList.vue";

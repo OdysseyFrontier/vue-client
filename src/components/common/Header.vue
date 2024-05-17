@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useMemberStore } from "@/stores/member.js";
 import { useSidebarStore } from "@/stores/sidebar.js";
 
 const memberStore = useMemberStore();
 const sidebarStore = useSidebarStore();
 
-const memberInfo = memberStore.memberInfo;
+const memberInfo =  memberStore.memberInfo;
 
 const sidebarList = ref(sidebarStore.sidebarList);
 </script>
@@ -29,17 +29,17 @@ const sidebarList = ref(sidebarStore.sidebarList);
       </div>
       <!-- End Logo -->
 
-      <nav class="header-nav ms-auto" v-if="memberInfo !== null">
+      <nav class="header-nav ms-auto" v-if="memberStore.isLogin">
         <ul class="d-flex align-items-center">
           <li class="nav-item dropdown pe-3">
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
               <img src="/src/assets/noimg.png" alt="Profile" class="rounded-circle" />
-              <span class="d-none d-md-block dropdown-toggle ps-2">{{ memberInfo.memberName }}</span> </a>
+              <span class="d-none d-md-block dropdown-toggle ps-2">{{memberStore.memberInfo != null ? memberStore.memberInfo.name : "null"}}</span> </a>
             <!-- End Profile Iamge Icon -->
 
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
-                <h6>{{ memberInfo.memberName }}</h6>
+                <h6>{{ memberStore.memberInfo != null ? memberStore.memberInfo.name : "null" }}</h6>
                 <!-- <span>등록한 내용</span> -->
               </li>
               <li>
@@ -135,7 +135,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
         <li class="nav-heading">Pages</li>
 
 
-        <li class="nav-item">
+        <li class="nav-item" v-if="memberStore.isLogin">
           <a class="nav-link collapsed" href="/member/mypage">
             <i class="bi bi-person"></i>
             <span>마이페이지</span>
@@ -152,7 +152,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
         <!-- End F.A.Q Page Nav -->
 
 
-        <li class="nav-item">
+        <li class="nav-item" v-if="!memberStore.isLogin">
           <RouterLink :to="{ name: 'memberLogin' }" class="nav-link" :class="sidebarList.login">
             <i class="bi bi-box-arrow-in-right"></i>
             <span>로그인</span>
@@ -160,7 +160,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
         </li>
         <!-- End Login Page Nav -->
 
-        <li class="nav-item">
+        <li class="nav-item" v-if="!memberStore.isLogin">
           <RouterLink :to="{ name: 'memberJoin' }" class="nav-link" :class="sidebarList.join">
             <i>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -178,7 +178,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
 
 
 
-        <li class="nav-item">
+        <li class="nav-item" v-if="memberStore.isLogin">
           <a class="nav-link collapsed" href="/member/delete">
             <i class="bi bi-person-dash"></i>
             <span>회원탈퇴</span>

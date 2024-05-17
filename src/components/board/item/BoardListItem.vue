@@ -827,7 +827,7 @@ img {
 
 @media (max-width: 840px) {
     .title {
-        position: absolute;
+        /* position: absolute; */
         bottom: 15px;
     }
 
