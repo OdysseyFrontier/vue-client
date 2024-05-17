@@ -13,19 +13,19 @@ const local = localAxios();
     
     function registArticle(article, success, fail) {
         console.log("boardjs article", article);
-        local.post(`/shareboard`, JSON.stringify(article)).then(success).catch(fail);
+        local.post(`/board`, JSON.stringify(article)).then(success).catch(fail);
     }
     
-    function getModifyArticle(articleno, success, fail) {
-        local.get(`/shareboard/modify/${articleno}`).then(success).catch(fail);
+    function getModifyArticle(boardno, success, fail) {
+        local.get(`/board/modify/${boardno}`).then(success).catch(fail);
     }
     
     function modifyArticle(article, success, fail) {
-        local.put(`/shareboard`, JSON.stringify(article)).then(success).catch(fail);
+        local.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
     }
     
     function deleteArticle(boardno, success, fail) {
-        local.delete(`/shareboard/${boardno}`).then(success).catch(fail);
+        local.delete(`/board/${boardno}`).then(success).catch(fail);
     }
 
 export {

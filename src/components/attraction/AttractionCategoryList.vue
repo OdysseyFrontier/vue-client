@@ -49,9 +49,9 @@ const scrollRight = () => {
             class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center col-9 position-relative">
             <button @click="scrollLeft"
                 class="btn btn-secondary position-absolute start-0 top-50 translate-middle-y">〈</button>
+            <div class="d-flex justify-content-center overflow-hidden" ref="scrollContainer">
+                <div class="text-center row flex-nowrap">
 
-            <div class="d-flex justify-content-center overflow-hidden scroll-container" ref="scrollContainer">
-                <div class="text-center d-flex row flex-nowrap">
                     <AttractionCategoryListItem class="col-auto" v-for="(attractionCategory) in attractionCategoryList"
                         :key="attractionCategory.id" :attractionCategory="attractionCategory" />
                 </div>
@@ -69,8 +69,4 @@ const scrollRight = () => {
 }
 
 
-.maphead .btn {
-    z-index: 1;
-    /* 버튼이 다른 요소 위에 표시되도록 z-index를 높입니다 */
-}
 </style>
