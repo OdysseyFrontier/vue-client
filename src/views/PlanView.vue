@@ -1,8 +1,8 @@
 <script setup>
-// import { useSidebarStore } from "@/stores/sidebar.js";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
-// const sidebarStore = useSidebarStore();
-// sidebarStore.changesSidebarState("attraction");
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("plan");
 
 import SearchedAttractionList from "@/components/plan/SearchedAttractionList.vue";
 import InputPlanning from "@/components/plan/InputPlanning.vue";

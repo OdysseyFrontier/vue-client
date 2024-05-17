@@ -56,7 +56,8 @@ export const useMemberStore = defineStore('memberStore', () => {
       decodeToken.memberId,
       (response) => {
         if (response.status === httpStatusCode.OK) {
-          memberInfo.value = response.data.memerInfo
+          memberInfo.value = response.data.memberInfo
+          console.log(memberInfo.value)
         } else {
           console.log("유저 정보 없음!!!!")
         }

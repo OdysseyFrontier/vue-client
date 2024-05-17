@@ -1,7 +1,9 @@
 <script setup>
-    import { ref, onMounted } from "vue";
+    import { ref, onMounted, watch } from "vue";
     import { useRoute, useRouter } from "vue-router";
-    import { detailArticle, deleteArticle } from "@/api/board";
+    import { detailArticle,  } from "@/api/board";
+    // import { registArticle, getModifyArticle, modifyArticle } from "@/api/board";
+
 
     const route = useRoute();
     const router = useRouter();
@@ -32,107 +34,128 @@
     }
 
     function moveModify() {
-        router.push({ name: "boardModify", params: { boardno } });
+        router.push({ name: "article-modify", params: { boardno } });
     }
 
-    function onDeleteArticle() {
-        deleteArticle(
-            boardno,
-            (response) => {
-            if (response.status == 200) moveList();
-            },
-            (error) => {
-            console.error(error);
-            }
-        );
-    }
+// -------------------------------------------------------------
+    const isUseId = ref(false);
+
+
+
+//   getModifyArticle(
+//     boardno,
+//     ({ data }) => {
+//       article.value = data;
+//       isUseId.value = true;
+//     },
+//     (error) => {
+//       console.error(error);
+//     }
+//   );
+//   isUseId.value = true;
+
+
+// const subjectErrMsg = ref("");
+// const contentErrMsg = ref("");
+// watch(
+//   () => article.value.subject,
+//   (value) => {
+//     let len = value.length;
+//     if (len == 0 || len > 30) {
+//       subjectErrMsg.value = "제목을 확인해 주세요!!!";
+//     } else subjectErrMsg.value = "";
+//   },
+//   { immediate: true }
+// );
+// watch(
+//   () => article.value.content,
+//   (value) => {
+//     let len = value.length;
+//     if (len == 0 || len > 500) {
+//       contentErrMsg.value = "내용을 확인해 주세요!!!";
+//     } else contentErrMsg.value = "";
+//   },
+//   { immediate: true }
+// );
+
+// function onSubmit() {
+//   // event.preventDefault();
+
+//   if (subjectErrMsg.value) {
+//     alert(subjectErrMsg.value);
+//   } else if (contentErrMsg.value) {
+//     alert(contentErrMsg.value);
+//   } else {
+//     updateArticle();
+//   }
+// }
+
+
+// function updateArticle() {
+//   console.log(article.value.articleNo + "번글 수정하자!!", article.value);
+//   modifyArticle(
+//     article.value,
+//     (response) => {
+//       let msg = "글수정 처리시 문제 발생했습니다.";
+//       if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
+//       alert(msg);
+//       moveList();
+//       // router.push({ name: "article-view" });
+//       // router.push(`/board/view/${article.value.articleNo}`);
+//     },
+//     (error) => console.log(error)
+//   );
+// }
 </script>
 
 <template>
-    <div id="wrap">
+     <div id="wrap">
     <!-- container -->
     <div id="container">
 
  <!-- 컨텐츠 -->
-<div id="content" class="contents board board-view">
+<div id="content" class="contents board">
     <!-- 컨텐츠 내용 -->
     <div class="inner">
         <div class="table-wrap">
-            <h4>내용</h4>
+            <h4>글 수정</h4>
             <table class="table-type2 table-1">
-                <caption>고객문의 질문 상세 내용 - 제목 작성자 등록일자, 내용으로 구성</caption>
+                <caption>글 수정 - 제목 작성자 등록일자, 내용으로 구성</caption>
                 <thead>
                     <tr>
                         <th>
                             <div class="clearfix">
                                     <p class="table-division width-auto" :class="article.type">{{article.type === "notice"? "공지사항" : "커뮤니티"}}</p>  
-                                    <p class="table-title mb10">{{article.subject}}</p>
-                            </div>
-                       <span>{{article.name}}</span>
-                       <span class="ml10">|</span>
-                       <span class="ml10">{{article.registerTime}}</span>  
-                       <span class="ml10">|</span>
-                       <span class="ml10">{{article.hit}}</span>           
+                                    <input  type="text" class="table-title comment-input" name="subject" id="subject" placeholder="제목" :value="article.subject">
+                            </div>         
                    </th>
                </tr>
            </thead>
            <tbody>
                <tr>
                    <td colspan="2" class="table-content">
-                     <!-- <p>안녕하세요 <br/>이용 가이드북을 pdf로 다운로드 하고자 하나, <br/>이용 가이드북 이용방법 소개글과 다르게 다운로드 받을 수 있는 버튼이 없어 부득이하게 문의글을 올립니다.<br/>(소개글에는 왼쪽 아래 버튼 중 가장 첫번째에 다운로드 버튼이 있으나, 현재 이용 가이드북에는 가장 첫번째에 홈으로 가기가 배치되어있습니다..)<br/>pdf로 다운로드 받을 수 있는 경로를 안내받거나 혹은 첨부파일로 pdf를 제공받고 싶습니다.</p>  -->
-                        <p>{{article.content}}</p>
+                        <p>내용</p>
+                        
+                        <!-- 넣는중 -->
+                        <div id="editor">
+                        <p>Hello World!</p>
+                        <p>Some initial <strong>bold</strong> text</p>
+                        <p><br /></p>
+                        </div>
+
+                        <!-- 넣는 중 끝 -->
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div class="clearfix btn-wrap align-right mt30">
-            <button href="#" class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
-            <button href="#" class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
-            <button class="table-btn btn-exit btn_bbsList">삭제</button>
-        </div>
         
-        <h4 class="mt55">댓글</h4>
-        <table class="table-type2">
-            <caption>댓글 - 댓글 작성자, 내용으로 구성</caption>
-            <thead>
-                <tr>
-                    <th>
-                        <span>댓글 작성자</span>
-                        <span class="ml10">|</span>
-                        <span class="ml10">2024.04.19 13:44</span>            
-                   </th>
-               </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="2" class="table-content">
-                        
-                         <!-- 그 외 -->
-<p class="0" style="letter-spacing: 0pt;"><span style="font-family: NanumSquare; font-size: 12pt;">도움이 되셨기를 바라며</span></p>
-<p class="0" style="letter-spacing: 0pt;"><span style="font-family: Noto Sans KR; font-size: 12pt;">추가 문의 사항이 있으시면 언제든 문의 남겨주시길 바랍니다</span></p>
-<p class="0"><span style="font-family: 굴림; font-size: 12pt;">&nbsp;</span></p>
-<p class="0" style="letter-spacing: 0pt;"><span style="font-family: 'Noto Sans KR', sans-serif; font-size: 12pt;">더 좋은 서비스를 제공하는 한국관광 데이터랩이 되도록 노력하겠습니다</span><span lang="EN-US" style="font-family: 굴림; letter-spacing: 0pt; font-size: 12pt;">.</span></p>
-<p class="0" style="letter-spacing: 0pt;"><span style="font-family: 굴림; font-size: 12pt;">앞으로도 많은 이용 부탁드립니다</span><span lang="EN-US" style="font-family: 굴림; letter-spacing: 0pt; font-size: 12pt;">.</span></p>
-<p class="0"><span style="font-family: 굴림; font-size: 12pt;">&nbsp;</span></p>
-<p class="0"><span style="font-family: 굴림; font-size: 12pt;">감사합니다</span><span lang="EN-US" style="font-family: 굴림; letter-spacing: 0pt; font-size: 12pt;">.</span></p>
-                        
-                    </td>
-               </tr>
-           </tbody>
-        </table>
-
-
-            <div class="btn-wrap align-center mt30">
-                <input  type="text" class="comment-input" name="searchKey" id="searchKey"
-                title="검색어입력" placeholder="댓글달기">
-                <button class="table-btn btn-write btn_bbsList">등록</button>
-            </div>
-
 
         
         
         <div class="clearfix btn-wrap align-right mt30">
-            <button href="#" class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
+            <button class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
+            <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
+            <button class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
         </div>
     </div>
         </div>
@@ -146,9 +169,8 @@
     </div>
 
 
-
 </template>
-    
+
 
 <style scoped>
 @charset "utf-8";
@@ -162,12 +184,11 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     transition: all 0.5s;
-    width: calc(100% - 8rem);
+    width: calc(100% - 0.5rem);
 } 
 
 @media screen and (max-width:1023px) {
     .comment-input {padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 0.3rem;}
-    .comment-input {margin-left: 0.5rem;}
 }
 
 
@@ -480,7 +501,7 @@ textarea { resize: vertical; }
 	html, body, div, span,h4, p, form, label,
 	table, caption, tbody, thead, tr, th, td,
 	button, textarea, input {
-		font-size:24px;
+		font-size:20px;
 	}
 
 	.ml10 {margin-left: 0.7rem !important;}
@@ -527,9 +548,6 @@ textarea { resize: vertical; }
 .btn-wrap{font-size:0;}
 .btn-wrap:after{content: '';display: block; clear: both;}
 
-.btn-h50{height:50px !important;line-height: 22px !important;}
-.btn-h40{height:40px !important;line-height: 38px !important;}
-.btn-h30{height:30px !important;line-height: 27px !important;}
 
 .table-btn {
     display: inline-block;
@@ -583,36 +601,6 @@ textarea { resize: vertical; }
     text-align: center;
 }
 
-.board-view .table-wrap .table-content {padding: 20px; box-sizing: border-box; text-align:initial;}
-
-.board-view .table-wrap .table-type2 thead {border-top:1px solid #888888;}
-
-/* editor */
-.board-view .table-wrap .table-content * {font-family: 'Nanum Gothic'; font-size:inherit;}
-
-.board-view .table-wrap .table-content p{display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 0px; margin-inline-end: 0px;}
-
-
-/* 수정 중  */
-.board-view .table-wrap .table-content h4{
-	font-weight: normal;
-	line-height: 1.2;
-	margin-inline-start: 0px; 
-	margin-inline-end: 0px;
-    margin-block-start: 1.33em; 
-	margin-block-end: 1.33em; 
-}
-
-
-.board-view .table-wrap .table-content hr{
-	border: 0px;
-	border-top: 1px solid #ccc;
-}
-
-.board-view .table-wrap .table-content span[lang]{font-style: italic;}
-/* //수정중 */
-
-
 .board .table-wrap h4 {color:#1E96C4; font-size: 20px; font-weight: 500; margin:0px 0 20px 0;}
 
 
@@ -643,22 +631,11 @@ textarea { resize: vertical; }
     /* input */
     .input-wrap input {margin-right: 0.3rem;}
 
-	
-    /* button */
-    .btn-h30 {height: 2rem !important; line-height: 1.9rem !important;}
-	.btn-h40 {height: 2.5rem !important; line-height: 2.5rem !important;}
-
 }	
 
 
 @media screen and (max-width:720px) {
 	.contents > .inner{width: 90%;}
 }
-
-h4
- {
-    margin: 0;
-}
-
 
 </style>
