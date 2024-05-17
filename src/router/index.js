@@ -16,6 +16,7 @@ const onlyAuthUser = async (to, from, next) => {
     await getMemberInfo(token);
   }
   if (!isValidToken.value || memberInfo.value === null) {
+    alert("로그인 후 이용가능합니다.")
     next({ name: "memberLogin" });
   } else {
     next();

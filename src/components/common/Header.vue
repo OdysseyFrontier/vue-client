@@ -9,6 +9,11 @@ const sidebarStore = useSidebarStore();
 const memberInfo =  memberStore.memberInfo;
 
 const sidebarList = ref(sidebarStore.sidebarList);
+
+
+const logout = () => {
+  memberStore.memberLogout();
+};
 </script>
 
 <template>
@@ -78,10 +83,10 @@ const sidebarList = ref(sidebarStore.sidebarList);
               </li>
 
               <li>
-                <a class="dropdown-item d-flex align-items-center" href="/member/logout">
+                <router-link to="/"  @click.prevent="logout" class="dropdown-item d-flex align-items-center" href="/member/logout">
                   <i class="bi bi-box-arrow-right"></i>
                   <span>로그아웃</span>
-                </a>
+                </router-link>
               </li>
             </ul>
             <!-- End Profile Dropdown Items -->
@@ -98,10 +103,10 @@ const sidebarList = ref(sidebarStore.sidebarList);
     <aside id="sidebar" class="collapse navbar-collapse sidebar">
       <ul class="sidebar-nav navbar-nav" id="sidebar-nav">
         <li class="nav-item">
-          <a class="nav-link" :class="sidebarList.home" href="/">
+          <RouterLink :to="{ name: 'home' }" class="nav-link" :class="sidebarList.home">
             <i class="bi bi-grid"></i>
             <span>home</span>
-          </a>
+          </RouterLink>
         </li>
         <!-- End home Nav -->
 

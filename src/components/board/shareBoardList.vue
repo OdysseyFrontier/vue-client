@@ -130,10 +130,10 @@ const moveWrite = () => {
                                     style="display: none;" v-model="param.word">
                                     <option value="" selected="">전체</option>
                                     <option value="notice">공지사항</option>
-                                    <option value="nd02">이벤트</option>
+                                    <!-- <option value="nd02">이벤트</option> -->
                                     <option value="community">커뮤니티</option>
-                                    <option value="nd05">교육</option>
-                                    <option value="nd04">기타</option>
+                                    <!-- <option value="nd05">교육</option> -->
+                                    <!-- <option value="nd04">기타</option> -->
                                 </select>
                                 <input v-show="searchKey" type="text" class="search-input" name="searchKey" id="searchKey"  v-model="param.word"
                                     title="검색어입력">
@@ -372,7 +372,7 @@ const moveWrite = () => {
                         @pageChange="onPageChange"
                     ></VPageNavigation>
 
-                    <div class="clearfix">
+                    <div class="clearfix mb30">
                         <button class="table-btn btn-write" @click.prevent="moveWrite">글쓰기</button>
                     </div>
                     <!-- 컨텐츠 내용 -->
@@ -715,6 +715,7 @@ button:focus-visible{outline:2px dashed #222;box-sizing:border-box;outline-offse
 .mt30{margin-top:30px !important;}
 .mt55{margin-top:55px !important;}
 .mb55{margin-bottom:55px !important;}
+.mb30{margin-bottom:30px !important;}
 
 
 

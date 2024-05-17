@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <div class="card">
             <div class="card-body">
-              <h5 class="card-title">With captions</h5>
+              <h5 class="card-title">구경하세요!</h5>
 
               <!-- Slides with captions -->
               <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">

@@ -5,7 +5,7 @@
   sidebarStore.changesSidebarState("login");
 
 
-  import { ref } from "vue"
+  import { ref, watch } from "vue"
   import { storeToRefs } from "pinia"
   import { useRouter } from "vue-router"
   import { useMemberStore } from "@/stores/member"
@@ -16,6 +16,8 @@
 
 const { isLogin, isLoginError } = storeToRefs(memberStore)
 const { memberLogin, getMemberInfo } = memberStore
+
+const msg = ref("")
 
 const loginMember = ref({
   emailId: "",
@@ -31,8 +33,13 @@ const login = async () => {
   if (isLogin.value) {
     getMemberInfo(token)
     router.replace("/")
+  }else{
+    msg.value = "아이디 혹은 비밀번호가 일치하지 않습니다."
   }
 }
+
+
+
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 setTimeout(()=>{(function () {
@@ -54,6 +61,32 @@ setTimeout(()=>{(function () {
       }, false)
     })
 })()})
+
+
+watch(
+  () => loginMember.value.emailId,
+  (value) => {
+    console.log(value)
+    msg.value = ""
+  },
+  { immediate: true }
+);
+watch(
+  () => loginMember.value.emailDomain,
+  (value) => {
+    console.log(value)
+    msg.value = ""
+  },
+  { immediate: true }
+);
+watch(
+  () => loginMember.value.password,
+  (value) => {
+    console.log(value)
+    msg.value = ""
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -163,7 +196,7 @@ setTimeout(()=>{(function () {
                         </div>
                       </div>
 
-            <div class="text-danger mb-2">{{msg}}</div>   
+            <div class="text-danger mb-2" v-if="msg">{{msg}}</div>   
                       
                       <div class="col-12">
                         <button class="btn btn-primary w-100" @click.prevent="login" type="submit">
