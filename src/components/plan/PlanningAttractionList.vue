@@ -14,6 +14,7 @@ watchEffect(() => {
     }
 
     plannedAttractions.value = usePlanStore().plannedAttractions;
+    
 });
 
 

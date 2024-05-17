@@ -5,74 +5,39 @@ const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("plan");
 
 import SearchingBar from "@/components/plan/SearchingBar.vue";
-
-import PlanningAttractionList from "@/components/plan/PlanningAttractionList.vue";
-import SearchedAttractionList from "@/components/plan/SearchedAttractionList.vue";
-import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue";
+import PlanGoogleMap from "@/components/plan/PlanGoogleMap.vue";
 import AttractionZone from "@/components/plan/AttractionZone.vue";
-
 import InputPlanning from "@/components/plan/InputPlanning.vue";
-import PlanTimeLine from "@/components/plan/PlanTimeLine.vue";
+import PlanTimeLineList from "@/components/plan/PlanTimeLineList.vue";
 </script>
 
-<template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 bg-light p-3">
-                <SearchingBar />
+<template class="flex-grow-1">
+    <div class="d-flex flex-column">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 bg-light p-3">
+                    <SearchingBar />
+                </div>
             </div>
-        </div>
-        <div class="row">
-
-            <div class="col-4 bg-white p-6" style="height: 100vh;">
-                <AttractionZone />
+            <div class="row">
+                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="bg-white p-6">
+                    <AttractionZone />
+                </div>
+                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="p-3">
+                    <div class="bg-white p-3" style="height: 45rem;">
+                        <PlanGoogleMap />
+                    </div>
+                </div>
             </div>
-
-            <div class="col-8 p-3">
-                <div class="bg-white p-3" style="height: 70vh;">
-                    <AttractionGoogleMap />
-                </div>
-                <div class="bg-light p-3" style="height: 10vh;">
-                    <InputPlanning />
-                </div>
-                <div class="bg-white p-3" style="height: 20vh;">
-                    <PlanTimeLine />
-                </div>
+            <div class="row bg-light p-3">
+                <InputPlanning />
+            </div>
+            <div class="row bg-white p-3 flex-grow-1" style="height: 45rem;">
+                <PlanTimeLineList />
             </div>
         </div>
     </div>
 </template>
-
-
-<!-- <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 bg-light p-3">
-                <SearchingBar />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2 bg-white p-3" style="height: 100vh;">
-                <SearchedAttractionList />
-            </div>
-            <div class="col-2 bg-light p-3" style="height: 100vh;">
-                <PlanningAttractionList />
-            </div>
-            <div class="col-8 p-3">
-                <div class="bg-white p-3" style="height: 70vh;">
-                    <AttractionGoogleMap />
-                </div>
-                <div class="bg-light p-3" style="height: 10vh;">
-                    <InputPlanning />
-                </div>
-                <div class="bg-white p-3" style="height: 20vh;">
-                    <PlanTimeLine />
-                </div>
-            </div>
-        </div>
-    </div>
-</template> -->
-
 
 <style scoped>
 /* 필요한 추가 스타일링이 있다면 여기에 작성합니다. */
@@ -82,5 +47,10 @@ import PlanTimeLine from "@/components/plan/PlanTimeLine.vue";
 
 .bg-white {
     background-color: #ffffff !important;
+}
+
+.flex-grow-1 {
+    overflow-y: auto;
+    /* 스크롤이 내부에서 발생하도록 설정 */
 }
 </style>

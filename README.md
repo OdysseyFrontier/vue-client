@@ -34,10 +34,15 @@ npm run build
 npm run lint
 ```
 
+npm install
+npm i axios
+npm i pinia
+npm i bootstrap
 npm i vuedraggable
 npm i vue-draggable-next
 npm i vue3-google-map
-npm install vuedraggable
-npm install vue-draggable-next
+npm install vue-mq
+npm run dev
+
 
 npm install @popperjs/core

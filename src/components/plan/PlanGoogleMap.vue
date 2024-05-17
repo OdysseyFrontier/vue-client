@@ -3,47 +3,47 @@ import { ref, watchEffect } from "vue"
 import { GoogleMap, Marker, MarkerCluster } from 'vue3-google-map'
 const { VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
 
-import { useAttractionStore } from '@/stores/attraction';
+import { usePlanStore } from '@/stores/plan';
 
-// const store = useAttractionStore();
+// const store = usePlanStore();
 
 const init_center = ref({ lat: 36.1061824, lng: 128.4227797 })
 const zoom = ref(15)
 const markers = ref([])
 
 watchEffect(() => {
-  // searchAttractionList 값 가져오기
+  // searchedAttractions 값 가져오기
 
-  const searchAttractionList = useAttractionStore().searchAttractionList;
+  const searchedAttractions = usePlanStore().searchedAttractions;
 
-  // searchAttractionList가 비어 있는 경우 처리
-  if (!useAttractionStore().searchAttractionList || useAttractionStore().searchAttractionList.length == 0) {
+  // searchedAttractions가 비어 있는 경우 처리
+  if (!usePlanStore().searchedAttractions || usePlanStore().searchedAttractions.length == 0) {
     return;
   }
 
   // Find the minimum and maximum latitude and longitude
-  const minLat = Math.min(...searchAttractionList.map(attraction => attraction.latitude))
-  const maxLat = Math.max(...searchAttractionList.map(attraction => attraction.latitude))
-  const minLng = Math.min(...searchAttractionList.map(attraction => attraction.longitude))
-  const maxLng = Math.max(...searchAttractionList.map(attraction => attraction.longitude))
+  const minLat = Math.min(...searchedAttractions.map(plan => plan.latitude))
+  const maxLat = Math.max(...searchedAttractions.map(plan => plan.latitude))
+  const minLng = Math.min(...searchedAttractions.map(plan => plan.longitude))
+  const maxLng = Math.max(...searchedAttractions.map(plan => plan.longitude))
   const centerLat = (minLat - maxLat) / 2
   const centerLng = (minLng - maxLng) / 2
   const center = Math.abs(centerLat / 2 + centerLng) * 100
   // init_center.value = { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 }
 
-  const totalLat = searchAttractionList.reduce((acc, curr) => acc + curr.latitude, 0)
-  const totalLng = searchAttractionList.reduce((acc, curr) => acc + curr.longitude, 0)
-  const avgLat = totalLat / searchAttractionList.length
-  const avgLng = totalLng / searchAttractionList.length
+  const totalLat = searchedAttractions.reduce((acc, curr) => acc + curr.latitude, 0)
+  const totalLng = searchedAttractions.reduce((acc, curr) => acc + curr.longitude, 0)
+  const avgLat = totalLat / searchedAttractions.length
+  const avgLng = totalLng / searchedAttractions.length
 
   init_center.value = { lat: avgLat, lng: avgLng }
 
   if (center < 10) {
-    zoom.value = 12
+    zoom.value = 11
   } else if (center < 15) {
-    zoom.value = 10
+    zoom.value = 9
   } else {
-    zoom.value = 8
+    zoom.value = 7
   }
   console.log(zoom.value)
   console.log(center)
@@ -52,11 +52,11 @@ watchEffect(() => {
   markers.value = []
 
   // attractionList의 각 항목에 대해 마커를 생성합니다.
-  searchAttractionList.forEach(attraction => {
+  searchedAttractions.forEach(plan => {
     const marker = {
       options: {
-        position: { lat: attraction.latitude, lng: attraction.longitude },
-        title: attraction.title,
+        position: { lat: plan.latitude, lng: plan.longitude },
+        title: plan.title,
       }
     }
     markers.value.push(marker)
