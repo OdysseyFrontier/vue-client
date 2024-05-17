@@ -1,8 +1,7 @@
 <script setup>
-    import { ref, onMounted, watch } from "vue";
+    import { ref, watch } from "vue";
     import { useRoute, useRouter } from "vue-router";
-    import { detailArticle,  } from "@/api/board";
-    // import { registArticle, getModifyArticle, modifyArticle } from "@/api/board";
+    import { getModifyArticle, modifyArticle, deleteArticle } from "@/api/board";
 
 
     const route = useRoute();
@@ -12,100 +11,85 @@
 
     const article = ref({});
 
-    onMounted(() => {
-        getArticle();
-    });
+    function moveList() {
+        router.push({ name: "boardList" });
+    }
 
-    const getArticle = () => {
-        detailArticle(
+  getModifyArticle(
+    boardno,
+    ({ data }) => {
+      article.value = data;
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+
+
+const subjectErrMsg = ref("");
+const contentErrMsg = ref("");
+watch(
+  () => article.value.subject,
+  (value) => {
+    let len = value ? value.length : 0;
+    if (len == 0 || len > 30) {
+      subjectErrMsg.value = "제목을 확인해 주세요!!!";
+    } else if(len > 500){
+        subjectErrMsg.value = "제목이 너무 깁니다.";
+    }else subjectErrMsg.value = "";
+  },
+  { immediate: true }
+);
+watch(
+  () => article.value.content,
+  (value) => {
+    let len = value ? value.length : 0;
+    if (len == 0) {
+      contentErrMsg.value = "내용을 확인해 주세요!!!";
+    }else if(len > 500){
+        contentErrMsg.value = "내용이 너무 깁니다.";
+    } else contentErrMsg.value = "";
+  },
+  { immediate: true }
+);
+
+function onSubmit() {
+    console.log(article)
+  if (subjectErrMsg.value) {
+    alert(subjectErrMsg.value);
+  } else if (contentErrMsg.value) {
+    alert(contentErrMsg.value);
+  } else {
+    updateArticle();
+  }
+}
+
+
+function updateArticle() {
+  console.log(article.value.boardNo + "번글 수정하자!!", article.value);
+  modifyArticle(
+    article.value,
+    (response) => {
+      let msg = "글수정 처리시 문제 발생했습니다.";
+      if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
+      alert(msg);
+      router.push({ name: "boardDetail" , params: {boardno: article.boardNo} });
+    },
+    (error) => console.log(error)
+  );
+}
+
+function onDeleteArticle() {
+        deleteArticle(
             boardno,
-            ({ data }) => {
-            article.value = data;
+            (response) => {
+            if (response.status == 200) moveList();
             },
             (error) => {
             console.error(error);
             }
         );
-    };
-
-
-    function moveList() {
-        router.push({ name: "shareBoard" });
     }
-
-    function moveModify() {
-        router.push({ name: "article-modify", params: { boardno } });
-    }
-
-// -------------------------------------------------------------
-    const isUseId = ref(false);
-
-
-
-//   getModifyArticle(
-//     boardno,
-//     ({ data }) => {
-//       article.value = data;
-//       isUseId.value = true;
-//     },
-//     (error) => {
-//       console.error(error);
-//     }
-//   );
-//   isUseId.value = true;
-
-
-// const subjectErrMsg = ref("");
-// const contentErrMsg = ref("");
-// watch(
-//   () => article.value.subject,
-//   (value) => {
-//     let len = value.length;
-//     if (len == 0 || len > 30) {
-//       subjectErrMsg.value = "제목을 확인해 주세요!!!";
-//     } else subjectErrMsg.value = "";
-//   },
-//   { immediate: true }
-// );
-// watch(
-//   () => article.value.content,
-//   (value) => {
-//     let len = value.length;
-//     if (len == 0 || len > 500) {
-//       contentErrMsg.value = "내용을 확인해 주세요!!!";
-//     } else contentErrMsg.value = "";
-//   },
-//   { immediate: true }
-// );
-
-// function onSubmit() {
-//   // event.preventDefault();
-
-//   if (subjectErrMsg.value) {
-//     alert(subjectErrMsg.value);
-//   } else if (contentErrMsg.value) {
-//     alert(contentErrMsg.value);
-//   } else {
-//     updateArticle();
-//   }
-// }
-
-
-// function updateArticle() {
-//   console.log(article.value.articleNo + "번글 수정하자!!", article.value);
-//   modifyArticle(
-//     article.value,
-//     (response) => {
-//       let msg = "글수정 처리시 문제 발생했습니다.";
-//       if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
-//       alert(msg);
-//       moveList();
-//       // router.push({ name: "article-view" });
-//       // router.push(`/board/view/${article.value.articleNo}`);
-//     },
-//     (error) => console.log(error)
-//   );
-// }
 </script>
 
 <template>
@@ -126,7 +110,7 @@
                         <th>
                             <div class="clearfix">
                                     <p class="table-division width-auto" :class="article.type">{{article.type === "notice"? "공지사항" : "커뮤니티"}}</p>  
-                                    <input  type="text" class="table-title comment-input" name="subject" id="subject" placeholder="제목" :value="article.subject">
+                                    <input  type="text" class="table-title comment-input" name="subject" id="subject" placeholder="제목" v-model="article.subject">
                             </div>         
                    </th>
                </tr>
@@ -135,7 +119,7 @@
                <tr>
                    <td colspan="2" class="table-content">
                         <!-- <p>내용</p> -->
-                        <textarea class="comment-input" name="message" rows="6" placeholder="내용" :value="article.content"></textarea>
+                        <textarea class="comment-input" name="message" rows="6" placeholder="내용" v-model="article.content"></textarea>
 
                     </td>
                 </tr>
@@ -147,7 +131,7 @@
         
         
         <div class="clearfix btn-wrap align-right mt30 mb30">
-            <button class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
+            <button class="table-btn btn-write btn_bbsList" @click="onSubmit">수정</button>
             <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
             <button class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
         </div>

@@ -2,9 +2,11 @@
     import { ref, onMounted } from "vue";
     import { useRoute, useRouter } from "vue-router";
     import { detailArticle, deleteArticle } from "@/api/board";
+    import { useMemberStore } from "@/stores/member"
 
     const route = useRoute();
     const router = useRouter();
+    const memberStore = useMemberStore()
 
     const { boardno } = route.params;
 
@@ -28,7 +30,7 @@
 
 
     function moveList() {
-        router.push({ name: "shareBoard" });
+        router.push({ name: "boardList" });
     }
 
     function moveModify() {
@@ -89,10 +91,9 @@
                 </tr>
             </tbody>
         </table>
-        <div class="clearfix btn-wrap align-right mt30">
-            <button href="#" class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
-            <button href="#" class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
-            <button class="table-btn btn-exit btn_bbsList">삭제</button>
+        <div class="clearfix btn-wrap align-right mt30" v-if="article.memberId === memberStore.memberInfo.memberId">
+            <button class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
+            <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
         </div>
         
         <h4 class="mt55">댓글</h4>
@@ -135,7 +136,7 @@
 
         
         
-        <div class="clearfix btn-wrap align-right mt30">
+        <div class="clearfix btn-wrap align-right mt30 mb30">
             <button href="#" class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
         </div>
     </div>

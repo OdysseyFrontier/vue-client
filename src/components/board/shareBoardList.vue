@@ -9,6 +9,8 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("board");
 
+const router = useRouter();
+
 const articles = ref([])
 const currentPage = ref(1)
 const totalPage = ref(0)
@@ -78,7 +80,7 @@ const onPageChange = (val) => {
 };
 
 const moveWrite = () => {
-  router.push({ name: "article-write" });
+  router.push({ name: "boardWrite" });
 };
 
 
@@ -99,7 +101,7 @@ const moveWrite = () => {
 
     <div>
         <!-- <h1>여행 정보 공유 게시판</h1> -->
-        <form id="bbsFVo" name="bbsFVo" action="/site/portal/ex/bbs/List.do?cbIdx=1135" method="post">
+        <div >
             <input id="pageIndex" name="pageIndex" type="hidden" value="1">
             <input id="bcIdx" name="bcIdx" type="hidden" value="307301">
             <input id="mode" name="mode" type="hidden" value="">
@@ -364,19 +366,19 @@ const moveWrite = () => {
                         <a href="?pageIndex=10" @click="doBbsFPag(10);">10</a>
                     </div> -->
 
-                    <VPageNavigation class="mt55 mb55"
+                    <VPageNavigation class="mt30"
                         :current-page="currentPage"
                         :total-page="totalPage"
                         @pageChange="onPageChange"
                     ></VPageNavigation>
 
-                    <div class="clearfix align-right">
-                        <button href="javascript:funReg()" class="table-btn btn-write">글쓰기</button>
+                    <div class="clearfix">
+                        <button class="table-btn btn-write" @click.prevent="moveWrite">글쓰기</button>
                     </div>
                     <!-- 컨텐츠 내용 -->
                 </div>
             </div><!-- 컨텐츠 -->
-        </form>
+        </div>
     </div>
 </template>
 
