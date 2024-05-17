@@ -108,7 +108,7 @@ const sidebarList = ref(sidebarStore.sidebarList);
         <!-- 관광지 조회 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'shareBoard' }" class="nav-link" :class="sidebarList.board" href="/board?action=list">
+          <RouterLink :to="{ name: 'boardList' }" class="nav-link" :class="sidebarList.board" href="/board?action=list">
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
           </RouterLink>

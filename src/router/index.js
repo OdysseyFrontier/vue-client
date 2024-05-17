@@ -1,6 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/member";
+
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore();
+  const { memberInfo, isValidToken } = storeToRefs(memberStore);
+  const { getMemberInfo } = memberStore;
+
+  let token = sessionStorage.getItem("accessToken");
+
+  if (memberInfo.value != null && token) {
+    await getMemberInfo(token);
+  }
+  if (!isValidToken.value || memberInfo.value === null) {
+    next({ name: "memberLogin" });
+  } else {
+    next();
+  }
+};
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -23,36 +45,34 @@ const router = createRouter({
     {
       path: '/board',
       name: 'board',
+      beforeEnter: onlyAuthUser,
       component: () => import('@/views/boardView.vue'),
       children: [
         {
           path: 'list',
-          name: 'shareBoard',
+          name: 'boardList',
+          beforeEnter: onlyAuthUser,
           component: () => import('@/components/board/shareBoardList.vue'),
         },
         {
           path: 'boardDetail/:boardno',
           name: 'boardDetail',
+          beforeEnter: onlyAuthUser,
           component: () => import('@/components/board/boardDetail.vue')
         },
         {
           path: "write",
           name: "boardWrite",
-          // beforeEnter: onlyAuthUser,
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardWrite.vue"),
         },
         {
           path: "modify/:boardno",
           name: "boardModify",
-          // beforeEnter: onlyAuthUser,
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardModify.vue"),
         },
       ]
-    },
-    {
-      path: '/form/:type',
-      name: 'form',
-      component: () => import('@/components/board/item/boardForm.vue')
     },
     {
       path: '/hotplace',
