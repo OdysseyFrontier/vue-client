@@ -5,7 +5,7 @@ defineProps({
     attraction: Object
 });
 
-const defaultAttractionImg = "src/assets/attraction/defaultAttractionImg.png";
+// const defaultAttractionImg = "src/assets/attraction/defaultAttractionImg.png";
 
 const truncateDescription = (description) => {
     const maxLength = 35; // 최대 길이 설정
@@ -28,9 +28,15 @@ const truncateDescription = (description) => {
 </script>
 
 <template>
-    <div class="card">
+    <div class="list-group-item">
+        {{ attraction.title }}
+        <br />
+        {{ attraction.addr1 }}
+    </div>
+</template>
+<!-- <div class="card">
         <div class="row rounded slist">
-            <div role="group" class="input-group"><!---->
+            <div role="group" class="input-group">
                 <div class="input-group-prepend"><img variant="outline-secondary"
                         src="/trip_api//assets/images/map/marker/marker_12_color_round.png"
                         class="pt-1 pr-1 mx-auto d-block" style="width: 30px; height: 30px;"></div>
@@ -47,9 +53,17 @@ const truncateDescription = (description) => {
                                 class=""></path>
                         </svg>
                     </button>
-                </div><!---->
+                </div>
             </div>
             <div class="m-1 p-1">{{ attraction.addr1 }} </div>
         </div>
-    </div>
-</template>
+    </div> -->
+
+<style scoped>
+.list-group-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #fff;
+}
+</style>
