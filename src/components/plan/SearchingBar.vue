@@ -2,9 +2,9 @@
 import { ref, onMounted } from 'vue';
 import { getSidos, getGuguns, getSearchAttraction } from '@/api/attraction';
 
-import { useAttractionStore } from '@/stores/attraction';
+import { usePlanStore } from '@/stores/plan';
 
-const store = useAttractionStore();
+const store = usePlanStore();
 
 const sidos = ref([]);
 const guguns = ref([]);
@@ -74,7 +74,7 @@ onMounted(() => {
             <div class="d-flex justify-content-center">
                 <div class="text-center">
                     <h1 class="mx-auto my-0 mt-3 text-center fw-bold">
-                        전국 관광지 정보
+                        여행 계획
                     </h1>
                     <form class="d-flex my-3" onsubmit="return false;" role="search">
                         <select v-model="selectedSidoCode" id="search-sido" class="form-select me-2"
