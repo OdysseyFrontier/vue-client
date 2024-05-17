@@ -134,25 +134,19 @@
            <tbody>
                <tr>
                    <td colspan="2" class="table-content">
-                        <p>내용</p>
-                        
-                        <!-- 넣는중 -->
-                        <div id="editor">
-                        <p>Hello World!</p>
-                        <p>Some initial <strong>bold</strong> text</p>
-                        <p><br /></p>
-                        </div>
+                        <!-- <p>내용</p> -->
+                        <textarea class="comment-input" name="message" rows="6" placeholder="내용" :value="article.content"></textarea>
 
-                        <!-- 넣는 중 끝 -->
                     </td>
                 </tr>
             </tbody>
+            
         </table>
         
 
         
         
-        <div class="clearfix btn-wrap align-right mt30">
+        <div class="clearfix btn-wrap align-right mt30 mb30">
             <button class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
             <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
             <button class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
@@ -176,7 +170,7 @@
 @charset "utf-8";
 .comment-input{
     display: inline-block;
-    padding: 13px 40px;
+    padding: 13px 26px;
     font-size: 18px;
     /* text-align: center; */
     border: gray solid 1px;
@@ -188,7 +182,7 @@
 } 
 
 @media screen and (max-width:1023px) {
-    .comment-input {padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 0.3rem;}
+    .comment-input {padding: 0.5rem 1.0rem; font-size: 1rem; border-radius: 0.3rem;}
 }
 
 
@@ -207,6 +201,7 @@
     line-height: 2;
 }
 
+.table-content {padding: 20px; box-sizing: border-box; text-align:initial;}
 
 .table-division {margin: 0 auto; width: 115px; border-radius: 5px; background-color:#fff;}
 .table-division1 {color:#41626f !important; border:1px solid #41626f !important;} /*이벤트*/

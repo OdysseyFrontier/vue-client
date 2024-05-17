@@ -3,6 +3,7 @@
 </script>
 
 <template>
+<div class="container mt-4">
     <div class="card">
             <div class="card-body">
               <h5 class="card-title">With captions</h5>
@@ -16,21 +17,21 @@
                 </div>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img src="/src/assets/logo.png" class="d-block w-100" alt="...">
+                    <img src="/src/assets/silde1.jpg" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                       <h5>First slide label</h5>
                       <p>Some representative placeholder content for the first slide.</p>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <img src="/src/assets/noimg.png" class="d-block w-100" alt="...">
+                    <img src="/src/assets/slide2.jpg" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                       <h5>Second slide label</h5>
                       <p>Some representative placeholder content for the second slide.</p>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <img src="/src/assets/arrow_open.png" class="d-block w-100" alt="...">
+                    <img src="/src/assets/slide3.png" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                       <h5>Third slide label</h5>
                       <p>Some representative placeholder content for the third slide.</p>
@@ -50,6 +51,7 @@
               </div><!-- End Slides with captions -->
 
             </div>
+          </div>
           </div>
 </template>
 
