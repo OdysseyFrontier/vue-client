@@ -51,6 +51,7 @@ const scrollRight = () => {
                 class="btn btn-secondary position-absolute start-0 top-50 translate-middle-y">〈</button>
             <div class="d-flex justify-content-center overflow-hidden" ref="scrollContainer">
                 <div class="text-center row flex-nowrap">
+
                     <AttractionCategoryListItem class="col-auto" v-for="(attractionCategory) in attractionCategoryList"
                         :key="attractionCategory.id" :attractionCategory="attractionCategory" />
                 </div>

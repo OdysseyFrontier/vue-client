@@ -1,31 +1,66 @@
 <script setup>
-import { ref, watchEffect } from "vue"
-import AttractionListItem from "@/components/attraction/AttractionListItem.vue";
+import { ref, watchEffect } from "vue";
+import { usePlanStore } from '@/stores/plan';
+import AttractionItem from "@/components/plan/AttractionItem.vue";
+import draggable from 'vuedraggable';
 
-import { useAttractionStore } from '@/stores/attraction';
+const store = usePlanStore();
+const searchedAttractions = ref([]);
+const plannedAttractions = ref([]);
 
-let store = useAttractionStore();
-
-const attractionList = ref([])
-//  1213
 watchEffect(() => {
     // searchAttractionList 값 가져오기
-    console.log(useAttractionStore().searchAttractionList);
-    // searchAttractionList가 비어 있는 경우 처리
-    if (!useAttractionStore().searchAttractionList) {
+    console.log(usePlanStore().searchedAttractions);
+
+    if (!usePlanStore().searchedAttractions) {
         return;
     }
 
-    attractionList.value = useAttractionStore().searchAttractionList;
+    searchedAttractions.value = usePlanStore().searchedAttractions;
 });
 
 </script>
 
 <template>
-    <ul class="row">
-        <AttractionListItem class="col-sm-12 col-xl-6 col-xxl-4" v-for="(attraction, index) in attractionList"
-            :key="index" :attraction="attraction" />
-    </ul>
+    <div class="row">
+        <div class="">
+            <h3>Draggable 1</h3>
+            <draggable class="dragArea list-group" :list="searchedAttractions"
+                :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="name">
+                <template #item="{ element }">
+                    <div class="list-group-item">
+                        {{ element.title }}
+                    </div>
+                </template>
+            </draggable>
+        </div>
+
+
+        <!-- <AttractionItem v-for="(attraction, index) in searchedAttractions" 
+                :key="index" :attraction="attraction" /> -->
+
+    </div>
+
+    <h3>Draggable 2</h3>
+    <draggable class="dragArea list-group" :list="plannedAttractions" group="people" @change="log" item-key="name">
+        <template #item="{ element }">
+            <div class="list-group-item">
+                {{ element }}
+            </div>
+        </template>
+    </draggable>
 </template>
 
-<style scoped></style>
+<!-- <template>
+    <h3>Draggable 2</h3>
+    <draggable class="dragArea list-group" :list="plannedAttractions" group="people" @change="log" item-key="name">
+        <template #item="{ element }">
+            <div class="list-group-item">
+                {{ element }}
+            </div>
+        </template>
+    </draggable>
+</template> -->
+<style scoped>
+/* Styles here */
+</style>

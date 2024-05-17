@@ -6,10 +6,7 @@ import Header from "./components/common/Header.vue";
 </script>
 
 <template>
-  
-  
   <Header />
-
   <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.png" width="125" height="125" />
 
@@ -24,16 +21,14 @@ import Header from "./components/common/Header.vue";
   </header> -->
   <RouterView />
 
-<a href="#"
-		class="back-to-top d-flex align-items-center justify-content-center active"><i
-		class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center active"><i
+      class="bi bi-arrow-up-short"></i></a>
 
 
   <Footer />
 </template>
 
 <style scoped>
-
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/

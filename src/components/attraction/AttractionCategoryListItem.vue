@@ -33,14 +33,10 @@ const searchCategory = () => {
 </script>
 
 <template>
-    <!-- <div class="card"> -->
-        <!-- <img :src="attractionCategory.firstImage || defaultAttractionImg" class=" card-img-top" alt="..."> -->
-        <!-- 좋아요 위치 -->
-        <!-- <label :for="attractionCategory.code"></label> -->
-        <button @click="searchCategory" :id="attractionCategory.code" class="btn btn-primary mx-1">
-            {{ attractionCategory.name }}
-        </button>
-    <!-- </div> -->
+
+    <button @click="searchCategory" :id="attractionCategory.code" class="btn btn-primary mx-1">
+        {{ attractionCategory.name }}
+    </button>
 </template>
 
 <style scoped>
@@ -65,6 +61,4 @@ const searchCategory = () => {
 		font-size:15px;
 	}
 } */
-
-
 </style>

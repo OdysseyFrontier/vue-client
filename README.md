@@ -33,3 +33,11 @@ npm run build
 ```sh
 npm run lint
 ```
+
+npm i vuedraggable
+npm i vue-draggable-next
+npm i vue3-google-map
+npm install vuedraggable
+npm install vue-draggable-next
+
+npm install @popperjs/core
