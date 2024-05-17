@@ -3,29 +3,29 @@ import { defineStore } from 'pinia';
 
 export const usePlanStore = defineStore('plan', () => {
 
-    const searchAttractionList = ref([]);
-    const planAttractionList = ref([]);
+    const searchedAttractions = ref([]);
+    const plannedAttractions = ref([]);
 
     // Define actions
-    function setSearchAttractionList(attractions) {
-        searchAttractionList.value = attractions;
-        console.log(searchAttractionList.value);
-        console.log(searchAttractionList.value.length)
+    function setSearchedAttractions(attractions) {
+        searchedAttractions.value = attractions;
+        console.log(searchedAttractions.value);
+        console.log(searchedAttractions.value.length)
     }
 
-    function addAttractionToPlan(attraction) {
-        planAttractionList.value.push(attraction);
+    function addPlannedAttraction(attraction) {
+        this.plannedAttractions.push(attraction);
     }
-    function removeAttractionFromPlan(attractionId) {
-        planAttractionList.value =
-            planAttractionList.value.filter(attr => attr.id !== attractionId);
+    function removeSearchedAttraction(index) {
+        this.searchedAttractions.splice(index, 1);
+
     }
     // Return the state and actions so they can be used in components
     return {
-        searchAttractionList,
-        planAttractionList,
-        setSearchAttractionList,
-        addAttractionToPlan,
-        removeAttractionFromPlan
+        searchedAttractions,
+        plannedAttractions,
+        setSearchedAttractions,
+        addPlannedAttraction,
+        removeSearchedAttraction
     };
 });

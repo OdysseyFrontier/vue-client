@@ -52,7 +52,7 @@ const fetchSearchAttraction = () => {
         keyword.value,
         nowLoc.value,
         ({ data }) => {
-            store.setSearchAttractionList(data);
+            store.setSearchedAttractions(data);
         },
         (error) => {
             console.log(error);

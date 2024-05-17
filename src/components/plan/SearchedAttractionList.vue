@@ -1,58 +1,66 @@
 <script setup>
-import { ref, watchEffect } from "vue"
-import SearchedAttractionListItem from "@/components/plan/SearchedAttractionListItem.vue";
-
-import { draggable } from 'vuedraggable';
-// import { draggable } from 'vue-draggable-next';
-
+import { ref, watchEffect } from "vue";
 import { usePlanStore } from '@/stores/plan';
+import AttractionItem from "@/components/plan/AttractionItem.vue";
+import draggable from 'vuedraggable';
 
 const store = usePlanStore();
+const searchedAttractions = ref([]);
+const plannedAttractions = ref([]);
 
-const searchAttractionList = ref([]);
+watchEffect(() => {
+    // searchAttractionList 값 가져오기
+    console.log(usePlanStore().searchedAttractions);
 
-//  1213
-watchEffect(() => {    // searchAttractionList 값 가져오기
-    console.log(usePlanStore().searchAttractionList);
-    // searchAttractionList가 비어 있는 경우 처리
-    if (!usePlanStore().searchAttractionList) {
+    if (!usePlanStore().searchedAttractions) {
         return;
     }
-    console.log(usePlanStore().searchAttractionList);
-    searchAttractionList.value = usePlanStore().searchAttractionList;
+
+    searchedAttractions.value = usePlanStore().searchedAttractions;
 });
-
-
-const onDragEnd = (event) => {
-    const attraction = event.item._underlying_vm_.attraction;
-    store.addAttractionToPlan(attraction);
-    store.searchAttractionList = store.searchAttractionList.filter(attr => attr.id !== attraction.id);
-};
 
 </script>
 
 <template>
-    <h3>검색 된 장소!!!</h3>
-    <p>원하는 장소를 검색하세요</p>
-    <div>
-        <draggable v-model="searchAttractionList" group="search" @end="onDragEnd">
-            <!-- <AttractionListItem v-for="(attraction, index) in searchAttractionList" 
-            :key="index" :attraction="element"
-                #item="{ element }" /> -->
+    <div class="row">
+        <div class="">
+            <h3>Draggable 1</h3>
+            <draggable class="dragArea list-group" :list="searchedAttractions"
+                :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="name">
+                <template #item="{ element }">
+                    <div class="list-group-item">
+                        {{ element.title }}
+                    </div>
+                </template>
+            </draggable>
+        </div>
 
 
-            <template #item="{ element }">
-                <SearchedAttractionListItem :attraction="element" />
-            </template>
-        </draggable>
+        <!-- <AttractionItem v-for="(attraction, index) in searchedAttractions" 
+                :key="index" :attraction="attraction" /> -->
+
     </div>
+
+    <h3>Draggable 2</h3>
+    <draggable class="dragArea list-group" :list="plannedAttractions" group="people" @change="log" item-key="name">
+        <template #item="{ element }">
+            <div class="list-group-item">
+                {{ element }}
+            </div>
+        </template>
+    </draggable>
 </template>
 
+<!-- <template>
+    <h3>Draggable 2</h3>
+    <draggable class="dragArea list-group" :list="plannedAttractions" group="people" @change="log" item-key="name">
+        <template #item="{ element }">
+            <div class="list-group-item">
+                {{ element }}
+            </div>
+        </template>
+    </draggable>
+</template> -->
 <style scoped>
-.list-group-item {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #fff;
-}
+/* Styles here */
 </style>

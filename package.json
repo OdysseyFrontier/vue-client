@@ -20,7 +20,7 @@
     "vue-draggable-next": "^2.2.1",
     "vue-router": "^4.3.0",
     "vue3-google-map": "^0.20.0",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
