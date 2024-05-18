@@ -20,32 +20,32 @@ watchEffect(() => {
     }
 });
 
+
 </script>
 
 <template>
     <div>
-
         <form>
             <div class="form-group">
                 <label for="plan-name">계획 이름:</label>
-                <input v-model="inputPlanName" type="text" id="plan-name" placeholder="계획 이름">
+                <input v-model="inputPlanName" type="text" id="plan-name" class="form-control" placeholder="계획 이름">
             </div>
             <div class="form-group">
                 <label for="start-date">출발일자:</label>
-                <input v-model="inputStartDate" type="date" id="start-date">
+                <input v-model="inputStartDate" type="date" id="start-date" class="form-control">
             </div>
             <div class="form-group">
                 <label for="end-date">도착일자:</label>
-                <input v-model="inputEndDate" type="date" id="end-date">
+                <input v-model="inputEndDate" type="date" id="end-date" class="form-control">
             </div>
             <div class="form-group">
                 <label for="plan-details">계획 설명:</label>
-                <textarea v-model="inputPlanDescription" id="plan-details" rows="4"
+                <textarea v-model="inputPlanDescription" id="plan-details" class="form-control" rows="4"
                     placeholder="계획 상세 설명..."></textarea>
             </div>
             <div class="form-actions">
-                <button type="submit">계획 추가</button>
-                <button type="reset">계획 취소</button>
+                <button type="submit" class="btn btn-primary">계획 추가</button>
+                <button type="reset" class="btn btn-secondary">계획 취소</button>
             </div>
         </form>
     </div>
