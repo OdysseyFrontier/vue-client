@@ -47,8 +47,20 @@ const router = createRouter({
       component: () => import("@/views/AttractionView.vue"),
     },
     {
-      path: "/board",
-      name: "board",
+      path: "/memberMyPage",
+      name: "memberMyPage",
+      // beforeEnter: onlyAuthUser,
+      component: () => import("@/views/MemberMyPageView.vue"),
+    },
+    {
+      path: "/myMemberList",
+      name: "myMemberList",
+      // beforeEnter: onlyAuthUser,
+      component: () => import("@/views/MyMemberListView.vue"),
+    },
+    {
+      path: '/board',
+      name: 'board',
       beforeEnter: onlyAuthUser,
       component: () => import("@/views/boardView.vue"),
       children: [
@@ -173,12 +185,12 @@ const router = createRouter({
           name: "memberJoin",
           component: () => import("@/components/member/MemberJoin.vue"),
         },
-        {
-          path: "mypage",
-          name: "user-mypage",
-          // beforeEnter: onlyAuthUser,
-          component: () => import("@/views/MemberMyPageView.vue"),
-        },
+        // {
+        //   path: "mypage",
+        //   name: "user-mypage",
+        //   // beforeEnter: onlyAuthUser,
+        //   component: () => import("@/views/MemberMyPageView.vue"),
+        // },
         // {
         //   path: "modify/:userid",
         //   name: "user-modify",

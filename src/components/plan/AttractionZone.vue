@@ -3,13 +3,13 @@ import { ref, watchEffect } from "vue";
 import { usePlanStore } from '@/stores/plan';
 import AttractionItem from "@/components/plan/AttractionItem.vue";
 import draggable from 'vuedraggable';
-import Footer from "@/components/common/Footer.vue";
 
 const store = usePlanStore();
 const searchedAttractions = ref([]);
 const plannedAttractions = ref([]);
 const startDate = ref();
 const endDate = ref();
+
 
 const deleteAttraction = (index) => {
     plannedAttractions.value.splice(index, 1);
@@ -24,25 +24,29 @@ watchEffect(() => {
     }
 
     searchedAttractions.value = usePlanStore().searchedAttractions;
-}),
+});
 
-    watchEffect(() => {
-        if (usePlanStore().startDate && usePlanStore().endDate) {
-            startDate = usePlanStore().startDate;
-            endDate = usePlanStore().endDate;
-            // make date line
-        }
-    }),
+watchEffect(() => {
+    if (usePlanStore().startDate && usePlanStore().endDate) {
+        startDate = usePlanStore().startDate;
+        endDate = usePlanStore().endDate;
+        // make date line
+        // store.updateAttractionsByDate();
 
-    watchEffect(() => {
-        console.log(usePlanStore().plannedAttractions);
+    }
+});
 
-        if (!usePlanStore().plannedAttractions) {
-            return;
-        }
-        plannedAttractions.value = usePlanStore().plannedAttractions;
-        usePlanStore().plannedAttractions = plannedAttractions.value;
-    });
+watchEffect(() => {
+    console.log(usePlanStore().plannedAttractions);
+
+    if (!usePlanStore().plannedAttractions) {
+        return;
+    }
+    plannedAttractions.value = usePlanStore().plannedAttractions;
+    usePlanStore().plannedAttractions = plannedAttractions.value;
+    // plannedAttractions.value = store.plannedAttractions;
+    // store.updateAttractionsByDate();
+});
 
 </script>
 
@@ -50,7 +54,7 @@ watchEffect(() => {
 
     <div class="d-flex flex-column">
         <div class="container">
-            <div class="row min-vh-100" >
+            <div class="row min-vh-100">
                 <div class="col-6 flex-grow-1" style="height: 45rem;">
                     <h3>검색 된 장소</h3>
                     <p>드래그로 옮겨 보세요.</p>
@@ -94,5 +98,23 @@ watchEffect(() => {
 .flex-grow-1 {
     overflow-y: auto;
     /* 스크롤이 내부에서 발생하도록 설정 */
+}
+
+/* Chrome, Safari, Opera */
+.flex-grow-1::-webkit-scrollbar {
+    display: none;
+    /* 스크롤바 영역을 숨김 */
+}
+
+/* Firefox */
+.flex-grow-1 {
+    scrollbar-width: none;
+    /* Firefox에서 스크롤바를 숨김 */
+}
+
+/* IE, Edge */
+.flex-grow-1 {
+    -ms-overflow-style: none;
+    /* IE와 Edge에서 스크롤바를 숨김 */
 }
 </style>

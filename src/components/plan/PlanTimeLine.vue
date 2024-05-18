@@ -1,49 +1,53 @@
-<script setup>
-// defineProps는 자동으로 사용할 수 있으므로 임포트 문을 제거합니다.
-const props = defineProps({
-    attraction: Object,
-});
-
-</script>
-
 <template>
-    <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <h3>{{ props.attraction.title }}</h3>
-                <p>{{ props.attraction.addr1 }}</p>
-                <p>{{ props.attraction.description }}</p>
-            </div>
+    <div class="timeline-item" :class="{ 'left': isLeft, 'right': !isLeft }">
+        <img :src="attraction.firstImage || defaultImg" alt="Attraction Image" class="timeline-image">
+        <div class="content">
+            <h3>{{ attraction.title }}</h3>
+            <p>{{ attraction.addr1 }}</p>
+            <textarea placeholder="간단메모..."></textarea>
         </div>
     </div>
 </template>
 
-<style scoped>
-.timeline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
+<script setup>
+  const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
 
+defineProps({
+    attraction: Object,
+    isLeft: Boolean
+});
+</script>
+
+<style scoped>
 .timeline-item {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
     border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    width: 80%;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    background: #fff;
 }
 
-.timeline-content h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.2em;
+.timeline-image {
+    width: 15rem;
+    height: auto;
+    margin-right: 10px;
 }
 
-.timeline-content p {
-    margin: 0 0 10px 0;
+.content {
+    padding: 1rem;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+.left {
+    /* justify-content: flex-end; */
+}
+
+.right {
+    /* justify-content: flex-start; */
 }
 </style>

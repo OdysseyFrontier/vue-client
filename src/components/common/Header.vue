@@ -202,12 +202,17 @@ const logout = () => {
             <span>관광지 검색</span>
           </RouterLink>
         </li>
-
         <li class="nav-item">
-          <a class="nav-link collapsed" href="/member/mypage">
+          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.memberMyPage" href="/memberMyPage">
             <i class="bi bi-person"></i>
-            <span>마이페이지</span>
-          </a>
+            <span>마이 페이지</span>
+          </RouterLink>
+        </li>
+        <li class="nav-item">
+          <RouterLink :to="{ name: 'myMemberList' }" class="nav-link" :class="sidebarList.myMemberList" href="/myMemberList">
+            <i class="bi bi-person"></i>
+            <span>MyMemberListView</span>
+          </RouterLink>
         </li>
         <!-- End 여행정보공유 Nav -->
 

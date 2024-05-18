@@ -22,7 +22,7 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
         </div>
     </div>
     
-    <div class="row" >    
+    <div class="row">    
         <div class="col scrollable-column">
             <AttractionList />
         </div>
@@ -30,6 +30,7 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
             <AttractionGoogleMap />
         </div>
     </div>
+
     <router-view />
 </template>
 
