@@ -31,7 +31,7 @@ watchEffect(() => {
         startDate = usePlanStore().startDate;
         endDate = usePlanStore().endDate;
         // make date line
-        store.updateAttractionsByDate();
+        // store.updateAttractionsByDate();
 
     }
 });
@@ -42,10 +42,10 @@ watchEffect(() => {
     if (!usePlanStore().plannedAttractions) {
         return;
     }
-    // plannedAttractions.value = usePlanStore().plannedAttractions;
-    // usePlanStore().plannedAttractions = plannedAttractions.value;
-    plannedAttractions.value = store.plannedAttractions;
-    store.updateAttractionsByDate();
+    plannedAttractions.value = usePlanStore().plannedAttractions;
+    usePlanStore().plannedAttractions = plannedAttractions.value;
+    // plannedAttractions.value = store.plannedAttractions;
+    // store.updateAttractionsByDate();
 });
 
 </script>
