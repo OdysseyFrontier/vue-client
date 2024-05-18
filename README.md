@@ -42,7 +42,9 @@ npm i vuedraggable
 npm i vue-draggable-next
 npm i vue3-google-map
 npm install vue-mq
+npm i date-fns
 npm run dev
+
 
 
 npm install @popperjs/core
