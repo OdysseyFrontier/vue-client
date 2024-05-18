@@ -1,15 +1,14 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from "vue";
 import { useMemberStore } from "@/stores/member.js";
 import { useSidebarStore } from "@/stores/sidebar.js";
 
 const memberStore = useMemberStore();
 const sidebarStore = useSidebarStore();
 
-const memberInfo =  memberStore.memberInfo;
+const memberInfo = memberStore.memberInfo;
 
 const sidebarList = ref(sidebarStore.sidebarList);
-
 
 const logout = () => {
   memberStore.memberLogout();
@@ -17,34 +16,63 @@ const logout = () => {
 </script>
 
 <template>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
-    rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+  />
 
   <div class="fixed-top">
     <!-- ======= Header ======= -->
-    <header id="header" class="header  d-flex align-items-center">
+    <header id="header" class="header d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
         <a href="/" class="logo d-flex align-items-center">
           <img src="/src/assets/logo.png" alt="" />
           <span class="d-none d-lg-block">OdysseyFrontiers</span>
         </a>
 
-        <i class="bi bi-list toggle-sidebar-btn navbar-toggler-icon" data-bs-toggle="collapse" data-bs-target="#sidebar"
-          aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation"></i>
+        <i
+          class="bi bi-list toggle-sidebar-btn navbar-toggler-icon"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebar"
+          aria-controls="sidebar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        ></i>
       </div>
       <!-- End Logo -->
 
       <nav class="header-nav ms-auto" v-if="memberStore.isLogin">
         <ul class="d-flex align-items-center">
           <li class="nav-item dropdown pe-3">
-            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-              <img src="/src/assets/noimg.png" alt="Profile" class="rounded-circle" />
-              <span class="d-none d-md-block dropdown-toggle ps-2">{{memberStore.memberInfo != null ? memberStore.memberInfo.name : "null"}}</span> </a>
+            <a
+              class="nav-link nav-profile d-flex align-items-center pe-0"
+              href="#"
+              data-bs-toggle="dropdown"
+            >
+              <img
+                src="/src/assets/noimg.png"
+                alt="Profile"
+                class="rounded-circle"
+              />
+              <span class="d-none d-md-block dropdown-toggle ps-2">{{
+                memberStore.memberInfo != null
+                  ? memberStore.memberInfo.name
+                  : "null"
+              }}</span>
+            </a>
             <!-- End Profile Iamge Icon -->
 
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <ul
+              class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
+            >
               <li class="dropdown-header">
-                <h6>{{ memberStore.memberInfo != null ? memberStore.memberInfo.name : "null" }}</h6>
+                <h6>
+                  {{
+                    memberStore.memberInfo != null
+                      ? memberStore.memberInfo.name
+                      : "null"
+                  }}
+                </h6>
                 <!-- <span>등록한 내용</span> -->
               </li>
               <li>
@@ -52,7 +80,10 @@ const logout = () => {
               </li>
 
               <li>
-                <a class="dropdown-item d-flex align-items-center" href="/member/mypage">
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="/member/mypage"
+                >
                   <i class="bi bi-person"></i>
                   <span>마이페이지</span>
                 </a>
@@ -63,7 +94,11 @@ const logout = () => {
               </li>
 
               <li>
-                <RouterLink to="/" class="dropdown-item d-flex align-items-center " aria-current="page">
+                <RouterLink
+                  to="/"
+                  class="dropdown-item d-flex align-items-center"
+                  aria-current="page"
+                >
                   <i class="bi bi-house"></i>
                   <span>home</span>
                 </RouterLink>
@@ -83,7 +118,12 @@ const logout = () => {
               </li>
 
               <li>
-                <router-link to="/"  @click.prevent="logout" class="dropdown-item d-flex align-items-center" href="/member/logout">
+                <router-link
+                  to="/"
+                  @click.prevent="logout"
+                  class="dropdown-item d-flex align-items-center"
+                  href="/member/logout"
+                >
                   <i class="bi bi-box-arrow-right"></i>
                   <span>로그아웃</span>
                 </router-link>
@@ -98,12 +138,15 @@ const logout = () => {
     </header>
     <!-- End Header -->
 
-
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="collapse navbar-collapse sidebar">
       <ul class="sidebar-nav navbar-nav" id="sidebar-nav">
         <li class="nav-item">
-          <RouterLink :to="{ name: 'home' }" class="nav-link" :class="sidebarList.home">
+          <RouterLink
+            :to="{ name: 'home' }"
+            class="nav-link"
+            :class="sidebarList.home"
+          >
             <i class="bi bi-grid"></i>
             <span>home</span>
           </RouterLink>
@@ -113,28 +156,48 @@ const logout = () => {
         <!-- 관광지 조회 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'boardList' }" class="nav-link" :class="sidebarList.board" href="/board?action=list">
+          <RouterLink
+            :to="{ name: 'boardList' }"
+            class="nav-link"
+            :class="sidebarList.board"
+            href="/board?action=list"
+          >
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'plan' }" class="nav-link" :class="sidebarList.plan" href="/plan">
+          <RouterLink
+            :to="{ name: 'plan' }"
+            class="nav-link"
+            :class="sidebarList.plan"
+            href="/plan"
+          >
             <i class="bi bi-calendar-event"></i>
             <span>여행 계획 세우기</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'planList' }" class="nav-link" :class="sidebarList.planList" href="/planList">
+          <RouterLink
+            :to="{ name: 'planList' }"
+            class="nav-link"
+            :class="sidebarList.planList"
+            href="/planList"
+          >
             <i class="bi bi-clipboard"></i>
             <span>여행 계획 게시판</span>
           </RouterLink>
         </li>
-        
+
         <li class="nav-item">
-          <RouterLink :to="{ name: 'attraction' }" class="nav-link" :class="sidebarList.attraction" href="/attraction">
+          <RouterLink
+            :to="{ name: 'attraction' }"
+            class="nav-link"
+            :class="sidebarList.attraction"
+            href="/attraction"
+          >
             <i class="bi bi-search"></i>
             <span>관광지 검색</span>
           </RouterLink>
@@ -148,10 +211,14 @@ const logout = () => {
         </li>
         <!-- End 여행정보공유 Nav -->
 
-
-
         <li class="nav-heading">Pages</li>
 
+        <li class="nav-item">
+          <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link">
+            <i class="bi bi-person"></i>
+            <span>임시 마이페이지</span>
+          </RouterLink>
+        </li>
 
         <li class="nav-item" v-if="memberStore.isLogin">
           <a class="nav-link collapsed" href="/member/mypage">
@@ -169,9 +236,12 @@ const logout = () => {
         </li>
         <!-- End F.A.Q Page Nav -->
 
-
         <li class="nav-item" v-if="!memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberLogin' }" class="nav-link" :class="sidebarList.login">
+          <RouterLink
+            :to="{ name: 'memberLogin' }"
+            class="nav-link"
+            :class="sidebarList.login"
+          >
             <i class="bi bi-box-arrow-in-right"></i>
             <span>로그인</span>
           </RouterLink>
@@ -179,22 +249,32 @@ const logout = () => {
         <!-- End Login Page Nav -->
 
         <li class="nav-item" v-if="!memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberJoin' }" class="nav-link" :class="sidebarList.join">
+          <RouterLink
+            :to="{ name: 'memberJoin' }"
+            class="nav-link"
+            :class="sidebarList.join"
+          >
             <i>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-person-add" viewBox="0 0 16 16">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-person-add"
+                viewBox="0 0 16 16"
+              >
                 <path
-                  d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                  d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"
+                />
                 <path
-                  d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-              </svg></i>
+                  d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"
+                /></svg
+            ></i>
             <!-- <i class="bi bi-person-add"></i> -->
             <span>회원가입</span>
           </RouterLink>
         </li>
         <!-- End Join Page Nav -->
-
-
 
         <li class="nav-item" v-if="memberStore.isLogin">
           <a class="nav-link collapsed" href="/member/delete">
@@ -208,10 +288,8 @@ const logout = () => {
     <!-- End Sidebar-->
   </div>
 
-  <div style="height: 50px;"></div>
+  <div style="height: 50px"></div>
 </template>
-
-
 
 <style scoped>
 .logo {
@@ -328,7 +406,7 @@ const logout = () => {
   list-style: none;
 }
 
-.header-nav>ul {
+.header-nav > ul {
   margin: 0;
   padding: 0;
 }
@@ -387,7 +465,6 @@ const logout = () => {
   background-color: #f6f9ff;
 }
 
-
 /* 추가 */
 /*--------------------------------------------------------------
 # Sidebar
@@ -426,7 +503,6 @@ const logout = () => {
 }
 
 @media (min-width: 1200px) {
-
   #main,
   #footer {
     margin-left: 300px;
@@ -440,7 +516,6 @@ const logout = () => {
 }
 
 @media (min-width: 1200px) {
-
   .toggle-sidebar #main,
   .toggle-sidebar #footer {
     margin-left: 0;
