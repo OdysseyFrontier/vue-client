@@ -39,6 +39,11 @@ const router = createRouter({
       component: () => import('@/views/PlanView.vue')
     },
     {
+      path: '/planList',
+      name: 'planList',
+      component: () => import('@/views/PlanListView.vue')
+    },
+    {
       path: '/attraction',
       name: 'attraction',
       component: () => import('@/views/AttractionView.vue')
@@ -95,12 +100,12 @@ const router = createRouter({
           name: "memberJoin",
           component: () => import("@/components/member/MemberJoin.vue"),
         },
-        // {
-        //   path: "mypage",
-        //   name: "user-mypage",
-        //   beforeEnter: onlyAuthUser,
-        //   component: () => import("@/components/users/UserMyPage.vue"),
-        // },
+        {
+          path: "mypage",
+          name: "user-mypage",
+          // beforeEnter: onlyAuthUser,
+          component: () => import("@/views/MemberMyPageView.vue"),
+        },
         // {
         //   path: "modify/:userid",
         //   name: "user-modify",

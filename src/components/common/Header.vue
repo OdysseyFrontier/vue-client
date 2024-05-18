@@ -122,7 +122,14 @@ const logout = () => {
         <li class="nav-item">
           <RouterLink :to="{ name: 'plan' }" class="nav-link" :class="sidebarList.plan" href="/plan">
             <i class="bi bi-calendar-event"></i>
-            <span>여행 계획</span>
+            <span>여행 계획 세우기</span>
+          </RouterLink>
+        </li>
+
+        <li class="nav-item">
+          <RouterLink :to="{ name: 'planList' }" class="nav-link" :class="sidebarList.planList" href="/planList">
+            <i class="bi bi-clipboard"></i>
+            <span>여행 계획 게시판</span>
           </RouterLink>
         </li>
         
@@ -133,6 +140,12 @@ const logout = () => {
           </RouterLink>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/member/mypage">
+            <i class="bi bi-person"></i>
+            <span>마이페이지</span>
+          </a>
+        </li>
         <!-- End 여행정보공유 Nav -->
 
 
