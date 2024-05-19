@@ -100,8 +100,24 @@ const router = createRouter({
       path: "/hotplace",
       name: "hotPlace",
       component: () => import("@/views/HotPlaceView.vue"),
-      redirect: "/hotplace/list",
+      redirect: "/hotplace/list2",
       children: [
+        {
+          path: "list2",
+          name: "hotPlaceList2",
+          component: () =>
+            import(
+              /* webpackChunkName: "community" */ "@/components/hotplace/hotPlaceList2.vue"
+            ),
+        },
+        {
+          path: "detail",
+          name: "hotPlaceDetail",
+          component: () =>
+            import(
+              /* webpackChunkName: "community" */ "@/components/hotplace/HotPlaceDetail.vue"
+            ),
+        },
         {
           path: "list",
           name: "hotPlaceList",
