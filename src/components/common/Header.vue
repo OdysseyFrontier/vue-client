@@ -216,6 +216,14 @@ const logout = () => {
         </li>
         <!-- End 여행정보공유 Nav -->
 
+        <li class="nav-item">
+          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace" >
+            <i class="bi bi-camera"></i>
+            <span>HotPlace</span>
+          </RouterLink>
+        </li>
+        <!-- End 여행정보공유 Nav -->
+
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
