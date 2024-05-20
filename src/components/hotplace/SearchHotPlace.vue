@@ -1,19 +1,25 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { usePlanStore } from "@/stores/plan";
+import { useHotPlaceStore } from "@/stores/hotplace";
 import { getSidos, getGuguns } from '@/api/attraction';
 import { getSearchPlan } from '@/api/plan';
 
-const store = usePlanStore();
+
+import { listHotPlace } from "@/api/hotplace.js";
+
+const store = useHotPlaceStore();
 
 const sidos = ref([]);
 const guguns = ref([]);
 
-const selectedSidoCode = ref("0");
-const selectedGugunCode = ref("0");
-const selectedContentTypeId = ref("0");
-const keyword = ref("");
-const sortBy = ref('createdAt');
+
+const param = ref({
+    selectedSidoCode: "0",
+    selectedGugunCode: "0",
+    selectedContentTypeId: "0",
+    keyword: ""
+});
+
 
 const fetchSidos = () => {
     getSidos(
@@ -27,12 +33,12 @@ const fetchSidos = () => {
 }
 
 const fetchGuguns = () => {
-    if (selectedSidoCode.value === "0") {
+    if (param.value.selectedSidoCode === "0") {
         guguns.value = [];
         return;
     }
     getGuguns(
-        selectedSidoCode.value,
+        param.value.selectedSidoCode,
         ({ data }) => {
             guguns.value = data;
         },
@@ -42,19 +48,14 @@ const fetchGuguns = () => {
     );
 }
 
-const fetchSearchPlan = () => {
-    getSearchPlan(
-        selectedContentTypeId.value,
-        selectedSidoCode.value,
-        selectedGugunCode.value,
-        keyword.value,
+
+
+
+const fetchSearchHotPlace = () => {
+    listHotPlace(
+        param,
         ({ data }) => {
-            store.setSearchFilters({
-                query: keyword.value,
-                sido: selectedSidoCode.value,
-                gugun: selectedGugunCode.value,
-                category: selectedContentTypeId.value
-            });
+            store.setSearchHotPlaceList(data);
         },
         (error) => {
             console.log(error);
@@ -62,13 +63,47 @@ const fetchSearchPlan = () => {
     )
 }
 
-const updateSortBy = () => {
-    store.setSortBy(sortBy.value);
-}
+
 
 onMounted(() => {
     fetchSidos();
 });
+
+
+
+// ---------------------------------------
+// const param = ref({
+//     type: "",
+//     key: "subject",
+//     word: "",
+// });
+
+
+// 검색 조건 세팅
+// const tgtTypeCd = ref("subject")
+// const searchKey = ref(true)
+// const searchKey2 = ref(false)
+// const keyword = ref("")
+// const select2 = ref("")
+
+// function funChgTgtTypeCd(){
+// 	if(tgtTypeCd.value =="type"){ //구분
+//         param.value.word = ""
+//         param.value.key = ""
+//         searchKey.value = false;
+//         searchKey2.value = true;
+
+//         param.value.key = tgtTypeCd.value;
+// 	}else{
+//         param.value.word = ""
+//         param.value.key = tgtTypeCd.value
+//         searchKey.value = true;
+//         searchKey2.value = false;
+
+//         param.value.key = tgtTypeCd.value;
+// 	}
+// }
+//----------------------------------------------------------------
 </script>
 
 <template>
