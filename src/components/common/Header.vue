@@ -80,13 +80,14 @@ const logout = () => {
               </li>
 
               <li>
-                <a
-                  class="dropdown-item d-flex align-items-center"
-                  href="/member/mypage"
+                <RouterLink
+                  :to="{ name: 'memberMyPage' }"
+                  class="nav-link"
+                  :class="sidebarList.mypage"
                 >
                   <i class="bi bi-person"></i>
-                  <span>마이페이지</span>
-                </a>
+                  <span>마이 페이지</span>
+                </RouterLink>
               </li>
 
               <li>
@@ -98,6 +99,7 @@ const logout = () => {
                   to="/"
                   class="dropdown-item d-flex align-items-center"
                   aria-current="page"
+                  :class="sidebarList.home"
                 >
                   <i class="bi bi-house"></i>
                   <span>home</span>
@@ -172,7 +174,6 @@ const logout = () => {
             :to="{ name: 'plan' }"
             class="nav-link"
             :class="sidebarList.plan"
-            href="/plan"
           >
             <i class="bi bi-calendar-event"></i>
             <span>여행 계획 세우기</span>
@@ -184,7 +185,6 @@ const logout = () => {
             :to="{ name: 'planList' }"
             class="nav-link"
             :class="sidebarList.planList"
-            href="/planList"
           >
             <i class="bi bi-clipboard"></i>
             <span>여행 계획 게시판</span>
@@ -196,20 +196,27 @@ const logout = () => {
             :to="{ name: 'attraction' }"
             class="nav-link"
             :class="sidebarList.attraction"
-            href="/attraction"
           >
             <i class="bi bi-search"></i>
             <span>관광지 검색</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.memberMyPage" href="/memberMyPage">
+          <RouterLink
+            :to="{ name: 'memberMyPage' }"
+            class="nav-link"
+            :class="sidebarList.mypage"
+          >
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'myMemberList' }" class="nav-link" :class="sidebarList.myMemberList" href="/myMemberList">
+          <RouterLink
+            :to="{ name: 'myMemberList' }"
+            class="nav-link"
+            :class="sidebarList.myMemberList"
+          >
             <i class="bi bi-person"></i>
             <span>MyMemberListView</span>
           </RouterLink>
@@ -217,7 +224,11 @@ const logout = () => {
         <!-- End 여행정보공유 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace" >
+          <RouterLink
+            :to="{ name: 'hotPlace' }"
+            class="nav-link"
+            :class="sidebarList.hotplace"
+          >
             <i class="bi bi-camera"></i>
             <span>HotPlace</span>
           </RouterLink>
@@ -227,7 +238,11 @@ const logout = () => {
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link">
+          <RouterLink
+            :to="{ name: 'tempMyPage' }"
+            class="nav-link"
+            :class="sidebarList.mypage"
+          >
             <i class="bi bi-person"></i>
             <span>임시 마이페이지</span>
           </RouterLink>

@@ -1,4 +1,9 @@
-<script setup></script>
+<script setup>
+import { useSidebarStore } from "@/stores/sidebar.js";
+
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("mypage");
+</script>
 
 <template>
   <main id="main" class="main">
