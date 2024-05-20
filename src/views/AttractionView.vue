@@ -12,26 +12,27 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
 </script>
 
 <template class="no-scrollbar">
-    <br />
     <div>
-        <div class="row fixed-top">
-            <SearchingAttraction />
+        <br />
+        <div>
+            <div class="row fixed-top">
+                <SearchingAttraction />
+            </div>
+            <div class="row fixed-top">
+                <AttractionCategory />
+            </div>
         </div>
-        <div class="row fixed-top">
-            <AttractionCategory />
-        </div>
-    </div>
 
-    <div class="row h-100" style="height: 60rem;">
-        <div class="col scrollable-column flex-grow-1 ">
-            <AttractionList />
+        <div class="row h-100" style="height: 60rem;">
+            <div class="col scrollable-column flex-grow-1 ">
+                <AttractionList />
+            </div>
+            <div class="col flex-grow-1" style="height: 60rem; ">
+                <AttractionGoogleMap />
+            </div>
         </div>
-        <div class="col flex-grow-1" style="height: 60rem; ">
-            <AttractionGoogleMap />
-        </div>
+        <router-view />
     </div>
-
-    <router-view />
 </template>
 
 <style scoped>

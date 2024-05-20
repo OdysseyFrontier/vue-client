@@ -2,6 +2,10 @@ import { localAxios } from "@/util/http-commons";
 
 const local = localAxios();
 
+function getAttraction(contentId, success, fail) {
+    local.get(`/attraction/${contentId}`).then(success).catch(fail);
+}
+
 function getCategorys(success, fail) {
     local.get(`/attraction/category`).then(success).catch(fail);
 }
@@ -25,6 +29,7 @@ function getSearchAttraction(contentTypeId, sidoCode, gugunCode, keywordString, 
 }
 
 export {
+    getAttraction,
     getSidos,
     getGuguns,
     getSearchAttraction,

@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router';
 import { defineProps } from 'vue';
 
 defineProps({
@@ -40,7 +41,11 @@ const truncateDescription = (description) => {
             <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 {{ truncateDescription(attraction.description) }}
             </p>
-            <a href="#" class="btn btn-primary">상세 보기</a>
+            <RouterLink
+                  :to="{name: 'AttractionDetail', params: {contentId: attraction.contentId} }"
+                  class="꾸밀거 있으면 넣으면 됩니당"
+                >상세보기
+            </RouterLink>
         </div>
     </div>
 </template>

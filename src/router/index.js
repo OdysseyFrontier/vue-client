@@ -42,9 +42,16 @@ const router = createRouter({
       component: () => import("@/views/PlanListView.vue"),
     },
     {
-      path: "/attraction",
-      name: "attraction",
-      component: () => import("@/views/AttractionView.vue"),
+      path: '/attraction',
+      name: 'attraction',
+      component: () => import('@/views/AttractionView.vue'),
+      children: [
+        {
+          path: 'detail/:contentId',
+          name: 'AttractionDetail',
+          component: () => import('@/components/attraction/AttractionDetail.vue')
+        }
+      ]
     },
     {
       path: "/memberMyPage",
