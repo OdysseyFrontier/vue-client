@@ -51,6 +51,23 @@ const router = createRouter({
       name: "memberMyPage",
       // beforeEnter: onlyAuthUser,
       component: () => import("@/views/MemberMyPageView.vue"),
+      children: [
+        {
+          path: "/planList",
+          name: "MyPlanList",
+          component: () => import("@/components/member/myPage/MyPlanList.vue"),
+        },
+        {
+          path: "info",
+          name: "myInfo",
+          component: () => import("@/components/tempMyPage/info.vue"),
+        },
+        {
+          path: "infomodify",
+          name: "myInfoModify",
+          component: () => import("@/components/tempMyPage/infoModify.vue"),
+        },
+      ],
     },
     {
       path: "/myMemberList",
@@ -59,8 +76,8 @@ const router = createRouter({
       component: () => import("@/views/MyMemberListView.vue"),
     },
     {
-      path: '/board',
-      name: 'board',
+      path: "/board",
+      name: "board",
       beforeEnter: onlyAuthUser,
       component: () => import("@/views/boardView.vue"),
       children: [

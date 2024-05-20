@@ -7,12 +7,14 @@ async function memberConfirm(param, success, fail) {
 }
 
 async function findById(memberId, success, fail) {
-  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  local.defaults.headers["Authorization"] =
+    sessionStorage.getItem("accessToken");
   await local.get(`/member/info/${memberId}`).then(success).catch(fail);
 }
 
 async function tokenRegeneration(member, success, fail) {
-  local.defaults.headers["refreshToken"] = sessionStorage.getItem("refreshToken"); //axios header에 refresh-token 셋팅
+  local.defaults.headers["refreshToken"] =
+    sessionStorage.getItem("refreshToken"); //axios header에 refresh-token 셋팅
   await local.post(`/member/refresh`, member).then(success).catch(fail);
 }
 
@@ -20,4 +22,15 @@ async function logout(memberId, success, fail) {
   await local.get(`/member/logout/${memberId}`).then(success).catch(fail);
 }
 
-export { memberConfirm, findById, tokenRegeneration, logout };
+function idCheck(param, success, fail) {
+  local.get(`/member/idcheck`, { params: param }).then(success).catch(fail);
+}
+
+function join(joinMember, success, fail) {
+  local
+    .post(`/member/join`, JSON.stringify(joinMember))
+    .then(success)
+    .catch(fail);
+}
+
+export { memberConfirm, findById, tokenRegeneration, logout, idCheck, join };

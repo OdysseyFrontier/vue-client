@@ -1,13 +1,17 @@
 <script setup>
 import SearchPlan from "@/components/planList/SearchPlan.vue";
 import PlanList from "@/components/planList/PlanList.vue";
+import { useSidebarStore } from "@/stores/sidebar.js";
+
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("planList");
 </script>
 
 <template>
   <div>
     <h1>여행 계획 리스트</h1>
     <div class="row">
-        <SearchPlan />
+      <SearchPlan />
     </div>
     <PlanList />
   </div>

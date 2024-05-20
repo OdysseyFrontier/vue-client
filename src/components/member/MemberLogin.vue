@@ -1,242 +1,248 @@
 <script setup>
-  import { useSidebarStore } from "@/stores/sidebar.js";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
-  const sidebarStore = useSidebarStore();
-  sidebarStore.changesSidebarState("login");
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("login");
 
+import { ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
 
-  import { ref, watch } from "vue"
-  import { storeToRefs } from "pinia"
-  import { useRouter } from "vue-router"
-  import { useMemberStore } from "@/stores/member"
+const router = useRouter();
 
-  const router = useRouter()
+const memberStore = useMemberStore();
 
-  const memberStore = useMemberStore()
+const { isLogin, isLoginError } = storeToRefs(memberStore);
+const { memberLogin, getMemberInfo } = memberStore;
 
-const { isLogin, isLoginError } = storeToRefs(memberStore)
-const { memberLogin, getMemberInfo } = memberStore
-
-const msg = ref("")
+const msg = ref("");
 
 const loginMember = ref({
   emailId: "",
-  emailDomain:"",
+  emailDomain: "",
   password: "",
-})
+});
 
 const login = async () => {
-  await memberLogin(loginMember.value)
-  let token = sessionStorage.getItem("accessToken")
-  console.log(token)
-  console.log("isLogin: " + isLogin.value)
+  await memberLogin(loginMember.value);
+  let token = sessionStorage.getItem("accessToken");
+  console.log(token);
+  console.log("isLogin: " + isLogin.value);
   if (isLogin.value) {
-    getMemberInfo(token)
-    router.replace("/")
-  }else{
-    msg.value = "아이디 혹은 비밀번호가 일치하지 않습니다."
+    getMemberInfo(token);
+    router.replace("/");
+  } else {
+    msg.value = "아이디 혹은 비밀번호가 일치하지 않습니다.";
   }
-}
-
-
-
+};
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
-setTimeout(()=>{(function () {
-  'use strict'
+setTimeout(() => {
+  (function () {
+    "use strict";
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.needs-validation')
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll(".needs-validation");
 
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "click",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
 
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()})
-
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+});
 
 watch(
   () => loginMember.value.emailId,
   (value) => {
-    console.log(value)
-    msg.value = ""
+    console.log(value);
+    msg.value = "";
   },
   { immediate: true }
 );
 watch(
   () => loginMember.value.emailDomain,
   (value) => {
-    console.log(value)
-    msg.value = ""
+    console.log(value);
+    msg.value = "";
   },
   { immediate: true }
 );
 watch(
   () => loginMember.value.password,
   (value) => {
-    console.log(value)
-    msg.value = ""
+    console.log(value);
+    msg.value = "";
   },
   { immediate: true }
 );
 </script>
 
 <template>
-    <main>
-      <div class="container">
-        <section
-          class="section register d-flex flex-column align-items-center justify-content-center py-4"
-        >
-          <div class="container">
-            <div class="row justify-content-center">
-              <div
-                class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
-              >
-                <div class="d-flex justify-content-center py-4">
-                  <a
-                    href="/"
-                    class="logo d-flex align-items-center w-auto"
+  <main>
+    <div class="container">
+      <section
+        class="section register d-flex flex-column align-items-center justify-content-center py-4"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div
+              class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
+            >
+              <div class="d-flex justify-content-center py-4">
+                <a href="/" class="logo d-flex align-items-center w-auto">
+                  <img src="/src/assets/logo.png" alt="" />
+                  <span class="d-none d-lg-block">OdysseyFrontiers</span>
+                </a>
+              </div>
+              <!-- End Logo -->
+
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">로그인</h5>
+                    <p class="text-center small">
+                      아이디와 비밀번호를 입력해주세요.
+                    </p>
+                  </div>
+
+                  <form
+                    class="row g-3 needs-validation"
+                    novalidate
+                    id="form-login"
+                    method="POST"
+                    action="${root}/member/login"
                   >
-                    <img src="/src/assets/logo.png" alt="" />
-                    <span class="d-none d-lg-block">OdysseyFrontiers</span>
-                  </a>
-                </div>
-                <!-- End Logo -->
-
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="pt-4 pb-2">
-                      <h5 class="card-title text-center pb-0 fs-4">로그인</h5>
-                      <p class="text-center small">
-                        아이디와 비밀번호를 입력해주세요.
-                      </p>
-                    </div>
-
-                    <form class="row g-3 needs-validation" novalidate id="form-login" method="POST" action="${root}/member/login">
-                      <div class="col-12">
-                        <label for="yourUsername" class="form-label"
-                          >아이디</label
-                        >
-                        <div class="input-group has-validation">
-                          <input
-                            type="text"
-                            name="memberId"
-                            class="form-control"
-                            id="yourUsername"
-                            value=""
-                            v-model="loginMember.emailId"
-                            required
-                          />
-                          <div class="invalid-feedback">
-                            아이디를 입력해주세요.
-                          </div>
-                        </div>
-                      </div>
-
-
-                      <div class="col-12">
-                        <label for="eamilDomain" class="form-label"
-                          >이메일 도메인</label
-                        >
-                        <div class="input-group has-validation">
-                          <input
-                            type="text"
-                            name="eamilDomain"
-                            class="form-control"
-                            id="eamilDomain"
-                            value=""
-                            v-model="loginMember.emailDomain"
-                            required
-                          />
-                          <div class="invalid-feedback">
-                            이메일 도메인을 입력해주세요.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-12">
-                        <label for="yourPassword" class="form-label"
-                          >비밀번호</label
-                        >
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label"
+                        >아이디</label
+                      >
+                      <div class="input-group has-validation">
                         <input
-                          type="password"
-                          name="password"
+                          type="text"
+                          name="memberId"
                           class="form-control"
-                          id="yourPassword"
+                          id="yourUsername"
                           value=""
-                          v-model="loginMember.password"
-                          @keyup.enter="login"
+                          v-model="loginMember.emailId"
                           required
                         />
                         <div class="invalid-feedback">
-                          비밀번호를 입력해주세요.
+                          아이디를 입력해주세요.
                         </div>
                       </div>
+                    </div>
 
-                      <div class="col-12">
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="remember"
-                            value="true"
-                            id="rememberMe"
-                          />
-                          <label class="form-check-label" for="rememberMe"
-                            >로그인 정보 기억</label
-                          >
+                    <div class="col-12">
+                      <label for="eamilDomain" class="form-label"
+                        >이메일 도메인</label
+                      >
+                      <div class="input-group has-validation">
+                        <input
+                          type="text"
+                          name="eamilDomain"
+                          class="form-control"
+                          id="eamilDomain"
+                          value=""
+                          v-model="loginMember.emailDomain"
+                          required
+                        />
+                        <div class="invalid-feedback">
+                          이메일 도메인을 입력해주세요.
                         </div>
                       </div>
+                    </div>
 
-            <div class="text-danger mb-2" v-if="msg">{{msg}}</div>   
-                      
-                      <div class="col-12">
-                        <button class="btn btn-primary w-100" @click.prevent="login" type="submit">
-                          로그인
-                        </button>
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label"
+                        >비밀번호</label
+                      >
+                      <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        id="yourPassword"
+                        value=""
+                        v-model="loginMember.password"
+                        @keyup.enter="login"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        비밀번호를 입력해주세요.
                       </div>
-                      <div class="col-12">
-                        <p class="small mb-0">
-                          계정이 없으신가요?
-                          <RouterLink :to="{name: 'memberJoin'}">회원가입</RouterLink>
-                        </p>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                    </div>
 
-                <div class="credits">
-                  <!-- All the links in the footer should remain intact. -->
-                  <!-- You can delete the links only if you purchased the pro version. -->
-                  <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                  <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                  Designed by
-                  <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="remember"
+                          value="true"
+                          id="rememberMe"
+                        />
+                        <label class="form-check-label" for="rememberMe"
+                          >로그인 정보 기억</label
+                        >
+                      </div>
+                    </div>
+
+                    <div class="text-danger mb-2" v-if="msg">{{ msg }}</div>
+
+                    <div class="col-12">
+                      <button
+                        class="btn btn-primary w-100"
+                        @click.prevent="login"
+                        type="submit"
+                      >
+                        로그인
+                      </button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">
+                        계정이 없으신가요?
+                        <RouterLink :to="{ name: 'memberJoin' }"
+                          >회원가입</RouterLink
+                        >
+                      </p>
+                    </div>
+                  </form>
                 </div>
+              </div>
+
+              <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+                Designed by
+                <a href="https://bootstrapmade.com/">BootstrapMade</a>
               </div>
             </div>
           </div>
-        </section>
-      </div>
-    </main>
-    <!-- End #main -->
+        </div>
+      </section>
+    </div>
+  </main>
+  <!-- End #main -->
 
-
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-      rel="stylesheet"
-    />
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet"
+  />
 </template>
 
 <style scoped>
@@ -261,9 +267,6 @@ watch(
   color: #012970;
   font-family: "Nunito", sans-serif;
 }
-
-
-
 
 /* 복붙 */
 /**
@@ -296,8 +299,6 @@ a:hover {
   color: #717ff5;
   text-decoration: none;
 }
-
-
 
 /* Card */
 .card {
@@ -337,8 +338,4 @@ a:hover {
 .card-img-overlay {
   background-color: rgba(255, 255, 255, 0.6);
 }
-
-
-
-
 </style>

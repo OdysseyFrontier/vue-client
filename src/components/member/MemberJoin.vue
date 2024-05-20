@@ -4,149 +4,312 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("join");
 
-setTimeout(()=>{(function () {
-  'use strict'
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { idCheck, join } from "@/api/member";
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.needs-validation')
+const joinMemberInfo = ref({
+  name: "",
+  emailId: "",
+  emailDomain: "",
+  password: "",
+  phone: "",
+  address: "",
+  birthday: "",
+});
 
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
+const router = useRouter();
 
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()})
+const msg = ref("");
+watch(
+  () => joinMemberInfo.value.emailId,
+  (value) => {
+    msg.value = "";
+  },
+  { immediate: true }
+);
+
+watch(
+  () => joinMemberInfo.value.emailDomain,
+  (value) => {
+    msg.value = "";
+  },
+  { immediate: true }
+);
+
+function isIdCheck() {
+  let count = 0;
+  idCheck(
+    joinMemberInfo.value,
+    (response) => {
+      count = response.data;
+    },
+    (error) => console.error(error)
+  );
+
+  if (count != 0) {
+    return true;
+  }
+
+  return false;
+}
+
+function onSubmit() {
+  if (isIdCheck()) {
+    msg.value = "중복된 이메일입니다.";
+  } else {
+    joinMember();
+  }
+}
+
+function joinMember() {
+  join(
+    joinMemberInfo.value,
+    (response) => {
+      console.log(response.data);
+      let msg = "회원가입 처리시 문제 발생했습니다.";
+      if (response.status == 201) msg = "회원가입이 완료되었습니다.";
+      alert(msg);
+      router.push("/");
+    },
+    (error) => console.error(error)
+  );
+}
+
+setTimeout(() => {
+  (function () {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "click",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+});
 </script>
 
 <template>
-    <main>
-		<div class="container">
-			<section
-				class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-				<div class="container">
-					<div class="row justify-content-center">
-						<div
-							class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-							<div class="d-flex justify-content-center py-4">
-								<a href="/"
-									class="logo d-flex align-items-center w-auto"> <img
-									src="/src/assets/logo.png" alt="" /> <span
-									class="d-none d-lg-block">OdysseyFrontiers</span>
-								</a>
-							</div>
-							<!-- End Logo -->
+  <main>
+    <div class="container">
+      <section
+        class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div
+              class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
+            >
+              <div class="d-flex justify-content-center py-4">
+                <a href="/" class="logo d-flex align-items-center w-auto">
+                  <img src="/src/assets/logo.png" alt="" />
+                  <span class="d-none d-lg-block">OdysseyFrontiers</span>
+                </a>
+              </div>
+              <!-- End Logo -->
 
-							<div class="card mb-3">
-								<div class="card-body">
-									<div class="pt-4 pb-2">
-										<h5 class="card-title text-center pb-0 fs-4">회원가입</h5>
-										<p class="text-center small">개인정보를 입력해주세요.</p>
-									</div>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">회원가입</h5>
+                    <p class="text-center small">개인정보를 입력해주세요.</p>
+                  </div>
 
-									<form class="row g-3 needs-validation" novalidate method="POST"
-										action="/member/join">
-										<div class="col-12">
-											<label for="yourName" class="form-label">이름</label> <input
-												type="text" name="memberName" class="form-control" id="yourName"
-												required />
-											<div class="invalid-feedback">이름을 입력해주세요!</div>
-										</div>
+                  <form class="row g-3 needs-validation" novalidate>
+                    <div class="col-12">
+                      <label for="yourName" class="form-label">이름</label>
+                      <input
+                        type="text"
+                        name="memberName"
+                        class="form-control"
+                        id="yourName"
+                        required
+                        v-model="joinMemberInfo.name"
+                      />
+                      <div class="invalid-feedback">이름을 입력해주세요!</div>
+                    </div>
 
-										<div class="col-12">
-											<label for="memberId" class="form-label">아이디</label> <input
-												type="text" name="memberId" class="form-control"
-												id="memberId" required />
-											<div class="invalid-feedback">아이디를 입력해주세요!</div>
-											
-											<div id="idcheck-result"></div>
-										</div>
-										
-										<div class="col-12">
-											<label for="yourPassword" class="form-label">비밀번호</label> <input
-												type="password" name="memberPassword" class="form-control"
-												id="yourPassword" required />
-											<div class="invalid-feedback">비밀번호를 입력해주세요!</div>
-										</div>
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">이메일</label>
+                      <div class="input-group has-validation">
+                        <input
+                          type="text"
+                          name="emailId"
+                          class="form-control"
+                          id="yourEmail"
+                          required
+                          v-model="joinMemberInfo.emailId"
+                        />
+                        <span class="input-group-text" id="inputGroupPrepend"
+                          >@</span
+                        >
+                        <select
+                          class="form-select"
+                          id="emaildomain"
+                          name="emailDomain"
+                          aria-label="이메일 도메인 선택"
+                          required
+                          v-model="joinMemberInfo.emailDomain"
+                        >
+                          <option value="" selected disabled hidden>
+                            선택해주세요.
+                          </option>
+                          <option value="odysseyfrontiers.com">
+                            odysseyfrontiers.com
+                          </option>
+                          <option value="google.com">google.com</option>
+                          <option value="naver.com">naver.com</option>
+                          <option value="kakao.com">kakao.com</option>
+                        </select>
 
-										<div class="col-12">
-											<label for="yourEmail" class="form-label">이메일</label>
-											<div class="input-group has-validation">
-												<input type="text" name="emailId" class="form-control"
-													id="yourEmail" required /> <span class="input-group-text"
-													id="inputGroupPrepend">@</span> <select class="form-select"
-													id="emaildomain" name="emailDomain" aria-label="이메일 도메인 선택"
-													required>
-													<option value="" selected disabled hidden>선택해주세요.</option>
-													<option value="ssafy.com">싸피</option>
-													<option value="google.com">구글</option>
-													<option value="naver.com">네이버</option>
-													<option value="kakao.com">카카오</option>
-												</select>
+                        <div class="invalid-feedback">
+                          이메일을 입력해주세요.
+                        </div>
+                        <div class="invalid-feedback" v-if="msg">{{ msg }}</div>
+                      </div>
+                    </div>
 
-												<div class="invalid-feedback">이메일을 입력해주세요.</div>
-											</div>
-										</div>
-										
-										<div class="col-12">
-											<label for="yourPhone" class="form-label">전화번호</label> <input
-												type="text" name="memberPhone" class="form-control"
-												id="yourPhone" required />
-											<div class="invalid-feedback">전화번호를 입력해주세요!</div>
-										</div>
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label"
+                        >비밀번호</label
+                      >
+                      <input
+                        type="password"
+                        name="memberPassword"
+                        class="form-control"
+                        id="yourPassword"
+                        required
+                        v-model="joinMemberInfo.password"
+                      />
+                      <div class="invalid-feedback">
+                        비밀번호를 입력해주세요!
+                      </div>
+                    </div>
 
-										<div class="col-12">
-											<label for="memberAddress1">우편번호 <span
-												class="text-muted">&nbsp;(선택사항)</span> <span
-												class="text-muted">
-													<button type="button" class="btn " id="check_btn"
-														onclick="execDaumPostcode()">찾기</button>
-											</span>
-											</label> <input type="text" class="form-control" id="memberAddress1"
-												name="memberAddress1" placeholder="찾기를 눌러 주소를 입력하세요" value=""/>
-										</div>
+                    <div class="col-12">
+                      <label for="yourPhone" class="form-label">전화번호</label>
+                      <input
+                        type="text"
+                        name="memberPhone"
+                        class="form-control"
+                        id="yourPhone"
+                        required
+                        v-model="joinMemberInfo.phone"
+                      />
+                      <div class="invalid-feedback">
+                        전화번호를 입력해주세요!
+                      </div>
+                    </div>
 
-										<div class="col-12">
-											<label for="MemberAddress2">주소<span
-												class="text-muted">&nbsp;(선택사항)</span></label> <input type="text"
-												class="form-control" id="memberAddress2"
-												name="memberAddress2" placeholder="주소를 입력해주세요." value="" />
-										</div>
+                    <div class="col-12">
+                      <label for="birthday" class="form-label">생일</label>
+                      <input
+                        type="text"
+                        name="birthday"
+                        class="form-control"
+                        id="birthday"
+                        required
+                        v-model="joinMemberInfo.birthday"
+                      />
+                      <div class="invalid-feedback">생일을 입력해주세요!</div>
+                    </div>
 
-										<div class="col-12">
-											<div class="form-check">
-												<input class="form-check-input" name="terms" type="checkbox"
-													value="" id="acceptTerms" required /> <label
-													class="form-check-label" for="acceptTerms"><a
-													href="#">개인정보 수집 및 이용</a></label>에 동의
-												<div class="invalid-feedback">필수항목입니다.</div>
-											</div>
-										</div>
-										<div class="col-12">
-											<button class="btn btn-primary w-100" type="submit">
-												회원가입</button>
-										</div>
-										<div class="col-12">
-											<p class="small mb-0">
-												계정이 있으신가요?
-                                                <RouterLink :to="{name: 'memberLogin'}">로그인</RouterLink>
-											</p>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-	</main>
+                    <div class="col-12">
+                      <label for="memberAddress1"
+                        >우편번호
+                        <span class="text-muted">&nbsp;(선택사항)</span>
+                        <span class="text-muted">
+                          <button
+                            type="button"
+                            class="btn"
+                            id="check_btn"
+                            onclick="execDaumPostcode()"
+                          >
+                            찾기
+                          </button>
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="memberAddress1"
+                        name="memberAddress1"
+                        placeholder="찾기를 눌러 주소를 입력하세요"
+                        value=""
+                      />
+                    </div>
+
+                    <div class="col-12">
+                      <label for="MemberAddress2"
+                        >주소<span class="text-muted"
+                          >&nbsp;(선택사항)</span
+                        ></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="memberAddress2"
+                        name="memberAddress2"
+                        placeholder="주소를 입력해주세요."
+                        v-model="joinMemberInfo.address"
+                      />
+                    </div>
+
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          name="terms"
+                          type="checkbox"
+                          value=""
+                          id="acceptTerms"
+                          required
+                        />
+                        <label class="form-check-label" for="acceptTerms"
+                          ><a href="#">개인정보 수집 및 이용</a></label
+                        >에 동의
+                        <div class="invalid-feedback">필수항목입니다.</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <button
+                        class="btn btn-primary w-100"
+                        @click.prevent="onSubmit"
+                        type="button"
+                      >
+                        회원가입
+                      </button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">
+                        계정이 있으신가요?
+                        <RouterLink :to="{ name: 'memberLogin' }"
+                          >로그인</RouterLink
+                        >
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 </template>
 
 <style scoped>
@@ -190,8 +353,6 @@ h6 {
   font-family: "Nunito", sans-serif;
 }
 
-
-
 /*--------------------------------------------------------------
 # Page Title
 --------------------------------------------------------------*/
@@ -205,9 +366,6 @@ h6 {
   font-weight: 600;
   color: #012970;
 }
-
-
-
 
 /* Card */
 .card {
@@ -248,8 +406,6 @@ h6 {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-
-
 /*--------------------------------------------------------------
 # logo
 --------------------------------------------------------------*/
@@ -274,8 +430,4 @@ h6 {
   color: #012970;
   font-family: "Nunito", sans-serif;
 }
-
-
-
-
 </style>
