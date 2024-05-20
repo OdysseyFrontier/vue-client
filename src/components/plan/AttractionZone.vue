@@ -28,8 +28,8 @@ watchEffect(() => {
 
 watchEffect(() => {
     if (usePlanStore().startDate && usePlanStore().endDate) {
-        startDate = usePlanStore().startDate;
-        endDate = usePlanStore().endDate;
+        startDate.value = usePlanStore().startDate;
+        endDate.value = usePlanStore().endDate;
         // make date line
         // store.updateAttractionsByDate();
 

@@ -21,12 +21,12 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
             <AttractionCategory />
         </div>
     </div>
-    
-    <div class="row">    
-        <div class="col scrollable-column">
+
+    <div class="row h-100" style="height: 60rem;">
+        <div class="col scrollable-column flex-grow-1 ">
             <AttractionList />
         </div>
-        <div class="col">
+        <div class="col flex-grow-1" style="height: 60rem; ">
             <AttractionGoogleMap />
         </div>
     </div>
@@ -50,5 +50,23 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
     /* 세로 스크롤 적용 */
     max-height: 1000px;
     /* 최대 높이 설정 (화면 높이에서 다른 요소들의 높이 제외) */
+}
+
+/* Chrome, Safari, Opera */
+.flex-grow-1::-webkit-scrollbar {
+    display: none;
+    /* 스크롤바 영역을 숨김 */
+}
+
+/* Firefox */
+.flex-grow-1 {
+    scrollbar-width: none;
+    /* Firefox에서 스크롤바를 숨김 */
+}
+
+/* IE, Edge */
+.flex-grow-1 {
+    -ms-overflow-style: none;
+    /* IE와 Edge에서 스크롤바를 숨김 */
 }
 </style>

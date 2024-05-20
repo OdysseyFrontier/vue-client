@@ -23,10 +23,28 @@ watchEffect(() => {
 </script>
 
 <template>
-    <ul class="row">
+    <ul class="row flex-grow-1">
         <AttractionListItem class="col-sm-12 col-xl-6 col-xxl-4" v-for="(attraction, index) in attractionList"
             :key="index" :attraction="attraction" />
     </ul>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* Chrome, Safari, Opera */
+.flex-grow-1::-webkit-scrollbar {
+    display: none;
+    /* 스크롤바 영역을 숨김 */
+}
+
+/* Firefox */
+.flex-grow-1 {
+    scrollbar-width: none;
+    /* Firefox에서 스크롤바를 숨김 */
+}
+
+/* IE, Edge */
+.flex-grow-1 {
+    -ms-overflow-style: none;
+    /* IE와 Edge에서 스크롤바를 숨김 */
+}
+</style>
