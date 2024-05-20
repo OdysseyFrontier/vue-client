@@ -111,7 +111,7 @@ const router = createRouter({
             ),
         },
         {
-          path: "detail",
+          path: "detail/:contentId",
           name: "hotPlaceDetail",
           component: () =>
             import(
@@ -125,6 +125,12 @@ const router = createRouter({
             import(
               /* webpackChunkName: "community" */ "@/components/hotplace/HotPlaceList.vue"
             ),
+        },
+        {
+          path: "write",
+          name: "hotPlaceWrite",
+          // beforeEnter: onlyAuthUser,
+          component: () => import("@/components/hotplace/HotPlaceWrite.vue"),
         },
         // {
         //   path: "view/:hotPlaceId",

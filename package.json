@@ -32,6 +32,7 @@
     "vueisotope": "^3.1.2"
   },
   "devDependencies": {
+    "@types/isotope-layout": "^3.0.13",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",

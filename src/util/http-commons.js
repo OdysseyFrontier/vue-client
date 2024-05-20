@@ -35,6 +35,13 @@ export { localAxios };
 //     (config) => {
 //       // CORS 헤더 추가
 //       config.headers["Access-Control-Allow-Origin"] = "*";
+
+//       const token = sessionStorage.getItem("accessToken");
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+
+
 //       return config;
 //     },
 //     (error) => {

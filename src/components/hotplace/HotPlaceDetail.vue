@@ -1,4 +1,5 @@
 <script setup>
+import {ref, onMounted} from "vue"
 import Swiper from 'swiper';
 import { Autoplay, Pagination } from 'swiper/modules';
 import "swiper/css"
@@ -25,11 +26,136 @@ setTimeout(()=>{
     }
   });
 })
+
+
+  import { useRoute, useRouter } from "vue-router";
+  import { detailHotPlace, likeHotPlace, deleteLikeHotPlace, } from "@/api/hotplace";
+  import { useMemberStore } from "@/stores/member"
+
+    const route = useRoute();
+    const router = useRouter();
+    const memberStore = useMemberStore()
+
+    const { contentId } = route.params;
+
+    const hotplace = ref({});
+    const category = ref("")
+
+    const isLike = ref(false);
+    const param = ref({
+        memberId: useMemberStore().memberInfo.memberId,
+        contentId: ""
+    });
+
+
+function likeToggle(flag) {
+        isLike.value = !isLike.value;
+        console.log(isLike.value)
+        console.log(param.value)
+
+        if(flag){
+          likeHotPlace(
+    param.value,
+    (response) => {
+        console.log(response.data);
+      let msg = "좋아요 누름 처리시 문제 발생했습니다.";
+      if (response.status == 201) msg = "좋아요 누름이 완료되었습니다.";
+      alert(msg);
+      hotplace.value.likes++;
+    },
+    (error) => console.error(error)
+  );
+        }else{
+          deleteLikeHotPlace(
+    param.value,
+    (response) => {
+        console.log(response.data);
+      let msg = "좋아요 취소 누름 처리시 문제 발생했습니다.";
+      if (response.status == 200) msg = "좋아요 취소 누름이 완료되었습니다.";
+      alert(msg);
+      hotplace.value.likes--;
+    },
+    (error) => console.error(error)
+  );
+    }}
+
+    onMounted(() => {
+        getHotplace();
+    });
+
+    const getHotplace = () => {
+        detailHotPlace(
+            contentId,
+            ({ data }) => {
+            hotplace.value = data;
+
+            console.log(hotplace.value);
+            if(hotplace.value.isLike){
+            isLike.value = true;
+        }
+
+        param.value.contentId = hotplace.value.contentId;
+
+       if(hotplace.value.contentTypeId == "12"){
+            category.value = "관광지"
+    }else if(hotplace.value.contentTypeId == "14"){
+                category.value = "문화시설"}
+    else if(hotplace.value.contentTypeId == "15"){
+                category.value = "축제 / 공연 / 행사"
+    }else if(hotplace.value.contentTypeId == "25"){
+                category.value = "여행코스"
+    }else if(hotplace.value.contentTypeId == "28"){
+                category.value = "레포츠"
+    }else if(hotplace.value.contentTypeId == "32"){
+                category.value = "숙박"
+    }else if(hotplace.value.contentTypeId == "38"){
+                category.value = "쇼핑"
+    }else if(hotplace.value.contentTypeId == "39"){
+                category.value = "음식점"
+    }else{
+                category.value = "기타"
+        }
+            },
+            (error) => {
+            console.error(error);
+            }
+        );
+
+        
+    };
+
+    function moveList() {
+        router.push({ name: "hotPlaceList2" });
+    }
+
+    // function moveModify() {
+    //     router.push({ name: "hotPlaceModify", params: { contentId } });
+    // }
+
+    // function onDeleteArticle() {
+    //     deleteHotplace(
+    //         contentId,
+    //         (response) => {
+    //         if (response.status == 200) moveList();
+    //         },
+    //         (error) => {
+    //         console.error(error);
+    //         }
+    //     );
+    // }
 </script>
 
 
 <template>
      <!-- ======= Portfolio Details Section ======= -->
+
+     <div class="clearfix btn-wrap align-right mt30" v-if="hotplace.memberId === memberStore.memberInfo.memberId">
+            <button class="table-btn btn-write btn_bbsList" @click="moveModify(true)">수정</button>
+            <!-- <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle(false)">삭제</button> -->
+        </div>
+
+
+
      <section id="portfolio-details" class="portfolio-details">
       <div class="container">
 
@@ -40,7 +166,7 @@ setTimeout(()=>{
               <div class="swiper-wrapper align-items-center">
 
                 <div class="swiper-slide">
-                  <img src="/src/assets/portfolio/portfolio-details-1.jpg" alt="">
+                  <img :src="hotplace.firstImage" alt="">
                 </div>
 
                 <div class="swiper-slide">
@@ -62,17 +188,19 @@ setTimeout(()=>{
                 <!-- <i class="bi bi-person-check-fill"></i> : 200
                 <pre> </pre>
                 <i class="bi bi-heart-fill"></i> : 12 -->
-                <i class="bi bi-heart ms-auto fs-5"></i>
+                <i v-if="!isLike" @click="likeToggle(true)" class="bi bi-heart ms-auto fs-5"></i>
+                <i v-if="isLike" @click="likeToggle(false)" class="bi bi-heart-fill ms-auto fs-5"></i>
               </div>
-              <h3>Project information(제목)</h3>
-              <pre class="a">조회수 : 200   좋아요 : 12</pre>
+              <h3>{{hotplace.title}}</h3>
+              <pre class="a">조회수 : {{hotplace.hit}}   좋아요 : {{hotplace.likes}}</pre>
               <ul>
-                <li><strong>Category</strong>: 축제</li>
-                <li><strong>조회수</strong>: 100</li>
-                <li><strong>작성자</strong>: 회원이름</li>
-                <li><strong>작성일</strong>: 2024-05-20</li>
-                <li><strong>내용</strong>: 입력한 내용</li>
-                <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
+                <li><strong>Category</strong> : {{category}}</li>
+                <li><strong>작성자</strong> : {{hotplace.name}}</li>
+                <li><strong>작성일</strong> : {{hotplace.createdTime}}</li>
+                <li><strong>내용</strong> : {{hotplace.overview}}</li>
+                <li><strong>주소</strong> : {{hotplace.addr1}} {{hotplace.addr2}}</li>
+                <li v-if="hotplace.tel"><strong>전화번호</strong> : {{hotplace.tel}}</li>
+                <li v-if="hotplace.homepage"><strong>홈페이지</strong>: <a :href="hotplace.homepage">{{hotplace.homepage}}</a></li>
               </ul>
             </div>
             <div class="portfolio-description">
@@ -91,6 +219,8 @@ setTimeout(()=>{
 </template>
 
 <style scoped>
+i {cursor: pointer;}
+
 /**
 * Template Name: Laura
 * Template URL: https://bootstrapmade.com/laura-free-creative-bootstrap-theme/
