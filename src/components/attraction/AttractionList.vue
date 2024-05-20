@@ -18,6 +18,7 @@ watchEffect(() => {
     }
 
     attractionList.value = useAttractionStore().searchAttractionList;
+    console.log(attractionList.value);
 });
 
 </script>

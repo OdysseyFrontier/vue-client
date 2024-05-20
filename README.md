@@ -43,6 +43,8 @@ npm i vue-draggable-next
 npm i vue3-google-map
 npm install vue-mq
 npm i date-fns
+npm install glightbox swiper isotope-layout
+
 npm run dev
 
 

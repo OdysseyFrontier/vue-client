@@ -7,7 +7,7 @@ export const usePlanStore = defineStore('plan', () => {
     const plannedAttractions = ref([]);
     const startDate = ref(null);
     const endDate = ref(null);
-    const attractionsByDate = ref({});
+    // const plannedAttractionsByDate = ref({});
 
     function setStartDate(date){
         startDate.value = date;
