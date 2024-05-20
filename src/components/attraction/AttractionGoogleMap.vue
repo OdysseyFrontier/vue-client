@@ -13,7 +13,7 @@ const markers = ref([])
 
 watchEffect(() => {
   // searchAttractionList 값 가져오기
-
+  console.log("map")
   const searchAttractionList = useAttractionStore().searchAttractionList;
 
   // searchAttractionList가 비어 있는 경우 처리

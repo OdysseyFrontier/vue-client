@@ -18,6 +18,7 @@ const nowLoc = ref({ lat: 36.1061824, lng: 128.4227797 })
 
 
 const fetchSidos = () => {
+    console.log("sido")
     getSidos(
         ({ data }) => {
             sidos.value = data;
@@ -29,6 +30,7 @@ const fetchSidos = () => {
 }
 
 const fetchGuguns = () => {
+    console.log("gugun")
     if (selectedSidoCode.value === "0") {
         guguns.value = [];
         return;
@@ -45,6 +47,7 @@ const fetchGuguns = () => {
 }
 
 const fetchSearchAttraction = () => {
+    console.log("attr")
     getSearchAttraction(
         selectedContentTypeId.value,
         selectedSidoCode.value,
@@ -67,9 +70,11 @@ onMounted(() => {
     getSearchCategory(
         0,
         ({ data }) => {
+            console.log("category")
             store.setSearchAttractionList(data);
         },
         (error) => {
+            console.log("category")
             console.log(error);
         }
     );

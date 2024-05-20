@@ -8,6 +8,7 @@ const scrollIndex = ref(0);
 const scrollContainer = ref(null);
 
 const fetchCategorys = () => {
+    console.log("cate")
     getCategorys(
         ({ data }) => {
             attractionCategoryList.value = data;

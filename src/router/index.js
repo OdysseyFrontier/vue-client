@@ -45,13 +45,14 @@ const router = createRouter({
       path: '/attraction',
       name: 'attraction',
       component: () => import('@/views/AttractionView.vue'),
-      children: [
-        {
-          path: 'detail/:contentId',
-          name: 'AttractionDetail',
-          component: () => import('@/components/attraction/AttractionDetail.vue')
-        }
-      ]
+      // children: [
+        
+      // ]
+    },
+    {
+      path: '/attraction/detail/:contentId',
+      name: 'AttractionDetail',
+      component: () => import('@/components/attraction/AttractionDetail.vue')
     },
     {
       path: "/memberMyPage",

@@ -13,6 +13,7 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
 
 <template class="no-scrollbar">
     <div>
+        <router-view />
         <br />
         <div>
             <div class="row fixed-top">
@@ -31,7 +32,7 @@ import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue
                 <AttractionGoogleMap />
             </div>
         </div>
-        <router-view />
+        
     </div>
 </template>
 
