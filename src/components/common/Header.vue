@@ -235,6 +235,18 @@ const logout = () => {
         </li>
         <!-- End 여행정보공유 Nav -->
 
+        <li class="nav-item">
+          <RouterLink
+            :to="{ name: 'stat' }"
+            class="nav-link"
+            :class="sidebarList.stat"
+          >
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>통계</span>
+          </RouterLink>
+        </li>
+        <!-- End Login Page Nav -->
+
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">

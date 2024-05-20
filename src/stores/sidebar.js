@@ -12,6 +12,7 @@ export const useSidebarStore = defineStore("sidebar", () => {
     mypage: "collapsed",
     login: "collapsed",
     join: "collapsed",
+    stat: "collapsed",
   });
 
   const changesSidebarState = (name) => {
