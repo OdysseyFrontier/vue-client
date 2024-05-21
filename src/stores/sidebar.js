@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 
 export const useSidebarStore = defineStore("sidebar", () => {
@@ -15,11 +15,16 @@ export const useSidebarStore = defineStore("sidebar", () => {
     stat: "collapsed",
   });
 
+  const open = ref(false)
+
   const changesSidebarState = (name) => {
     Object.keys(sidebarList.value).forEach((key) => {
       sidebarList.value[key] = key === name ? "" : "collapsed";
     });
   };
 
-  return { sidebarList, changesSidebarState };
+  function toggleSidebar() {
+    open.value = !open.value;
+  }
+  return { sidebarList, open, changesSidebarState, toggleSidebar };
 });

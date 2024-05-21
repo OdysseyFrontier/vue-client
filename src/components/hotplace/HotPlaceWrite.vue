@@ -1,17 +1,17 @@
 <script setup>
 import { ref, watchEffect, reactive } from "vue";
 import { GoogleMap, Marker, MarkerCluster } from "vue3-google-map";
-import axios from 'axios';
-import EXIF from 'exif-js';
-import { useMemberStore } from "@/stores/member"
+import axios from "axios";
+import EXIF from "exif-js";
+import { useMemberStore } from "@/stores/member";
 import { useRouter } from "vue-router";
-const { VITE_VUE_APP_KAKAO_REST_API_KEY, VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
+// const { VITE_VUE_APP_KAKAO_REST_API_KEY, VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
 
 const router = useRouter();
-const memberStore = useMemberStore()
+const memberStore = useMemberStore();
 
 const params = ref({
-  memberId : memberStore.memberInfo.memberId,
+  // memberId : memberStore.memberInfo.memberId,
   contentTypeId: 0,
   title: "",
   addr1: "",
@@ -21,25 +21,24 @@ const params = ref({
   homepage: "",
   overview: "",
   sidoCode: 1,
-  gugunCode: 1
-})
+  gugunCode: 1,
+});
 const selectedFile = ref(null);
 const location = ref({
-  latitude: '',
-  longitude: '',
+  latitude: "",
+  longitude: "",
 });
 const locationAvailable = ref(false);
 const mapCenter = ref({ lat: 36.1061824, lng: 128.4227797 }); // Default to London
-const address = ref('');
+const address = ref("");
 const markerKey = ref(0);
 
-const options= reactive({
-        position: mapCenter.value,
-        title: "선택한 위치",
-      })
+const options = reactive({
+  position: mapCenter.value,
+  title: "선택한 위치",
+});
 
-
-const previewUrl = ref(null);  // 미리보기 URL 상태 추가
+const previewUrl = ref(null); // 미리보기 URL 상태 추가
 const onFileChange = (event) => {
   selectedFile.value = event.target.files[0];
   extractLocation(selectedFile.value);
@@ -47,7 +46,7 @@ const onFileChange = (event) => {
   // 파일 읽기 및 미리보기 URL 생성
   const reader = new FileReader();
   reader.onload = (e) => {
-    previewUrl.value = e.target.result;  // 미리보기 URL 설정
+    previewUrl.value = e.target.result; // 미리보기 URL 설정
   };
   reader.readAsDataURL(selectedFile.value);
 };
@@ -57,21 +56,23 @@ const extractLocation = (file) => {
   reader.onload = (e) => {
     const arrayBuffer = e.target.result;
     EXIF.getData(arrayBuffer, function () {
-      const lat = EXIF.getTag(this, 'GPSLatitude');
-      const lon = EXIF.getTag(this, 'GPSLongitude');
-      const latRef = EXIF.getTag(this, 'GPSLatitudeRef');
-      const lonRef = EXIF.getTag(this, 'GPSLongitudeRef');
+      const lat = EXIF.getTag(this, "GPSLatitude");
+      const lon = EXIF.getTag(this, "GPSLongitude");
+      const latRef = EXIF.getTag(this, "GPSLatitudeRef");
+      const lonRef = EXIF.getTag(this, "GPSLongitudeRef");
 
       if (lat && lon && latRef && lonRef) {
-        const latitude = (latRef === 'N' ? 1 : -1) * (lat[0] + lat[1] / 60 + lat[2] / 3600);
-        const longitude = (lonRef === 'E' ? 1 : -1) * (lon[0] + lon[1] / 60 + lon[2] / 3600);
+        const latitude =
+          (latRef === "N" ? 1 : -1) * (lat[0] + lat[1] / 60 + lat[2] / 3600);
+        const longitude =
+          (lonRef === "E" ? 1 : -1) * (lon[0] + lon[1] / 60 + lon[2] / 3600);
         location.value = { latitude, longitude };
         locationAvailable.value = true;
         mapCenter.value = { lat: latitude, lng: longitude };
         markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
-  options.position = { lat: latitude, lng: longitude };
+        options.position = { lat: latitude, lng: longitude };
       } else {
-        alert('No GPS data found in image.');
+        alert("No GPS data found in image.");
         locationAvailable.value = false;
       }
     });
@@ -79,54 +80,53 @@ const extractLocation = (file) => {
   reader.readAsArrayBuffer(file);
 };
 
-
-
- //다음 주소 검색
+//다음 주소 검색
 function execDaumPostcode() {
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          kakaoAddress(data.address);
-          
-        },
-      }).open();
+  new window.daum.Postcode({
+    oncomplete: (data) => {
+      kakaoAddress(data.address);
+    },
+  }).open();
 
-
-//  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
-//       options.position =mapCenter.value
-    }
-
+  //  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+  //       options.position =mapCenter.value
+}
 
 //주소를 기준으로 위도, 경도 정보 가져오기
-    function kakaoAddress(address){
-      axios.get('https://dapi.kakao.com/v2/local/search/address',{
-        params:{
-          query: address
-        },
-        headers:{
-          Authorization : 'KakaoAK '+ VITE_VUE_APP_KAKAO_REST_API_KEY
-        }
-      })
-      .then(res=>{
-        const roadAddress = res.data.documents[0].address;
-        console.log(roadAddress.x)
-        mapCenter.value.lat = Number(roadAddress.x)
-        mapCenter.value.lng = Number(roadAddress.y)
-        location.value = { latitude: roadAddress.x, longitude:roadAddress.y };
-        locationAvailable.value = true;
+function kakaoAddress(address) {
+  axios
+    .get("https://dapi.kakao.com/v2/local/search/address", {
+      params: {
+        query: address,
+      },
+      headers: {
+        // Authorization: "KakaoAK " + VITE_VUE_APP_KAKAO_REST_API_KEY,
+        Authorization: "KakaoAK " + "67bed65c15fd5c0a480c496bac0dadbb",
+      },
+    })
+    .then((res) => {
+      const roadAddress = res.data.documents[0].address;
+      console.log(roadAddress.x);
+      mapCenter.value.lat = Number(roadAddress.x);
+      mapCenter.value.lng = Number(roadAddress.y);
+      location.value = { latitude: roadAddress.x, longitude: roadAddress.y };
+      locationAvailable.value = true;
 
-       options.position = { lat: Number(roadAddress.x), lng: Number(roadAddress.y) };
-       triggerRerender();
-      })
-      .catch(err=>{
-        alert('주소를 불러오는데 실패했습니다...');
-        console.log(err);
-      });
-    }
+      options.position = {
+        lat: Number(roadAddress.x),
+        lng: Number(roadAddress.y),
+      };
+      triggerRerender();
+    })
+    .catch((err) => {
+      alert("주소를 불러오는데 실패했습니다...");
+      console.log(err);
+    });
+}
 
-    const triggerRerender = () => {
+const triggerRerender = () => {
   markerKey.value++;
 };
-
 
 // 맵클릭했을 때 마커 움직이는 함수
 const onMapClick = (event) => {
@@ -137,89 +137,93 @@ const onMapClick = (event) => {
   mapCenter.value = { lat, lng };
   locationAvailable.value = true;
 
-markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
   options.position = { lat, lng };
-//   options.value.position = { lat: lat, lng: lng };
+  //   options.value.position = { lat: lat, lng: lng };
 };
 
 const uploadFile = async () => {
   if (!selectedFile.value) {
-    alert('사진을 첨부해주세요.');
+    alert("사진을 첨부해주세요.");
     return;
   }
 
   if (!location.value.latitude || !location.value.longitude) {
-    alert('위치를 지정해주세요.');
+    alert("위치를 지정해주세요.");
     return;
   }
 
-  if(params.value.title.length ==  0) {
-    alert('제목을 작성해주세요.');
+  if (params.value.title.length == 0) {
+    alert("제목을 작성해주세요.");
     return;
   }
 
   const formData = new FormData();
-  formData.append('file', selectedFile.value);
-  
-  params.value.latitude = location.value.latitude
-  params.value.longitude = location.value.longitude
+  formData.append("file", selectedFile.value);
+
+  params.value.latitude = location.value.latitude;
+  params.value.longitude = location.value.longitude;
   // formData.append('hotplaceDto', params.value);
   // formData.append('latitude', location.value.latitude);
   // formData.append('longitude', location.value.longitude);
   // formData.append('longitude', location.value.longitude);
 
   const hotplaceDto = JSON.stringify({
-...params.value,
+    ...params.value,
   });
 
-  formData.append('hotplaceDto', hotplaceDto);
+  formData.append("hotplaceDto", hotplaceDto);
 
   try {
-    const response = await axios.post('http://localhost/hotplace/write', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const response = await axios.post(
+      "http://localhost/hotplace/write",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    alert("File uploaded successfully.");
+    router.push({
+      name: "hotPlaceDetail",
+      params: { contentId: response.data },
     });
-    alert('File uploaded successfully.');
-    router.push({ name: "hotPlaceDetail" , params: {contentId: response.data} });
   } catch (error) {
-    console.error('Error uploading file:', error);
-    alert('File upload failed.');
+    console.error("Error uploading file:", error);
+    alert("File upload failed.");
   }
 };
+
+function moveList() {
+        router.push({ name: "hotPlaceList2" });
+    }
 </script>
 
 <template>
   <!-- ======= Portfolio Details Section ======= -->
-
-  <div class="clearfix btn-wrap align-right mt30">
-    <button class="table-btn btn-write btn_bbsList" @click="uploadFile">
-      작성
-    </button>
-    <button
-      class="table-btn btn-exit btn_bbsList"
-      @click="onDeleteArticle"
-    >
-      삭제
-    </button>
-  </div>
-
   <section id="portfolio-details" class="portfolio-details">
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
-          <button class="btn btn-secondary" @click="execDaumPostcode">주소검색</button>
-        <div>주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!</div>
+          <div>
+            주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!
+          </div>
           <!-- 지도 -->
-          <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY"
-          id="map"
-        :center="mapCenter"
-        :zoom="10"
-        style="height: 500px; width: 100%"
-        @click="onMapClick"
-      >
-        <Marker :options="options" :key="markerKey"  />
-      </GoogleMap>
+          <GoogleMap
+            api-key="AIzaSyDHeUJPtnDJ_NHtP9HvnzVvbKTcHNqa9WQ"
+            id="map"
+            :center="mapCenter"
+            :zoom="10"
+            style="height: 500px; width: 100%"
+            @click="onMapClick"
+          >
+            <Marker :options="options" :key="markerKey" />
+          </GoogleMap>
+
+          <button class="btn btn-secondary mt10" @click="execDaumPostcode">
+            주소검색
+          </button>
 
           <!-- <GoogleMap
             :api-key="VITE_GOOGLE_MAP_API_KEY"
@@ -253,7 +257,9 @@ const uploadFile = async () => {
                 </div>
 
                 <div class="row mb-3">
-                  <label for="category" class="col-md-4 col-lg-3 col-form-label">카테고리</label>
+                  <label for="category" class="col-md-4 col-lg-3 col-form-label"
+                    >카테고리</label
+                  >
                   <div class="col-md-8 col-lg-9 d-flex">
                     <select
                       class="form-select"
@@ -263,7 +269,9 @@ const uploadFile = async () => {
                       required
                       v-model="params.contentTypeId"
                     >
-                      <option value="0" hidden disabled selected>카테고리를 선택해주세요.</option>
+                      <option value="0" hidden disabled selected>
+                        카테고리를 선택해주세요.
+                      </option>
                       <option value="12">관광지</option>
                       <option value="14">문화시설</option>
                       <option value="15">축제 / 공연 / 행사</option>
@@ -304,8 +312,7 @@ const uploadFile = async () => {
                       style="height: 100px"
                       v-model="params.overview"
                       placeholder="내용을 입력해주세요."
-                    ></textarea
-                    >
+                    ></textarea>
                   </div>
                 </div>
 
@@ -358,12 +365,26 @@ const uploadFile = async () => {
               <!-- End Profile Edit Form -->
             </div>
           </div>
+          <div class="align-right mt10 mb10">
+    
+            <button class="btn btn-primary me-1" @click="uploadFile">
+      작성
+    </button>
+    <button class="btn btn-secondary" @click="moveList">
+      목록
+    </button>
+  </div>
+
           <div class="portfolio-description" v-if="previewUrl">
             <h2>첨부사진 미리보기</h2>
-             <!-- 추가된 섹션: 이미지 미리보기 -->
-                  <div class="col-md-8 col-lg-9">
-                    <img :src="previewUrl" alt="Image Preview" style="max-width: 100%; height: auto;" />
-                  </div>
+            <!-- 추가된 섹션: 이미지 미리보기 -->
+            <div class="col-md-8 col-lg-9">
+              <img
+                :src="previewUrl"
+                alt="Image Preview"
+                style="max-width: 50%; height: auto"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -373,6 +394,15 @@ const uploadFile = async () => {
 </template>
 
 <style scoped>
+.align-right{text-align:right !important;}
+
+.mt10{margin-top:10px !important;}
+.mb10{margin-bottom:10px !important;}
+
+
+
+
+
 i {
   cursor: pointer;
 }

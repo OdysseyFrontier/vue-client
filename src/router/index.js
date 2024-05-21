@@ -101,25 +101,25 @@ const router = createRouter({
     {
       path: "/board",
       name: "board",
-      beforeEnter: onlyAuthUser,
+      // beforeEnter: onlyAuthUser,
       component: () => import("@/views/boardView.vue"),
       children: [
         {
           path: "list",
           name: "boardList",
-          beforeEnter: onlyAuthUser,
+          // beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/shareBoardList.vue"),
         },
         {
           path: "boardDetail/:boardno",
           name: "boardDetail",
-          beforeEnter: onlyAuthUser,
+          // beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardDetail.vue"),
         },
         {
           path: "write",
           name: "boardWrite",
-          beforeEnter: onlyAuthUser,
+          // beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardWrite.vue"),
         },
         {
