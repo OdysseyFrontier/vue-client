@@ -3,19 +3,21 @@
     <div class="row">
       <div class="col-12">
         <div class="tabs d-flex justify-content-center mb-3">
-          <button class="btn btn-outline-primary me-2" @click="currentTab = 'myPlans'"
-            :class="{ active: currentTab === 'myPlans' }">
+          <button class="btn btn-outline-primary me-2" @click="state.currentTab = 'myPlans'"
+            :class="{ active: state.currentTab === 'myPlans' }">
             나의 계획
           </button>
-          <button class="btn btn-outline-primary" @click="currentTab = 'likedPlans'"
-            :class="{ active: currentTab === 'likedPlans' }">
+          <button class="btn btn-outline-primary" @click="state.currentTab = 'likedPlans'"
+            :class="{ active: state.currentTab === 'likedPlans' }">
             관심 계획
           </button>
         </div>
       </div>
     </div>
     <div class="row">
-      <plan-item v-for="plan in plansToShow" :key="plan.id" :plan="plan" class="col-xs-12 col-sm-6 col-md-4" />
+      <plan-item v-for="plan in plansToShow" :key="plan.planId" :plan="plan" class="col-xs-12 col-sm-6 col-md-4">
+        <h6 class="card-subtitle mb-2 text-muted">{{ formatPlanTime(plan.planTime) }}</h6>
+      </plan-item>
     </div>
   </div>
 </template>
@@ -27,7 +29,8 @@ import { useMemberStore } from '@/stores/member';
 import { getMyMakePlans, getMyLikePlans } from '@/api/plan';
 
 const store = useMemberStore();
-const memberId = store.memberInfo.memberId;
+const memberId = store.memberInfo?.memberId || 1;
+console.log(memberId);
 
 const state = reactive({
   myPlans: [],
@@ -40,6 +43,7 @@ const fetchMyPlanList = () => {
     memberId,
     ({ data }) => {
       state.myPlans = data;
+      console.log(state.myPlans);
     },
     (error) => {
       console.error('Failed to fetch my plans:', error);
@@ -52,6 +56,7 @@ const fetchMyLikeList = () => {
     memberId,
     ({ data }) => {
       state.likedPlans = data;
+      console.log(state.likedPlans);
     },
     (error) => {
       console.error('Failed to fetch liked plans:', error);
@@ -59,13 +64,18 @@ const fetchMyLikeList = () => {
   );
 };
 
-
-onMounted(() => {
-  fetchMyPlanList();
-  fetchMyLikeList();
+onMounted(async() => {
+  await fetchMyPlanList();
+  await fetchMyLikeList();
 });
 
 const plansToShow = computed(() => state.currentTab === 'myPlans' ? state.myPlans : state.likedPlans);
+
+const formatPlanTime = (planTimeArray) => {
+  const [year, month, day, hour, minute] = planTimeArray;
+  const date = new Date(year, month - 1, day, hour, minute);
+  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 </script>
 
 <style scoped>

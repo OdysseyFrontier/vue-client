@@ -5,7 +5,8 @@ import { createPlan } from '@/api/plan'; // Import the createPlan function
 import { useMemberStore } from '@/stores/member';
 
 const store = usePlanStore();
-const memberId = useMemberStore().memberInfo.memberId;
+// 회원이 아니라면 관리자로 가능.
+const memberId = useMemberStore().memberInfo?.memberId || 1;
 
 
 const inputPlanName = ref("");
@@ -49,6 +50,7 @@ const handleCreatePlan = async () => {
     };
 
     createPlan(planDto, success, fail);
+    console.log(planDto)
 };
 </script>
 

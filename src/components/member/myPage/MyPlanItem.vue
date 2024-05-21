@@ -8,11 +8,11 @@
 
 
 <template>
-  <div class="plan-item">
+  <div class="plan-item m-1">
     <img :src="defaultImg" alt="Plan Thumbnail" class="plan-image">
     <div class="plan-details">
-      <h3>제목{{ plan.title }}</h3>
-      <p>설명{{ plan.description }}</p>
+      <h3>{{ plan.title }}</h3>
+      <p>{{ plan.description }}</p>
     </div>
   </div>
 </template>

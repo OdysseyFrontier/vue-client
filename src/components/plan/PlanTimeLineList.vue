@@ -48,6 +48,9 @@ watch(usePlanStore().plannedAttractions, () => {
 }, { immediate: true });
 
 
+const formatDateToLocalString = (date) => {
+    return date.toLocaleDateString('en-CA'); // 'en-CA' 포맷은 'YYYY-MM-DD' 형식을 제공
+};
 
 const updateAttraction = (updatedAttraction) => {
     const index = updatedAttraction.index;
@@ -64,9 +67,13 @@ const updateAttraction = (updatedAttraction) => {
         if (planTimes.length) {
             const minTime = new Date(Math.min(...planTimes));
             const maxTime = new Date(Math.max(...planTimes));
-
-            usePlanStore().setStartTime(minTime.toISOString().split('T')[0]);
-            usePlanStore().setEndTime(maxTime.toISOString().split('T')[0]);
+            
+            usePlanStore().setStartTime(formatDateToLocalString(minTime));
+            usePlanStore().setEndTime(formatDateToLocalString(maxTime));
+            console.log(minTime)
+            console.log(maxTime)
+            console.log(usePlanStore().startTime)
+            console.log(usePlanStore().endTime)
         }
     }
 };
@@ -88,8 +95,8 @@ const deleteAttraction = (index) => {
         const minTime = new Date(Math.min(...planTimes));
         const maxTime = new Date(Math.max(...planTimes));
 
-        usePlanStore().setStartTime(minTime.toISOString().split('T')[0]);
-        usePlanStore().setEndTime(maxTime.toISOString().split('T')[0]);
+        usePlanStore().setStartTime(formatDateToLocalString(minTime));
+        usePlanStore().setEndTime(formatDateToLocalString(maxTime));
     } else {
         usePlanStore().setStartTime(null);
         usePlanStore().setEndTime(null);

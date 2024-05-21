@@ -7,18 +7,18 @@ const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("attraction");
 
 import PlanDetailInfo from "@/components/plan/PlanDetailInfo.vue";
-import AttractionGoogleMap from "@/components/attraction/AttractionGoogleMap.vue";
+import PlanDetailGoogleMap from "@/components/plan/PlanDetailGoogleMap.vue";
 
 </script>
 
-<template class="no-scrollbar">
-    <div>
+<template class="no-scrollbar ">
+    <div class="row mt-3">
         <br />
         <div class="row h-100" style="height: 60rem;">
-            <div class="col scrollable-column flex-grow-1 ">
-                <AttractionGoogleMap />
+            <div class="col-5 scrollable-column flex-grow-1 ">
+                <PlanDetailGoogleMap />
             </div>
-            <div class="col flex-grow-1" style="height: 60rem; ">
+            <div class="col-7 flex-grow-1" style="height: 60rem; ">
                 <PlanDetailInfo />
             </div>
         </div>

@@ -8,11 +8,16 @@ export const usePlanStore = defineStore('plan', () => {
     const endTime = ref(null);
     const title = ref(null);
     const description = ref(null);
+    const planDetails = ref([]);
 
     watch(plannedAttractions, (newVal, oldVal) => {
         console.log(newVal);
         console.log(oldVal);
     });
+
+    function setPlanDetails(details) {
+        planDetails.value = details;
+    }
 
     function setStartTime(date) {
         startTime.value = date;
@@ -53,11 +58,13 @@ export const usePlanStore = defineStore('plan', () => {
         startTime,
         endTime,
         searchedAttractions,
+        planDetails,
         setStartTime,
         setEndTime,
         plannedAttractions,
         setSearchedAttractions,
         setPlannedAttractions,
+        setPlanDetails,
         addPlannedAttraction,
         removeSearchedAttraction,
         updatePlannedAttraction,
