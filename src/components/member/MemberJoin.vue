@@ -37,30 +37,36 @@ watch(
   { immediate: true }
 );
 
-function isIdCheck() {
+let isfilled = false;
+function onSubmit() {
+  if(isfilled){
+  console.log(joinMemberInfo.value)
   let count = 0;
   idCheck(
     joinMemberInfo.value,
     (response) => {
       count = response.data;
-    },
-    (error) => console.error(error)
-  );
-
-  if (count != 0) {
-    return true;
-  }
-
-  return false;
-}
-
-function onSubmit() {
-  if (isIdCheck()) {
+console.log(count)
+       if (count> 0) {
+        console.log("중복")
     msg.value = "중복된 이메일입니다.";
   } else {
     joinMember();
   }
+
+    },
+    (error) => console.error(error)
+  );
 }
+}
+
+// function onSubmit() {
+//   if (isIdCheck()) {
+//     msg.value = "중복된 이메일입니다.";
+//   } else {
+//     joinMember();
+//   }
+// }
 
 function joinMember() {
   join(
@@ -86,17 +92,20 @@ setTimeout(() => {
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
-        "click",
+        "submit",
         function (event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
-
+          event.preventDefault();
+          isfilled = true;
           form.classList.add("was-validated");
         },
         false
       );
+
+
     });
   })();
 });
@@ -128,7 +137,7 @@ setTimeout(() => {
                     <p class="text-center small">개인정보를 입력해주세요.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" novalidate @submit="onSubmit">
                     <div class="col-12">
                       <label for="yourName" class="form-label">이름</label>
                       <input
@@ -142,7 +151,7 @@ setTimeout(() => {
                       <div class="invalid-feedback">이름을 입력해주세요!</div>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-12" id="idcheck">
                       <label for="yourEmail" class="form-label">이메일</label>
                       <div class="input-group has-validation">
                         <input
@@ -178,7 +187,7 @@ setTimeout(() => {
                         <div class="invalid-feedback">
                           이메일을 입력해주세요.
                         </div>
-                        <div class="invalid-feedback" v-if="msg">{{ msg }}</div>
+                        <div class="col-12 text-danger" style="fontSize: 14px">{{ msg }}</div>
                       </div>
                     </div>
 
@@ -195,7 +204,7 @@ setTimeout(() => {
                         v-model="joinMemberInfo.password"
                       />
                       <div class="invalid-feedback">
-                        비밀번호를 입력해주세요!
+                        비밀번호를 입력해주세요.
                       </div>
                     </div>
 
@@ -207,10 +216,11 @@ setTimeout(() => {
                         class="form-control"
                         id="yourPhone"
                         required
+                        placeholder="000-0000-0000"
                         v-model="joinMemberInfo.phone"
                       />
                       <div class="invalid-feedback">
-                        전화번호를 입력해주세요!
+                        전화번호를 입력해주세요.
                       </div>
                     </div>
 
@@ -222,9 +232,10 @@ setTimeout(() => {
                         class="form-control"
                         id="birthday"
                         required
+                        placeholder="0000-00-00"
                         v-model="joinMemberInfo.birthday"
                       />
-                      <div class="invalid-feedback">생일을 입력해주세요!</div>
+                      <div class="invalid-feedback">생일을 입력해주세요.</div>
                     </div>
 
                     <div class="col-12">
@@ -287,8 +298,7 @@ setTimeout(() => {
                     <div class="col-12">
                       <button
                         class="btn btn-primary w-100"
-                        @click.prevent="onSubmit"
-                        type="button"
+                        type="submit"
                       >
                         회원가입
                       </button>
