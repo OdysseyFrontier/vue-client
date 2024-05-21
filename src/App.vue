@@ -1,10 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView, onBeforeRouteLeave } from "vue-router";
 import Footer from "./components/common/Footer.vue";
 import Header from "./components/common/Header.vue";
+import { } from 'vue-router';
 
 
-setTimeout(()=>{
+setTimeout(() => {
   let backtotop = document.querySelector('.back-to-top')
   if (backtotop) {
     const toggleBacktotop = () => {
@@ -23,7 +24,7 @@ setTimeout(()=>{
 
 <template>
   <div class="d-flex flex-column min-vh-100">
-      <Header />
+    <Header />
     <main class="flex-grow-1 container-fluid">
       <RouterView />
     </main>
@@ -82,6 +83,7 @@ setTimeout(()=>{
 
 .flex-grow-1 {
   flex-grow: 1;
-  overflow-y: auto; /* 스크롤이 내부에서 발생하도록 설정 */
+  overflow-y: auto;
+  /* 스크롤이 내부에서 발생하도록 설정 */
 }
 </style>

@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref, watchEffect } from "vue";
 import { usePlanStore } from '@/stores/plan';
 import AttractionItem from "@/components/plan/AttractionItem.vue";
@@ -30,8 +30,8 @@ watchEffect(() => {
     </draggable>
 </template>
 
-<!-- <AttractionItem v-for="(attraction, index) in plannedAttractions" :key="index" :attraction="attraction" /> -->
 
 <style scoped>
 /* Styles here */
-</style>
+</style> -->
+<!-- <AttractionItem v-for="(attraction, index) in plannedAttractions" :key="index" :attraction="attraction" /> -->

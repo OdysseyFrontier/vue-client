@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { usePlanStore } from "@/stores/plan";
+import { usePlanListStore } from "@/stores/planList";
 import { getSidos, getGuguns } from '@/api/attraction';
 import { getSearchPlan } from '@/api/plan';
 
-const store = usePlanStore();
+const store = usePlanListStore();
 
 const sidos = ref([]);
 const guguns = ref([]);
@@ -49,12 +49,7 @@ const fetchSearchPlan = () => {
         selectedGugunCode.value,
         keyword.value,
         ({ data }) => {
-            store.setSearchFilters({
-                query: keyword.value,
-                sido: selectedSidoCode.value,
-                gugun: selectedGugunCode.value,
-                category: selectedContentTypeId.value
-            });
+            store.setPlanList(data);
         },
         (error) => {
             console.log(error);
@@ -69,6 +64,7 @@ const updateSortBy = () => {
 onMounted(() => {
     fetchSidos();
 });
+
 </script>
 
 <template>
@@ -77,13 +73,15 @@ onMounted(() => {
             <div class="col-lg-auto col-12">
                 <select v-model="selectedSidoCode" class="form-select" @change="fetchGuguns">
                     <option value="0" selected>검색 할 지역 선택</option>
-                    <option v-for="(sido) in sidos" :key="sido.sidoCode" :value="sido.sidoCode">{{ sido.sidoName }}</option>
+                    <option v-for="(sido) in sidos" :key="sido.sidoCode" :value="sido.sidoCode">{{ sido.sidoName }}
+                    </option>
                 </select>
             </div>
             <div class="col-lg-auto col-12">
                 <select v-model="selectedGugunCode" class="form-select">
                     <option value="0" selected>검색할 구/군 선택</option>
-                    <option v-for="gugun in guguns" :key="gugun.gugunCode" :value="gugun.gugunCode">{{ gugun.gugunName }}</option>
+                    <option v-for="gugun in guguns" :key="gugun.gugunCode" :value="gugun.gugunCode">{{ gugun.gugunName
+                        }}</option>
                 </select>
             </div>
             <div class="col-lg-auto col-12">
@@ -126,7 +124,8 @@ onMounted(() => {
 
 .search-item {
     flex: 1 1 auto;
-    min-width: 150px; /* 최소 너비를 설정하여 아이템들이 줄어들 때 겹치지 않도록 합니다 */
+    min-width: 150px;
+    /* 최소 너비를 설정하여 아이템들이 줄어들 때 겹치지 않도록 합니다 */
 }
 
 @media (max-width: 992px) {

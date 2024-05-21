@@ -55,9 +55,9 @@ export default {
 
         console.log("detail")
 
-        onMounted(async () => {
+        onMounted(() => {
             const contentId = router.currentRoute.value.params.contentId;
-            await getAttraction(contentId, (response) => {
+            getAttraction(contentId, (response) => {
                 attraction.value = response.data;
                 console.log(attraction.value);
                 images.value = [response.data.firstImage, response.data.firstImage2].filter(Boolean);

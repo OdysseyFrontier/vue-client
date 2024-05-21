@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref, watchEffect } from "vue";
 import { usePlanStore } from '@/stores/plan';
 import AttractionItem from "@/components/plan/AttractionItem.vue";
@@ -36,9 +36,7 @@ watchEffect(() => {
         </div>
 
 
-        <!-- <AttractionItem v-for="(attraction, index) in searchedAttractions" 
-                :key="index" :attraction="attraction" /> -->
-
+ 
     </div>
 
     <h3>Draggable 2</h3>
@@ -51,6 +49,11 @@ watchEffect(() => {
     </draggable>
 </template>
 
+
+<style scoped>
+/* Styles here */
+</style> -->
+
 <!-- <template>
     <h3>Draggable 2</h3>
     <draggable class="dragArea list-group" :list="plannedAttractions" group="people" @change="log" item-key="name">
@@ -61,6 +64,6 @@ watchEffect(() => {
         </template>
     </draggable>
 </template> -->
-<style scoped>
-/* Styles here */
-</style>
+
+<!-- <AttractionItem v-for="(attraction, index) in searchedAttractions" 
+                :key="index" :attraction="attraction" /> -->

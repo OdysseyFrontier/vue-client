@@ -2,17 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const usePlanListStore = defineStore('planList', () => {
-  const planList = ref([
-    { id: 1, title: '플랜 1', description: '설명 1', image: 'url-to-image-1', likes: 100, views: 200, createdAt: new Date('2023-01-01'), attraction: { sido: '서울', gugun: '강남', category: '관광지1' }},
-    { id: 2, title: '플랜 2', description: '설명 2', image: 'url-to-image-2', likes: 150, views: 300, createdAt: new Date('2023-02-01'), attraction: { sido: '서울', gugun: '종로', category: '관광지2' }},
-    { id: 3, title: '플랜 3', description: '설명 3', image: 'url-to-image-3', likes: 120, views: 250, createdAt: new Date('2023-03-01'), attraction: { sido: '부산', gugun: '해운대', category: '관광지1' }},
-    { id: 1, title: '플랜 4', description: '설명 1', image: 'url-to-image-1', likes: 100, views: 200, createdAt: new Date('2023-01-01'), attraction: { sido: '서울', gugun: '강남', category: '관광지1' }},
-    { id: 2, title: '플랜 2', description: '설명 2', image: 'url-to-image-2', likes: 150, views: 300, createdAt: new Date('2023-02-01'), attraction: { sido: '서울', gugun: '종로', category: '관광지2' }},
-    { id: 3, title: '플랜 3', description: '설명 3', image: 'url-to-image-3', likes: 120, views: 250, createdAt: new Date('2023-03-01'), attraction: { sido: '부산', gugun: '해운대', category: '관광지1' }},
-    { id: 1, title: '플랜 11', description: '설명 1', image: 'url-to-image-1', likes: 100, views: 200, createdAt: new Date('2023-01-01'), attraction: { sido: '서울', gugun: '강남', category: '관광지1' }},
-    { id: 2, title: '플랜 2', description: '설명 2', image: 'url-to-image-2', likes: 150, views: 300, createdAt: new Date('2023-02-01'), attraction: { sido: '서울', gugun: '종로', category: '관광지2' }},
-    { id: 3, title: '플랜 3', description: '설명 3', image: 'url-to-image-3', likes: 120, views: 250, createdAt: new Date('2023-03-01'), attraction: { sido: '부산', gugun: '해운대', category: '관광지1' }},
-  ]);
+  const planList = ref([]);
 
   const searchFilters = ref({
     query: '',
@@ -56,6 +46,9 @@ export const usePlanListStore = defineStore('planList', () => {
     updatePlanList();
   }
 
+  function setPlanList(plans) {
+    planList.value = plans;
+  }
   function updatePlanList() {
     planList.value = filteredAndSortedPlans.value;
   }
@@ -68,6 +61,7 @@ export const usePlanListStore = defineStore('planList', () => {
     filteredAndSortedPlans,
     setSearchFilters,
     setSortBy,
+    setPlanList,
     updatePlanList
   };
 });
