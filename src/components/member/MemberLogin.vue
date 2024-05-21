@@ -4,6 +4,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("login");
 
+
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -25,6 +26,7 @@ const loginMember = ref({
 });
 
 const login = async () => {
+  console.log("로그인 들어옴")
   await memberLogin(loginMember.value);
   let token = sessionStorage.getItem("accessToken");
   console.log(token);
@@ -48,13 +50,17 @@ setTimeout(() => {
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
-        "click",
+        "submit",
         function (event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
+          }else{
+            event.preventDefault();
+            login()
           }
 
+          // login()
           form.classList.add("was-validated");
         },
         false
@@ -121,8 +127,6 @@ watch(
                     class="row g-3 needs-validation"
                     novalidate
                     id="form-login"
-                    method="POST"
-                    action="${root}/member/login"
                   >
                     <div class="col-12">
                       <label for="yourUsername" class="form-label"
@@ -203,7 +207,7 @@ watch(
                     <div class="col-12">
                       <button
                         class="btn btn-primary w-100"
-                        @click.prevent="login"
+
                         type="submit"
                       >
                         로그인
@@ -226,8 +230,8 @@ watch(
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by
-                <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                <!-- Designed by
+                <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
               </div>
             </div>
           </div>

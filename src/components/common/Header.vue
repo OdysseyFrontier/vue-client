@@ -13,6 +13,10 @@ const sidebarList = ref(sidebarStore.sidebarList);
 const logout = () => {
   memberStore.memberLogout();
 };
+
+const toggleSidebar = () => {
+  sidebarStore.toggleSidebar();
+};
 </script>
 
 <template>
@@ -23,13 +27,18 @@ const logout = () => {
     <!-- ======= Header ======= -->
     <header id="header" class="header d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center">
+        <RouterLink to="/" class="logo d-flex align-items-center" :class="sidebarList.home" @click="toggleSidebar">
           <img src="/src/assets/logo.png" alt="" />
           <span class="d-none d-lg-block">OdysseyFrontiers</span>
-        </a>
+                </RouterLink>
+        
+        <!-- <a href="/" class="logo d-flex align-items-center">
+          <img src="/src/assets/logo.png" alt="" />
+          <span class="d-none d-lg-block">OdysseyFrontiers</span>
+        </a> -->
 
         <i class="bi bi-list toggle-sidebar-btn navbar-toggler-icon" data-bs-toggle="collapse" data-bs-target="#sidebar"
-          aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation"></i>
+          aria-controls="sidebar" aria-label="Toggle navigation" aria-expanded="false"></i>
       </div>
       <!-- End Logo -->
 
@@ -117,10 +126,10 @@ const logout = () => {
     <!-- End Header -->
 
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="collapse navbar-collapse sidebar">
+    <aside id="sidebar" class="collapse navbar-collapse sidebar" :class="{ 'show': sidebarStore.open }">
       <ul class="sidebar-nav navbar-nav" id="sidebar-nav">
         <li class="nav-item">
-          <RouterLink :to="{ name: 'home' }" class="nav-link" :class="sidebarList.home">
+          <RouterLink :to="{ name: 'home' }" class="nav-link" :class="sidebarList.home" @click="toggleSidebar">
             <i class="bi bi-grid"></i>
             <span>home</span>
           </RouterLink>
@@ -130,40 +139,40 @@ const logout = () => {
         <!-- 관광지 조회 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'boardList' }" class="nav-link" :class="sidebarList.board" href="/board?action=list">
+          <RouterLink :to="{ name: 'boardList' }" class="nav-link" :class="sidebarList.board" @click="toggleSidebar">
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'plan' }" class="nav-link" :class="sidebarList.plan">
+          <RouterLink :to="{ name: 'plan' }" class="nav-link" :class="sidebarList.plan" @click="toggleSidebar">
             <i class="bi bi-calendar-event"></i>
             <span>여행 계획 세우기</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'planList' }" class="nav-link" :class="sidebarList.planList">
+          <RouterLink :to="{ name: 'planList' }" class="nav-link" :class="sidebarList.planList" @click="toggleSidebar">
             <i class="bi bi-clipboard"></i>
             <span>여행 계획 게시판</span>
           </RouterLink>
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'attraction' }" class="nav-link" :class="sidebarList.attraction">
+          <RouterLink :to="{ name: 'attraction' }" class="nav-link" :class="sidebarList.attraction" @click="toggleSidebar">
             <i class="bi bi-search"></i>
             <span>관광지 검색</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage">
+          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage" @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'myMemberList' }" class="nav-link" :class="sidebarList.myMemberList">
+          <RouterLink :to="{ name: 'myMemberList' }" class="nav-link" :class="sidebarList.myMemberList" @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>MyMemberListView</span>
           </RouterLink>
@@ -171,7 +180,7 @@ const logout = () => {
         <!-- End 여행정보공유 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace">
+          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace" @click="toggleSidebar">
             <i class="bi bi-camera"></i>
             <span>HotPlace</span>
           </RouterLink>
@@ -179,7 +188,7 @@ const logout = () => {
         <!-- End 여행정보공유 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'stat' }" class="nav-link" :class="sidebarList.stat">
+          <RouterLink :to="{ name: 'stat' }" class="nav-link" :class="sidebarList.stat" @click="toggleSidebar">
             <i class="bi bi-box-arrow-in-right"></i>
             <span>통계</span>
           </RouterLink>
@@ -189,7 +198,7 @@ const logout = () => {
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link" :class="sidebarList.mypage">
+          <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link" :class="sidebarList.mypage" @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>임시 마이페이지</span>
           </RouterLink>
@@ -212,7 +221,7 @@ const logout = () => {
         <!-- End F.A.Q Page Nav -->
 
         <li class="nav-item" v-if="!memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberLogin' }" class="nav-link" :class="sidebarList.login">
+          <RouterLink :to="{ name: 'memberLogin' }" class="nav-link" :class="sidebarList.login" @click="toggleSidebar">
             <i class="bi bi-box-arrow-in-right"></i>
             <span>로그인</span>
           </RouterLink>
@@ -220,7 +229,7 @@ const logout = () => {
         <!-- End Login Page Nav -->
 
         <li class="nav-item" v-if="!memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberJoin' }" class="nav-link" :class="sidebarList.join">
+          <RouterLink :to="{ name: 'memberJoin' }" class="nav-link" :class="sidebarList.join" @click="toggleSidebar">
             <i>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-person-add" viewBox="0 0 16 16">

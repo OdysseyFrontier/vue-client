@@ -114,14 +114,12 @@ setTimeout(()=>{
 
 
 <template>
-  <div class="clearfix mb30">
-                        <button class="table-btn btn-write" @click.prevent="moveWrite">글쓰기</button>
-                    </div>
-
-
     <!-- ======= My Portfolio Section ======= -->
     <section id="portfolio" class="portfolio">
       <div class="container">
+        <div class="align-right">
+          <button class="btn btn-outline-primary btn-sm" @click="moveWrite">핫플등록</button>
+        </div>
 
         <div class="section-title">
           <span>Hot Place</span>
@@ -133,9 +131,14 @@ setTimeout(()=>{
 
         <ul id="portfolio-flters" class="d-flex justify-content-center">
           <li data-filter="*" class="filter-active">All</li>
-          <li data-filter=".filter-app">App</li>
-          <li data-filter=".filter-card">Card</li>
-          <li data-filter=".filter-web">Web</li>
+          <li data-filter=".filter-12">관광지</li>
+          <li data-filter=".filter-14">문화시설</li>
+          <li data-filter=".filter-15">축제 / 공연 / 행사</li>
+          <li data-filter=".filter-25">여행코스</li>
+          <li data-filter=".filter-28">레포츠</li>
+          <li data-filter=".filter-32">숙박</li>
+          <li data-filter=".filter-38">쇼핑</li>
+          <li data-filter=".filter-39">음식점</li>
         </ul>
 
         <div class="row portfolio-container">
@@ -143,7 +146,7 @@ setTimeout(()=>{
           <HotPlaceListItem v-for="hotplace in hotPlaces" :key="hotplace.contentId" :hotplace="hotplace" />
 
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+          <div class="col-lg-4 col-md-6 portfolio-item fitter-12">
             <a href="/src/assets/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="사진을 누를시 뭐가 된다던디">
             <div class="portfolio-img"><img src="/src/assets/portfolio/portfolio-1.jpg" class="img-fluid" alt=""></div>
           </a>
@@ -309,6 +312,8 @@ setTimeout(()=>{
 </template>
 
 <style scoped>
+.align-right{text-align:right !important;}
+
 .portfolio .portfolio-item .portfolio-2 {
   /* opacity: 0;
   left: 15px;

@@ -59,22 +59,30 @@ import {ref}from "vue"
     const def = defineProps({ hotplace: Object });
 
     const category = ref("");
-
+    const fillter = ref("")
     if(def.hotplace.contentTypeId == "12"){
+            fillter.value = "filter-12"
             category.value = "관광지"
     }else if(def.hotplace.contentTypeId == "14"){
-                category.value = "문화시설"}
-    else if(def.hotplace.contentTypeId == "15"){
+      fillter.value = "filter-14"
+                category.value = "문화시설"
+              }else if(def.hotplace.contentTypeId == "15"){
+                fillter.value = "filter-15"
                 category.value = "축제 / 공연 / 행사"
     }else if(def.hotplace.contentTypeId == "25"){
+      fillter.value = "filter-25"
                 category.value = "여행코스"
     }else if(def.hotplace.contentTypeId == "28"){
+      fillter.value = "filter-28"
                 category.value = "레포츠"
     }else if(def.hotplace.contentTypeId == "32"){
+      fillter.value = "filter-32"
                 category.value = "숙박"
     }else if(def.hotplace.contentTypeId == "38"){
+      fillter.value = "filter-38"
                 category.value = "쇼핑"
     }else if(def.hotplace.contentTypeId == "39"){
+      fillter.value = "filter-39"
                 category.value = "음식점"
     }else{
                 category.value = "기타"
@@ -83,7 +91,7 @@ import {ref}from "vue"
 </script>
 
 <template>
-    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+    <div class="col-lg-4 col-md-6 portfolio-item" :class="fillter">
             <a :href="hotplace.firstImage ? hotplace.firstImage: '/src/assets/portfolio/portfolio-1.jpg' " data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="사진을 누를시 사진 자세히 보기가 가능합니다.">
             <div class="portfolio-img"><img :src="hotplace.firstImage ? hotplace.firstImage: '/src/assets/portfolio/portfolio-1.jpg' " class="img-fluid" alt=""></div>
           </a>

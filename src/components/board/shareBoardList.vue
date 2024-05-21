@@ -8,6 +8,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("board");
+sidebarStore.open = false;
 
 const router = useRouter();
 
@@ -98,7 +99,6 @@ const moveWrite = () => {
 
 
 <template>
-
     <div>
         <!-- <h1>여행 정보 공유 게시판</h1> -->
         <div >
