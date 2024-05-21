@@ -58,7 +58,7 @@ watchEffect(() => {
                 <div class="col-6 flex-grow-1" style="height: 45rem;">
                     <h3>검색 된 장소</h3>
                     <p>드래그로 옮겨 보세요.</p>
-                    <draggable class="dragArea list-group custom-border h-100" :list="searchedAttractions"
+                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="searchedAttractions"
                         :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="name">
                         <template #item="{ element }">
                             <div class="list-group-item">
@@ -70,7 +70,7 @@ watchEffect(() => {
                 <div class="col-6 flex-grow-1" style="height: 45rem;">
                     <h3>계획 장소</h3>
                     <p>아래에 추가 됩니다.</p>
-                    <draggable class="dragArea list-group custom-border h-100" :list="plannedAttractions"
+                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="plannedAttractions"
                         :group="{ name: 'people', pull: true, put: true }" @change="log" item-key="name">
                         <template #item="{ element }">
                             <div class="list-group-item">
@@ -88,33 +88,24 @@ watchEffect(() => {
 <style scoped>
 .custom-border {
     border: 2px solid rgb(174, 167, 167);
-    /* 빨간색 실선 테두리 */
     border-radius: 5px;
-    /* 테두리 모서리를 둥글게 만듦 */
     padding: 10px;
-    /* 내용과 테두리 사이에 여백 추가 */
+    overflow-y: auto; /* Ensure scroll only if content overflows */
 }
 
-.flex-grow-1 {
-    overflow-y: auto;
-    /* 스크롤이 내부에서 발생하도록 설정 */
-}
-
-/* Chrome, Safari, Opera */
-.flex-grow-1::-webkit-scrollbar {
+/* Hide scrollbar */
+.dragArea::-webkit-scrollbar {
     display: none;
-    /* 스크롤바 영역을 숨김 */
+}
+.dragArea {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
 
-/* Firefox */
+/* Flexbox adjustments */
 .flex-grow-1 {
-    scrollbar-width: none;
-    /* Firefox에서 스크롤바를 숨김 */
-}
-
-/* IE, Edge */
-.flex-grow-1 {
-    -ms-overflow-style: none;
-    /* IE와 Edge에서 스크롤바를 숨김 */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 </style>

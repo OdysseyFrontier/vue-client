@@ -44,9 +44,8 @@ npm i vue3-google-map
 npm install vue-mq
 npm i date-fns
 npm install glightbox swiper isotope-layout
+npm install chart.js
 
 npm run dev
 
 
-
-npm install @popperjs/core

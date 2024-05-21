@@ -50,4 +50,22 @@ h3 {
 .right {
     /* justify-content: flex-start; */
 }
+
+/* Media query for responsiveness */
+@media (max-width: 1200px) {
+    .timeline-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .timeline-image {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .left,
+    .right {
+        justify-content: flex-start;
+    }
+}
+
+
 </style>
