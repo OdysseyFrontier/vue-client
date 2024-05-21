@@ -140,6 +140,7 @@ const onMapClick = (event) => {
   markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
   options.position = { lat, lng };
   //   options.value.position = { lat: lat, lng: lng };
+  reverseGeocode(lat, lng);
 };
 
 const uploadFile = async () => {
@@ -198,6 +199,30 @@ const uploadFile = async () => {
 function moveList() {
         router.push({ name: "hotPlaceList2" });
     }
+
+
+    const reverseGeocode = (latitude, longitude) => {
+  axios
+    .get("https://dapi.kakao.com/v2/local/geo/coord2regioncode.json", {
+      params: {
+        x: longitude,
+        y: latitude,
+      },
+      headers: {
+        Authorization: "KakaoAK " + "67bed65c15fd5c0a480c496bac0dadbb", // Replace with your Kakao API key
+      },
+    })
+    .then((response) => {
+      const regionInfo = response.data.documents[0];
+      params.value.sidoCode = regionInfo.region_1depth_name;
+      params.value.gugunCode = regionInfo.region_2depth_name;
+      params.value.addr1 = regionInfo.address_name; // Update address as well
+    })
+    .catch((error) => {
+      console.error("Error during reverse geocoding:", error);
+      alert("Failed to get region information.");
+    });
+};
 </script>
 
 <template>
@@ -206,6 +231,8 @@ function moveList() {
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
+          <div>{{ params.sidoCode }}</div>
+          <div>{{ params.gugunCode }}</div>
           <div>
             주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!
           </div>
