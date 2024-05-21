@@ -19,12 +19,12 @@ import PlanTimeLineList from "@/components/plan/PlanTimeLineList.vue";
                     <SearchingBar />
                 </div>
             </div>
-            <div class="row">
-                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="bg-white p-6">
+            <div class="row" style="height: 60rem;">
+                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="bg-white p-6" style="height: 60rem;">
                     <AttractionZone />
                 </div>
                 <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="p-3">
-                    <div class="bg-white p-3" style="height: 45rem;">
+                    <div class="bg-white p-3" style="height: 60rem;">
                         <PlanGoogleMap />
                     </div>
                 </div>

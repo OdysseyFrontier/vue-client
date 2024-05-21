@@ -1,8 +1,11 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { usePlanStore } from '@/stores/plan';
+import { createPlan } from '@/api/plan'; // Import the createPlan function
+import { useMemberStore } from '@/stores/member';
 
-const planStore = usePlanStore();
+const store = usePlanStore();
+const memberId = useMemberStore().memberInfo.memberId;
 
 
 const inputPlanName = ref("");
@@ -11,32 +14,58 @@ const inputEndDate = ref("");
 const inputPlanDescription = ref("");
 
 watchEffect(() => {
-    if (inputStartDate.value && inputEndDate.value) {
-        planStore.setStartDate(inputStartDate.value);
-        planStore.setEndDate(inputEndDate.value);
-    } else if (inputStartDate.value === '' || inputEndDate.value === '') {
-        planStore.setStartDate(null);
-        planStore.setEndDate(null);
-    }
+    inputStartDate.value = usePlanStore().startTime;
+    inputEndDate.value = usePlanStore().endTime;
+    usePlanStore().title = inputPlanName.value;
+    usePlanStore().description = inputPlanDescription.value;
 });
 
 
+const handleCreatePlan = async () => {
+    const planDto = {
+        memberId: memberId,
+        title: usePlanStore().title,
+        description: usePlanStore().description,
+        startTime: inputStartDate.value,
+        endTime: inputEndDate.value,
+        planDetails: usePlanStore().plannedAttractions.map(attraction => ({
+            contentId: attraction.contentId,
+            name: attraction.name,
+            planTime: attraction.planTime,
+            description: attraction.description
+        }))
+    };
+
+    console.log(planDto);
+
+    const success = (response) => {
+        console.log(response.data);
+        alert('Plan created successfully');
+    };
+
+    const fail = (error) => {
+        console.error('Error creating plan:', error);
+        alert('Failed to create plan');
+    };
+
+    createPlan(planDto, success, fail);
+};
 </script>
 
 <template>
     <div>
-        <form>
+        <form @submit.prevent="handleCreatePlan">
             <div class="form-group">
                 <label for="plan-name">계획 이름:</label>
                 <input v-model="inputPlanName" type="text" id="plan-name" class="form-control" placeholder="계획 이름">
             </div>
             <div class="form-group">
                 <label for="start-date">출발일자:</label>
-                <input v-model="inputStartDate" type="date" id="start-date" class="form-control">
+                <input v-model="inputStartDate" type="date" id="start-date" class="form-control" readonly>
             </div>
             <div class="form-group">
                 <label for="end-date">도착일자:</label>
-                <input v-model="inputEndDate" type="date" id="end-date" class="form-control">
+                <input v-model="inputEndDate" type="date" id="end-date" class="form-control" readonly>
             </div>
             <div class="form-group">
                 <label for="plan-details">계획 설명:</label>

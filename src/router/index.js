@@ -47,6 +47,11 @@ const router = createRouter({
       component: () => import("@/views/PlanView.vue"),
     },
     {
+      path: '/plan/detail/:planId',
+      name: 'PlanDetail',
+      component: () => import('@/components/plan/PlanDetail.vue')
+    },
+    {
       path: "/planList",
       name: "planList",
       component: () => import("@/views/PlanListView.vue"),
@@ -56,7 +61,7 @@ const router = createRouter({
       name: 'attraction',
       component: () => import('@/views/AttractionView.vue'),
       // children: [
-        
+
       // ]
     },
     {

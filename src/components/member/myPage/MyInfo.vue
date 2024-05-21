@@ -1,15 +1,33 @@
 <script setup>
-import { reactive } from "vue";
-const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
+import { computed, reactive } from "vue";
+import { useMemberStore } from '@/stores/member';
+const store = useMemberStore();
+
+const defaultImg = "src/assets/fighting.jpg";
+const defaultProfile = {
+  name: "sihyun",
+  image: defaultImg,
+  posts: 100,
+  followers: 300,
+  following: 300,
+  description: "",
+};
+
+const member = store.memberInfo || defaultProfile;
 
 const memberProfile = reactive({
-  username: "__sihyun__",
-  image: "path/to/image.jpg", // 이미지 경로를 정확하게 설정하세요.
-  posts: 100,
-  followers: 142,
-  following: 300,
-  description: "Carpe diem",
+  name: member.name || defaultProfile.name,
+  image: member.image || defaultProfile.image,
+  posts: member.posts || defaultProfile.posts,
+  followers: member.followers || defaultProfile.followers,
+  following: member.following || defaultProfile.following,
+  description: member.description || defaultProfile.description,
 });
+
+
+
+
+
 </script>
 
 <template>
@@ -17,19 +35,12 @@ const memberProfile = reactive({
     <div class="row align-items-center">
       <!-- 사진을 항상 왼쪽에 유지합니다 -->
       <div class="col-auto">
-        <img
-          :src="defaultImg"
-          alt="Profile picture"
-          class="profile-pic rounded-circle"
-        />
+        <img :src="memberProfile.image" alt="Profile picture" class="profile-pic rounded-circle" />
       </div>
       <div class="col">
         <div class="d-flex align-items-center mb-2">
-          <h1 class="me-3 text-nowrap">{{ memberProfile.username }}</h1>
-          <RouterLink
-            :to="{ name: 'myInfoModify' }"
-            class="btn btn-sm btn-outline-secondary text-nowrap"
-          >
+          <h1 class="me-3 text-nowrap">{{ memberProfile.name }}</h1>
+          <RouterLink :to="{ name: 'myInfoModify' }" class="btn btn-sm btn-outline-secondary text-nowrap">
             프로필 편집
           </RouterLink>
           <!-- <button class="btn btn-sm btn-outline-secondary text-nowrap">
@@ -54,41 +65,60 @@ const memberProfile = reactive({
 }
 
 @media (max-width: 767px) {
+
   /* md 이하에서 가로 정렬 */
   .my-info .row {
-    flex-direction: row; /* 행 방향 유지 */
+    flex-direction: row;
+    /* 행 방향 유지 */
     align-items: center;
   }
+
   .d-flex {
-    flex-direction: row; /* 가로 정렬 */
+    flex-direction: row;
+    /* 가로 정렬 */
     align-items: center;
   }
+
   .btn {
-    width: auto; /* 버튼 너비 자동 조정 */
-    padding: 0.25rem 0.5rem; /* 버튼 패딩 조정 */
-    font-size: 0.875rem; /* 폰트 크기 조정 */
+    width: auto;
+    /* 버튼 너비 자동 조정 */
+    padding: 0.25rem 0.5rem;
+    /* 버튼 패딩 조정 */
+    font-size: 0.875rem;
+    /* 폰트 크기 조정 */
   }
 }
 
 @media (min-width: 768px) {
+
   /* md 초과에서도 가로 정렬 */
   .my-info .row {
-    flex-direction: row; /* 행 방향 유지 */
+    flex-direction: row;
+    /* 행 방향 유지 */
     align-items: center;
   }
+
   .profile-pic {
     width: 120px;
     height: 120px;
   }
+
   .d-flex {
-    flex-direction: row; /* 가로 정렬 */
-    justify-content: space-between; /* 요소들 사이에 공간 배분 */
-    align-items: center; /* 세로 중앙 정렬 */
-    width: 100%; /* 전체 너비 사용 */
+    flex-direction: row;
+    /* 가로 정렬 */
+    justify-content: space-between;
+    /* 요소들 사이에 공간 배분 */
+    align-items: center;
+    /* 세로 중앙 정렬 */
+    width: 100%;
+    /* 전체 너비 사용 */
   }
+
   .btn {
-    padding: 0.25rem 0.5rem; /* 버튼 패딩 */
-    font-size: 0.875rem; /* 폰트 크기 */
+    padding: 0.25rem 0.5rem;
+    /* 버튼 패딩 */
+    font-size: 0.875rem;
+    /* 폰트 크기 */
   }
 }
 </style>

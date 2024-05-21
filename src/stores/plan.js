@@ -1,69 +1,65 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 
 export const usePlanStore = defineStore('plan', () => {
-
     const searchedAttractions = ref([]);
     const plannedAttractions = ref([]);
-    const startDate = ref(null);
-    const endDate = ref(null);
-    // const plannedAttractionsByDate = ref({});
+    const startTime = ref(null);
+    const endTime = ref(null);
+    const title = ref(null);
+    const description = ref(null);
 
-    function setStartDate(date){
-        startDate.value = date;
-        console.log(startDate.value)
+    watch(plannedAttractions, (newVal, oldVal) => {
+        console.log(newVal);
+        console.log(oldVal);
+    });
+
+    function setStartTime(date) {
+        startTime.value = date;
+        console.log(startTime.value);
     }
 
-    function setEndDate(date){
-        endDate.value = date;
-        console.log(endDate.value)
+    function setEndTime(date) {
+        endTime.value = date;
+        console.log(endTime.value);
     }
-    // Define actions
+
     function setSearchedAttractions(attractions) {
         searchedAttractions.value = attractions;
-        console.log(searchedAttractions.value);
-        console.log(searchedAttractions.value.length)
+    }
+
+    function setPlannedAttractions(attractions) {
+        console.log(attractions);
+        plannedAttractions.value = attractions;
+        console.log(plannedAttractions.value);
     }
 
     function addPlannedAttraction(attraction) {
-        this.plannedAttractions.push(attraction);
-        updateAttractionsByDate();
-
+        plannedAttractions.value.push(attraction);
     }
+
     function removeSearchedAttraction(index) {
-        this.searchedAttractions.splice(index, 1);
-
+        searchedAttractions.value.splice(index, 1);
     }
 
-    function updateAttractionsByDate() {
-        const start = new Date(startDate.value);
-        const end = new Date(endDate.value);
-        const date = new Date(start);
-
-        attractionsByDate.value = {};
-
-        while (date <= end) {
-            const dateString = date.toISOString().split('T')[0];
-            attractionsByDate.value[dateString] = [];
-            date.setDate(date.getDate() + 1);
+    function updatePlannedAttraction(updatedAttraction) {
+        const index = plannedAttractions.value.findIndex(a => a.id === updatedAttraction.id);
+        if (index !== -1) {
+            plannedAttractions.value[index] = updatedAttraction;
         }
-        plannedAttractions.value.forEach(attraction => {
-            const dateString = new Date(attraction.date).toISOString().split('T')[0];
-            if (attractionsByDate.value[dateString]) {
-                attractionsByDate.value[dateString].push(attraction);
-            }
-        });
     }
-    // Return the state and actions so they can be used in components
+
     return {
-        startDate,
-        endDate,
+        startTime,
+        endTime,
         searchedAttractions,
-        setStartDate,
-        setEndDate,
+        setStartTime,
+        setEndTime,
         plannedAttractions,
         setSearchedAttractions,
+        setPlannedAttractions,
         addPlannedAttraction,
         removeSearchedAttraction,
+        updatePlannedAttraction,
     };
 });
