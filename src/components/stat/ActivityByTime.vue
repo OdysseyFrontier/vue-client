@@ -14,34 +14,34 @@
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
 import { time } from "@/api/stat";
-import { httpStatusCode } from "@/util/http-status"
+import { httpStatusCode } from "@/util/http-status";
 
 export default {
   setup() {
-    const activityByTimeData = ref([ ]);
+    const activityByTimeData = ref([]);
 
-      //  { time_slot: 2, activity_count: 4 },
-      // { time_slot: 4, activity_count: 40 },
-      // { time_slot: 6, activity_count: 24 },
-      // { time_slot: 7, activity_count: 35 },
-      // { time_slot: 10, activity_count: 6 },
-      // { time_slot: 12, activity_count: 50 },
+    //  { time_slot: 2, activity_count: 4 },
+    // { time_slot: 4, activity_count: 40 },
+    // { time_slot: 6, activity_count: 24 },
+    // { time_slot: 7, activity_count: 35 },
+    // { time_slot: 10, activity_count: 6 },
+    // { time_slot: 12, activity_count: 50 },
 
     onMounted(async () => {
       // const response = await axios.get("/api/stat/time");
       // activityByTimeData.value = response.data;
       await time(
-      (response) => {
-        if (response.status === httpStatusCode.OK) {
-          activityByTimeData.value = response.data;
-        } else {
-          console.error("통계 없음!!!!")
+        (response) => {
+          if (response.status === httpStatusCode.OK) {
+            activityByTimeData.value = response.data;
+          } else {
+            console.error("통계 없음!!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error)
-      }
-    )
+      );
 
       new Chart(document.getElementById("lineChartTime"), {
         type: "line",

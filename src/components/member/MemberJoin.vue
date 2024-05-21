@@ -39,7 +39,7 @@ watch(
 
 let isfilled = false;
 function onSubmit() {
-  if(isfilled){
+
   console.log(joinMemberInfo.value)
   let count = 0;
   idCheck(
@@ -57,7 +57,7 @@ console.log(count)
     },
     (error) => console.error(error)
   );
-}
+
 }
 
 // function onSubmit() {
@@ -97,9 +97,12 @@ setTimeout(() => {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
+          }else{
+            event.preventDefault();
+            onSubmit()
           }
           event.preventDefault();
-          isfilled = true;
+          // isfilled = true;
           form.classList.add("was-validated");
         },
         false
@@ -137,7 +140,7 @@ setTimeout(() => {
                     <p class="text-center small">개인정보를 입력해주세요.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate @submit="onSubmit">
+                  <form class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
                       <label for="yourName" class="form-label">이름</label>
                       <input
