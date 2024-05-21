@@ -18,7 +18,6 @@ const nowLoc = ref({ lat: 36.1061824, lng: 128.4227797 })
 
 
 const fetchSidos = () => {
-    console.log("sido")
     getSidos(
         ({ data }) => {
             sidos.value = data;

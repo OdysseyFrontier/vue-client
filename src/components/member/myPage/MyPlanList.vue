@@ -14,9 +14,9 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <plan-item v-for="plan in plansToShow" :key="plan.planId" :plan="plan" class="col-xs-12 col-sm-6 col-md-4">
-        <h6 class="card-subtitle mb-2 text-muted">{{ formatPlanTime(plan.planTime) }}</h6>
+    <div class="row p-3 m-3">
+      <plan-item v-for="plan in plansToShow" :key="plan.planId" :plan="plan" class="col-xs-12 col-sm-6 col-md-4 p-1">
+        <h6 class="card-subtitle mb-2 text-muted ">{{ formatPlanTime(plan.planTime) }}</h6>
       </plan-item>
     </div>
   </div>

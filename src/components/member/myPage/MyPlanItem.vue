@@ -8,7 +8,7 @@
 
 
 <template>
-  <div class="plan-item m-1">
+  <div class="plan-item">
     <img :src="defaultImg" alt="Plan Thumbnail" class="plan-image">
     <div class="plan-details">
       <h3>{{ plan.title }}</h3>

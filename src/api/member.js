@@ -33,4 +33,39 @@ function join(joinMember, success, fail) {
     .catch(fail);
 }
 
-export { memberConfirm, findById, tokenRegeneration, logout, idCheck, join };
+async function getFollowers(memberId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/${memberId}/followers`).then(success).catch(fail);
+}
+
+// Fetch following of a member
+async function getFollowing(memberId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/${memberId}/following`).then(success).catch(fail);
+}
+
+async function searchMembers(searchQuery, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/search/${searchQuery}`).then(success).catch(fail);
+}
+
+async function followMember(followerId, followingId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.post(`/member/${followerId}/follow/${followingId}`).then(success).catch(fail);
+}
+
+// Function to unfollow another member
+async function unfollowMember(followerId, followingId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.post(`/member/${followerId}/unfollow/${followingId}`).then(success).catch(fail);
+}
+
+
+
+export { memberConfirm, findById, tokenRegeneration, logout, idCheck, join,
+  getFollowers,
+  getFollowing,
+  searchMembers,
+  followMember,
+  unfollowMember
+ };

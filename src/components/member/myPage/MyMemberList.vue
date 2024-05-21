@@ -5,7 +5,7 @@
       <button class="btn btn-primary" @click="fetchMembers">검색</button>
     </div>
     <div class="member-list">
-      <MyMemberItem v-for="member in memberList" :key="member.id" :member="member" />
+      <MyMemberItem v-for="member in memberList" :key="member.memberId" :member="member" />
     </div>
   </div>
 </template>
