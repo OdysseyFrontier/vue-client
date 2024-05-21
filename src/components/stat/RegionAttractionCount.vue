@@ -15,18 +15,30 @@
 <script>
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
-import axios from "axios";
+
+import { reginonCount } from "@/api/stat";
+import { httpStatusCode } from "@/util/http-status"
 
 export default {
   setup() {
-    const regionAttractionCountData = ref([
-      { sido_name: "안녕", gugun_name: "서구", attraction_count: 5 },
-      { sido_name: "안녕\ㅇ", gugun_name: "달서구", attraction_count: 10 },
-    ]);
+    const regionAttractionCountData = ref([]);
+
+    // { sido_name: "안녕", gugun_name: "서구", attraction_count: 5 },
+    //   { sido_name: "안녕\ㅇ", gugun_name: "달서구", attraction_count: 10 },
 
     onMounted(async () => {
-      // const response = await axios.get("/api/attractions/region-count");
-      // regionAttractionCountData.value = response.data;
+      await reginonCount(
+      (response) => {
+        if (response.status === httpStatusCode.OK) {
+          regionAttractionCountData.value = response.data;
+        } else {
+          console.error("통계 없음!!!!")
+        }
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
 
       new Chart(document.getElementById("barChartRegion"), {
         type: "bar",

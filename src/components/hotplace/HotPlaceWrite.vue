@@ -1,17 +1,191 @@
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, reactive } from "vue";
 import { GoogleMap, Marker, MarkerCluster } from "vue3-google-map";
-const { VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
+import axios from 'axios';
+import EXIF from 'exif-js';
+import { useMemberStore } from "@/stores/member"
+import { useRouter } from "vue-router";
+const { VITE_VUE_APP_KAKAO_REST_API_KEY, VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
 
-const init_center = ref({ lat: 36.1061824, lng: 128.4227797 });
-const zoom = 12;
-// const options: {
-//         position: { lat: attraction.latitude, lng: attraction.longitude },
-//         title: attraction.title,
-//       }
-const options = {
-  position: { lat: 36.1061824, lng: 128.4227797 },
-  title: "추가한 장소",
+const router = useRouter();
+const memberStore = useMemberStore()
+
+const params = ref({
+  memberId : memberStore.memberInfo.memberId,
+  contentTypeId: 0,
+  title: "",
+  addr1: "",
+  tel: "",
+  latitude: "",
+  longitude: "",
+  homepage: "",
+  overview: "",
+  sidoCode: 1,
+  gugunCode: 1
+})
+const selectedFile = ref(null);
+const location = ref({
+  latitude: '',
+  longitude: '',
+});
+const locationAvailable = ref(false);
+const mapCenter = ref({ lat: 36.1061824, lng: 128.4227797 }); // Default to London
+const address = ref('');
+const markerKey = ref(0);
+
+const options= reactive({
+        position: mapCenter.value,
+        title: "선택한 위치",
+      })
+
+
+const previewUrl = ref(null);  // 미리보기 URL 상태 추가
+const onFileChange = (event) => {
+  selectedFile.value = event.target.files[0];
+  extractLocation(selectedFile.value);
+
+  // 파일 읽기 및 미리보기 URL 생성
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewUrl.value = e.target.result;  // 미리보기 URL 설정
+  };
+  reader.readAsDataURL(selectedFile.value);
+};
+
+const extractLocation = (file) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    EXIF.getData(arrayBuffer, function () {
+      const lat = EXIF.getTag(this, 'GPSLatitude');
+      const lon = EXIF.getTag(this, 'GPSLongitude');
+      const latRef = EXIF.getTag(this, 'GPSLatitudeRef');
+      const lonRef = EXIF.getTag(this, 'GPSLongitudeRef');
+
+      if (lat && lon && latRef && lonRef) {
+        const latitude = (latRef === 'N' ? 1 : -1) * (lat[0] + lat[1] / 60 + lat[2] / 3600);
+        const longitude = (lonRef === 'E' ? 1 : -1) * (lon[0] + lon[1] / 60 + lon[2] / 3600);
+        location.value = { latitude, longitude };
+        locationAvailable.value = true;
+        mapCenter.value = { lat: latitude, lng: longitude };
+        markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+  options.position = { lat: latitude, lng: longitude };
+      } else {
+        alert('No GPS data found in image.');
+        locationAvailable.value = false;
+      }
+    });
+  };
+  reader.readAsArrayBuffer(file);
+};
+
+
+
+ //다음 주소 검색
+function execDaumPostcode() {
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          kakaoAddress(data.address);
+          
+        },
+      }).open();
+
+
+//  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+//       options.position =mapCenter.value
+    }
+
+
+//주소를 기준으로 위도, 경도 정보 가져오기
+    function kakaoAddress(address){
+      axios.get('https://dapi.kakao.com/v2/local/search/address',{
+        params:{
+          query: address
+        },
+        headers:{
+          Authorization : 'KakaoAK '+ VITE_VUE_APP_KAKAO_REST_API_KEY
+        }
+      })
+      .then(res=>{
+        const roadAddress = res.data.documents[0].address;
+        console.log(roadAddress.x)
+        mapCenter.value.lat = Number(roadAddress.x)
+        mapCenter.value.lng = Number(roadAddress.y)
+        location.value = { latitude: roadAddress.x, longitude:roadAddress.y };
+        locationAvailable.value = true;
+
+       options.position = { lat: Number(roadAddress.x), lng: Number(roadAddress.y) };
+       triggerRerender();
+      })
+      .catch(err=>{
+        alert('주소를 불러오는데 실패했습니다...');
+        console.log(err);
+      });
+    }
+
+    const triggerRerender = () => {
+  markerKey.value++;
+};
+
+
+// 맵클릭했을 때 마커 움직이는 함수
+const onMapClick = (event) => {
+  const { latLng } = event;
+  const lat = latLng.lat();
+  const lng = latLng.lng();
+  location.value = { latitude: lat, longitude: lng };
+  mapCenter.value = { lat, lng };
+  locationAvailable.value = true;
+
+markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+  options.position = { lat, lng };
+//   options.value.position = { lat: lat, lng: lng };
+};
+
+const uploadFile = async () => {
+  if (!selectedFile.value) {
+    alert('사진을 첨부해주세요.');
+    return;
+  }
+
+  if (!location.value.latitude || !location.value.longitude) {
+    alert('위치를 지정해주세요.');
+    return;
+  }
+
+  if(params.value.title.length ==  0) {
+    alert('제목을 작성해주세요.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', selectedFile.value);
+  
+  params.value.latitude = location.value.latitude
+  params.value.longitude = location.value.longitude
+  // formData.append('hotplaceDto', params.value);
+  // formData.append('latitude', location.value.latitude);
+  // formData.append('longitude', location.value.longitude);
+  // formData.append('longitude', location.value.longitude);
+
+  const hotplaceDto = JSON.stringify({
+...params.value,
+  });
+
+  formData.append('hotplaceDto', hotplaceDto);
+
+  try {
+    const response = await axios.post('http://localhost/hotplace/write', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    alert('File uploaded successfully.');
+    router.push({ name: "hotPlaceDetail" , params: {contentId: response.data} });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    alert('File upload failed.');
+  }
 };
 </script>
 
@@ -19,12 +193,12 @@ const options = {
   <!-- ======= Portfolio Details Section ======= -->
 
   <div class="clearfix btn-wrap align-right mt30">
-    <button class="table-btn btn-write btn_bbsList" @click="moveModify(true)">
-      수정
+    <button class="table-btn btn-write btn_bbsList" @click="uploadFile">
+      작성
     </button>
     <button
       class="table-btn btn-exit btn_bbsList"
-      @click="onDeleteArticle(false)"
+      @click="onDeleteArticle"
     >
       삭제
     </button>
@@ -34,8 +208,20 @@ const options = {
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
+          <button class="btn btn-secondary" @click="execDaumPostcode">주소검색</button>
+        <div>주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!</div>
           <!-- 지도 -->
-          <GoogleMap
+          <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY"
+          id="map"
+        :center="mapCenter"
+        :zoom="10"
+        style="height: 500px; width: 100%"
+        @click="onMapClick"
+      >
+        <Marker :options="options" :key="markerKey"  />
+      </GoogleMap>
+
+          <!-- <GoogleMap
             :api-key="VITE_GOOGLE_MAP_API_KEY"
             id="map"
             style="width: 100%; height: 500px"
@@ -43,7 +229,7 @@ const options = {
             :center="init_center"
           >
             <Marker :options="options" />
-          </GoogleMap>
+          </GoogleMap> -->
         </div>
 
         <div class="col-lg-6">
@@ -61,14 +247,13 @@ const options = {
                       type="file"
                       class="form-control"
                       id="Image"
+                      @change="onFileChange"
                     />
                   </div>
                 </div>
 
                 <div class="row mb-3">
-                  <label for="category" class="col-md-4 col-lg-3 col-form-label"
-                    >카테고리</label
-                  >
+                  <label for="category" class="col-md-4 col-lg-3 col-form-label">카테고리</label>
                   <div class="col-md-8 col-lg-9 d-flex">
                     <select
                       class="form-select"
@@ -76,7 +261,9 @@ const options = {
                       name="category"
                       aria-label="카테고리 선택"
                       required
+                      v-model="params.contentTypeId"
                     >
+                      <option value="0" hidden disabled selected>카테고리를 선택해주세요.</option>
                       <option value="12">관광지</option>
                       <option value="14">문화시설</option>
                       <option value="15">축제 / 공연 / 행사</option>
@@ -100,6 +287,7 @@ const options = {
                       class="form-control"
                       id="title"
                       value="제목"
+                      v-model="params.title"
                     />
                   </div>
                 </div>
@@ -114,8 +302,9 @@ const options = {
                       class="form-control"
                       id="content"
                       style="height: 100px"
-                    >
-Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea
+                      v-model="params.overview"
+                      placeholder="내용을 입력해주세요."
+                    ></textarea
                     >
                   </div>
                 </div>
@@ -130,7 +319,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
                       type="text"
                       class="form-control"
                       id="Address"
-                      value="A108 Adam Street, New York, NY 535022"
+                      v-model="params.addr1"
                     />
                   </div>
                 </div>
@@ -145,7 +334,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
                       type="text"
                       class="form-control"
                       id="Phone"
-                      value="(436) 486-3538 x29071"
+                      v-model="params.tel"
                     />
                   </div>
                 </div>
@@ -160,7 +349,8 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
                       type="text"
                       class="form-control"
                       id="Homepage"
-                      value="https://Homepage.com/#"
+                      placeholder="https://Homepage.com/#"
+                      v-model="params.homepage"
                     />
                   </div>
                 </div>
@@ -168,9 +358,12 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
               <!-- End Profile Edit Form -->
             </div>
           </div>
-          <div class="portfolio-description">
-            <h2>This is an example of portfolio detail</h2>
-            <p>첨부사진 미리보기</p>
+          <div class="portfolio-description" v-if="previewUrl">
+            <h2>첨부사진 미리보기</h2>
+             <!-- 추가된 섹션: 이미지 미리보기 -->
+                  <div class="col-md-8 col-lg-9">
+                    <img :src="previewUrl" alt="Image Preview" style="max-width: 100%; height: auto;" />
+                  </div>
           </div>
         </div>
       </div>

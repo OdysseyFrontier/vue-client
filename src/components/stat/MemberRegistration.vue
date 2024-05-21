@@ -13,20 +13,33 @@
 <script>
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
-import axios from "axios";
+import { registrationStats } from "@/api/stat";
+import { httpStatusCode } from "@/util/http-status"
 
 export default {
   setup() {
-    const registrationStatsData = ref([
-      { registration_date: "2024-02-02", member_count: 100 },
-      { registration_date: "2024-02-22", member_count: 4 },
-      { registration_date: "2024-12-02", member_count: 26 },
-      { registration_date: "2024-11-02", member_count: 26 },
-    ]);
+    const registrationStatsData = ref([]);
+
+    // { registration_date: "2024-02-02", member_count: 100 },
+    //   { registration_date: "2024-02-22", member_count: 4 },
+    //   { registration_date: "2024-12-02", member_count: 26 },
+    //   { registration_date: "2024-11-02", member_count: 26 },
 
     onMounted(async () => {
       // const response = await axios.get("/api/members/registration-stats");
       // registrationStatsData.value = response.data;
+      await registrationStats(
+      (response) => {
+        if (response.status === httpStatusCode.OK) {
+          registrationStatsData.value = response.data;
+        } else {
+          console.error("통계 없음!!!!")
+        }
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
 
       new Chart(document.getElementById("lineChart"), {
         type: "line",

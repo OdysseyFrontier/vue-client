@@ -13,23 +13,36 @@
 <script>
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
-import axios from "axios";
+import { popular } from "@/api/stat";
+import { httpStatusCode } from "@/util/http-status"
 
 export default {
   setup() {
-    const popularAttractionsData = ref([
-      { title: "제목", hit_count: 5 },
-      { title: "제목2", hit_count: 35 },
-      { title: "제목3", hit_count: 25 },
-      { title: "제목4", hit_count: 15 },
-      { title: "제목5", hit_count: 5 },
-      { title: "제목6", hit_count: 25 },
-      { title: "제목7", hit_count: 70 },
-    ]);
+    const popularAttractionsData = ref([]);
+
+    // { title: "제목", hit_count: 5 },
+    //   { title: "제목2", hit_count: 35 },
+    //   { title: "제목3", hit_count: 25 },
+    //   { title: "제목4", hit_count: 15 },
+    //   { title: "제목5", hit_count: 5 },
+    //   { title: "제목6", hit_count: 25 },
+    //   { title: "제목7", hit_count: 70 },
 
     onMounted(async () => {
       // const response = await axios.get("/api/attractions/popular");
       // popularAttractionsData.value = response.data;
+      await popular(
+      (response) => {
+        if (response.status === httpStatusCode.OK) {
+          popularAttractionsData.value = response.data;
+        } else {
+          console.error("통계 없음!!!!")
+        }
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
 
       new Chart(document.getElementById("barChart"), {
         type: "bar",

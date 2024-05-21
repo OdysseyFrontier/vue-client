@@ -62,7 +62,13 @@ const logout = () => {
               </li>
 
               <li>
-                <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage">
+
+                <RouterLink
+                  :to="{ name: 'memberMyPage' }"
+                  class="dropdown-item d-flex align-items-center"
+                  :class="sidebarList.mypage"
+                >
+
                   <i class="bi bi-person"></i>
                   <span>마이 페이지</span>
                 </RouterLink>
