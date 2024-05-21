@@ -3,7 +3,7 @@
     <div class="container mt-4">
         <div class="search-bar mb-3 d-flex">
             <input type="text" class="form-control me-2" placeholder="검색" v-model="searchQuery">
-            <button class="btn btn-primary" @click="fetchMembers">검색</button>
+            <button class="btn btn-primary" @click="filterFollowers">검색</button>
         </div>
         <div class="member-list">
             <MyMemberItem v-for="member in followers" :key="member.memberId" :member="member"
@@ -62,6 +62,14 @@ const toggleFollow = async memberId => {
         }
     }
 };
+
+function filterFollowers() {
+    if (searchQuery.value) {
+        followers.value = followers.value.filter(member =>
+            member.name.includes(searchQuery.value) || member.emailId.includes(searchQuery.value)
+        );
+    }
+}
 
 watchEffect(() => {
     fetchMembers();

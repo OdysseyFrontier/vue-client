@@ -3,24 +3,24 @@
     <div class="container mt-4">
         <div class="search-bar mb-3 d-flex">
             <input type="text" class="form-control me-2" placeholder="검색" v-model="searchQuery">
-            <button class="btn btn-primary" @click="fetchMembers">검색</button>
+            <button class="btn btn-primary" @click="filterFollowings">검색</button>
         </div>
         <div class="member-list">
-            <MyFollowingListItem v-for="member in following" :key="member.memberId" :member="member"
+            <MyFollowingListItem v-for="member in followings" :key="member.memberId" :member="member"
                 @deleteFollowing="deleteFollowing" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect, onMounted, computed } from 'vue';
 import { useMemberStore } from '@/stores/member';
 import { getFollowing, unfollowMember } from '@/api/member';
 import MyFollowingListItem from '@/components/member/myPage/MyFollowingListItem.vue';
 
 const store = useMemberStore();
 const memberId = store.memberInfo?.memberId || 1;
-const following = ref({});
+const followings = ref({});
 const searchQuery = ref('');
 
 const deleteFollowing = async (followingId) => {
@@ -29,9 +29,9 @@ const deleteFollowing = async (followingId) => {
         await unfollowMember(memberId, followingId,
             () => {
                 // Remove the unfollowed member from the list
-                const index = following.value.findIndex(member => member.memberId === followingId);
+                const index = followings.value.findIndex(member => member.memberId === followingId);
                 if (index !== -1) {
-                    following.value.splice(index, 1);
+                    followings.value.splice(index, 1);
                 }
                 console.log('Unfollow successful');
             },
@@ -43,16 +43,26 @@ const deleteFollowing = async (followingId) => {
         console.error('Error during unfollow operation:', error);
     }
 };
+
 async function fetchMembers() {
     getFollowing(memberId,
         response => {
-            following.value = response.data;
+            followings.value = response.data;
         },
         error => {
             console.error('Failed to fetch followers:', error);
         }
     );
 }
+
+function filterFollowings() {
+    if (searchQuery.value) {
+        followings.value = followings.value.filter(member =>
+            member.name.includes(searchQuery.value) || member.emailId.includes(searchQuery.value)
+        );
+    }
+}
+
 
 watchEffect(() => {
     fetchMembers();
