@@ -16,6 +16,11 @@ import { ref, onMounted, watch } from 'vue';
 import { searchAllMembersByLoginMemberId, searchMembersByLoginMemberId, followMember, unfollowMember } from '@/api/member';
 import MyMemberItem from '@/components/member/myPage/MyMemberItem.vue';
 import { useMemberStore } from '@/stores/member';
+import { useSidebarStore } from "@/stores/sidebar.js";
+
+const sidebarStore = useSidebarStore();
+sidebarStore.changesSidebarState("memberSearch");
+sidebarStore.open = false;
 
 const store = useMemberStore();
 const memberList = ref([]);

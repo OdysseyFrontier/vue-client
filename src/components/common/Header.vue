@@ -140,6 +140,14 @@ const toggleSidebar = () => {
         <!-- 관광지 조회 Nav -->
 
         <li class="nav-item">
+          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace" @click="toggleSidebar">
+            <i class="bi bi-camera"></i>
+            <span>HotPlace</span>
+          </RouterLink>
+        </li>
+        <!-- End HotPlace Nav -->
+
+        <li class="nav-item">
           <RouterLink :to="{ name: 'boardList' }" class="nav-link" :class="sidebarList.board" @click="toggleSidebar">
             <i class="bi bi-clipboard"></i>
             <span>여행 정보 공유 게시판</span>
@@ -167,52 +175,38 @@ const toggleSidebar = () => {
             <span>관광지 검색</span>
           </RouterLink>
         </li>
-        <li class="nav-item" v-if="memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : memberId} }" class="nav-link" :class="sidebarList.mypage"
-            @click="toggleSidebar">
-            <i class="bi bi-person"></i>
-            <span>마이 페이지</span>
-          </RouterLink>
-        </li>
         <li class="nav-item">
           <RouterLink :to="{ name: 'memberSearch' }" class="nav-link" :class="sidebarList.memberSearch"
             @click="toggleSidebar">
-            <i class="bi bi-search"></i>
+            <i class="bi bi-people"></i>
             <span>회원 검색</span>
           </RouterLink>
         </li>
         <!-- End 여행정보공유 Nav -->
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'hotPlace' }" class="nav-link" :class="sidebarList.hotplace" @click="toggleSidebar">
-            <i class="bi bi-camera"></i>
-            <span>HotPlace</span>
-          </RouterLink>
-        </li>
-        <!-- End 여행정보공유 Nav -->
-
-        <li class="nav-item">
           <RouterLink :to="{ name: 'stat' }" class="nav-link" :class="sidebarList.stat" @click="toggleSidebar">
-            <i class="bi bi-box-arrow-in-right"></i>
+            <i class="bi bi-bar-chart"></i>
             <span>통계</span>
           </RouterLink>
         </li>
-        <!-- End Login Page Nav -->
+        <!-- End stat Nav -->
 
         <li class="nav-heading">Pages</li>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link" :class="sidebarList.mypage" @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>임시 마이페이지</span>
           </RouterLink>
-        </li>
+        </li> -->
 
         <li class="nav-item" v-if="memberStore.isLogin">
-          <a class="nav-link collapsed" href="/member/mypage">
+          <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : memberId} }" class="nav-link" :class="sidebarList.mypage"
+            @click="toggleSidebar">
             <i class="bi bi-person"></i>
-            <span>마이페이지</span>
-          </a>
+            <span>마이 페이지</span>
+          </RouterLink>
         </li>
         <!-- End Profile Page Nav -->
 

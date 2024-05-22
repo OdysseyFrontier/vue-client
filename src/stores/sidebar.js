@@ -13,6 +13,7 @@ export const useSidebarStore = defineStore("sidebar", () => {
     login: "collapsed",
     join: "collapsed",
     stat: "collapsed",
+    memberSearch: "collapsed"
   });
 
   const open = ref(false)
