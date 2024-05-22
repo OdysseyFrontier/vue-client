@@ -1,6 +1,10 @@
 <template>
-    <h2>팔로워</h2>
     <div class="container mt-4">
+        <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : 'me'} }">
+            <i class="bi bi-caret-left-fill"></i>
+            <span>뒤로가기</span>
+        </RouterLink>
+        <h2 class="my-3">팔로워 목록</h2>
         <div class="search-bar mb-3 d-flex">
             <input type="text" class="form-control me-2" placeholder="검색" v-model="searchQuery">
             <button class="btn btn-primary" @click="filterFollowers">검색</button>
@@ -17,9 +21,15 @@ import { ref, watchEffect, onMounted } from 'vue';
 import { useMemberStore } from '@/stores/member';
 import { getFollowers, unfollowMember, followMember } from '@/api/member';
 import MyFollowerListItem from '@/components/member/myPage/MyFollowerListItem.vue';
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
+
+let { memberId } = route.params;
 
 const store = useMemberStore();
-const loginMemberId = store.memberInfo?.memberId || 1;
+const loginMemberId = memberId;
 const followers = ref({});
 const searchQuery = ref('');
 
@@ -90,6 +100,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+a {
+  /* color: #4154f1; */
+  color: black;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #717ff5;
+  text-decoration: none;
+}
+
 .member-list {
     display: flex;
     flex-direction: column;

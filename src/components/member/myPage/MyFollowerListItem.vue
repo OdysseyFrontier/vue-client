@@ -42,6 +42,7 @@ const follow = () => {
 </script>
 
 <style scoped>
+
 .member-item {
   margin-bottom: 10px;
 }
