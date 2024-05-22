@@ -21,9 +21,15 @@ import { ref, watchEffect, onMounted } from 'vue';
 import { useMemberStore } from '@/stores/member';
 import { getFollowers, unfollowMember, followMember } from '@/api/member';
 import MyFollowerListItem from '@/components/member/myPage/MyFollowerListItem.vue';
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
+
+let { memberId } = route.params;
 
 const store = useMemberStore();
-const loginMemberId = store.memberInfo?.memberId || 1;
+const loginMemberId = memberId;
 const followers = ref({});
 const searchQuery = ref('');
 

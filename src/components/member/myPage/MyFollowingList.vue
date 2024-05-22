@@ -21,6 +21,13 @@ import { ref, watchEffect, onMounted, computed } from 'vue';
 import { useMemberStore } from '@/stores/member';
 import { getFollowing, unfollowMember, followMember } from '@/api/member';
 import MyMemberItem from '@/components/member/myPage/MyMemberItem.vue';
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
+
+let { memberId } = route.params;
+
 
 const store = useMemberStore();
 const loginMemberId = store.memberInfo?.memberId || 1;
