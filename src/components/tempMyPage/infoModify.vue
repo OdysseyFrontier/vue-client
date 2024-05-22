@@ -1,9 +1,79 @@
-<script setup></script>
+<script setup>
+import {ref} from 'vue'
+import { useMemberStore } from "@/stores/member"
+import { updateMemberInfo } from "@/api/member.js";
+
+const memberStore = useMemberStore();
+
+const memberInfo = ref(memberStore.memberInfo)
+
+function updateMember() {
+  updateMemberInfo(
+    memberInfo.value,
+    (response) => {
+      console.log(response.data);
+      let msg = "정보 수정 처리시 문제 발생했습니다.";
+      if (response.status == 201) msg = "정보 수정이 완료되었습니다.";
+      memberStore.getMemberInfo(sessionStorage.getItem[accessToken])
+      
+      alert(msg);
+      router.push({
+      name: "myInfo",
+      params: { memberId: 'me' },
+    });
+    },
+    (error) => console.error(error)
+  );
+}
+
+function execDaumPostcode() {
+  new window.daum.Postcode({
+    oncomplete: (data) => {
+      console.log("주소검색");
+      if(data.jibunAddress)
+      memberInfo.value.address = data.jibunAddress
+      if(data.roadAddress)
+      memberInfo.value.address = data.roadAddress
+    },
+  }).open();
+}
+
+
+
+setTimeout(() => {
+  (function () {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }else{
+            event.preventDefault();
+            updateMember()
+          }
+          event.preventDefault();
+          // isfilled = true;
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+});
+</script>
 
 <template>
   <div class="tab-pane profile-edit pt-3" id="profile-edit">
     <!-- Profile Edit Form -->
-    <form id="main">
+    <form id="main" class="needs-validation" novalidate>
       <div class="row mb-3">
         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label"
           >Profile Image</label
@@ -29,7 +99,7 @@
 
       <div class="row mb-3">
         <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
-          >Full Name</label
+          >Name</label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -37,12 +107,14 @@
             type="text"
             class="form-control"
             id="fullName"
-            value="Kevin Anderson"
+            required
+            v-model="memberInfo.name"
           />
+          <div class="invalid-feedback">이름을 입력해주세요!</div>
         </div>
       </div>
 
-      <div class="row mb-3">
+      <!-- <div class="row mb-3">
         <label for="about" class="col-md-4 col-lg-3 col-form-label"
           >About</label
         >
@@ -56,48 +128,39 @@
 Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea
           >
         </div>
-      </div>
+      </div> -->
 
       <div class="row mb-3">
-        <label for="company" class="col-md-4 col-lg-3 col-form-label"
-          >Company</label
+        <label for="Phone" class="col-md-4 col-lg-3 col-form-label"
+          >Phone</label
         >
         <div class="col-md-8 col-lg-9">
           <input
-            name="company"
+            name="Phone"
             type="text"
             class="form-control"
-            id="company"
-            value="Lueilwitz, Wisoky and Leuschke"
+            id="Phone"
+            required
+            v-model="memberInfo.phone"
           />
+          <div class="invalid-feedback">
+            전화번호를 입력해주세요.
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
+        <label for="Birthday" class="col-md-4 col-lg-3 col-form-label">Birthday</label>
         <div class="col-md-8 col-lg-9">
           <input
-            name="job"
+            name="Birthday"
             type="text"
             class="form-control"
-            id="Job"
-            value="Web Designer"
+            id="Birthday"
+            required
+            v-model="memberInfo.birthday"
           />
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="Country" class="col-md-4 col-lg-3 col-form-label"
-          >Country</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="country"
-            type="text"
-            class="form-control"
-            id="Country"
-            value="USA"
-          />
+          <div class="invalid-feedback">생일을 입력해주세요.</div>
         </div>
       </div>
 
@@ -106,106 +169,33 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
           >Address</label
         >
         <div class="col-md-8 col-lg-9">
-          <input
-            name="address"
-            type="text"
-            class="form-control"
-            id="Address"
-            value="A108 Adam Street, New York, NY 535022"
-          />
+          <label for="MemberAddress"
+                        >주소<span class="text-muted"
+                          >&nbsp;(선택사항)</span>
+                          <span class="text-muted">
+                          <button
+                            type="button"
+                            class="btn"
+                            id="check_btn"
+                            @click="execDaumPostcode"
+                          >
+                            찾기
+                          </button>
+                        </span>
+                        </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="memberAddress"
+                        name="memberAddress"
+                        placeholder="주소를 직접 입력하거나 찾기를 눌러주세요."
+                        v-model="memberInfo.address"
+                      />
         </div>
       </div>
 
-      <div class="row mb-3">
-        <label for="Phone" class="col-md-4 col-lg-3 col-form-label"
-          >Phone</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="phone"
-            type="text"
-            class="form-control"
-            id="Phone"
-            value="(436) 486-3538 x29071"
-          />
-        </div>
-      </div>
 
-      <div class="row mb-3">
-        <label for="Email" class="col-md-4 col-lg-3 col-form-label"
-          >Email</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="email"
-            type="email"
-            class="form-control"
-            id="Email"
-            value="k.anderson@example.com"
-          />
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label"
-          >Twitter Profile</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="twitter"
-            type="text"
-            class="form-control"
-            id="Twitter"
-            value="https://twitter.com/#"
-          />
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label"
-          >Facebook Profile</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="facebook"
-            type="text"
-            class="form-control"
-            id="Facebook"
-            value="https://facebook.com/#"
-          />
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label"
-          >Instagram Profile</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="instagram"
-            type="text"
-            class="form-control"
-            id="Instagram"
-            value="https://instagram.com/#"
-          />
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label"
-          >Linkedin Profile</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            name="linkedin"
-            type="text"
-            class="form-control"
-            id="Linkedin"
-            value="https://linkedin.com/#"
-          />
-        </div>
-      </div>
-
+<!-- 
       <div class="row mb-3">
         <label for="Email" class="col-md-4 col-lg-3 col-form-label"
           >이메일</label
@@ -233,10 +223,10 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
             <option value="kakao.com">카카오</option>
           </select>
         </div>
-      </div>
+      </div> -->
 
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" class="btn btn-primary">수정</button>
       </div>
     </form>
     <!-- End Profile Edit Form -->

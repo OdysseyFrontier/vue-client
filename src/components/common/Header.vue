@@ -11,6 +11,8 @@ const memberInfo = memberStore.memberInfo;
 //   memberInfo.memberId = 1
 // }
 
+const memberId = "me"
+
 const sidebarList = ref(sidebarStore.sidebarList);
 
 const logout = () => {
@@ -30,7 +32,7 @@ const toggleSidebar = () => {
     <!-- ======= Header ======= -->
     <header id="header" class="header d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
-        <RouterLink to="/" class="logo d-flex align-items-center" :class="sidebarList.home" @click="toggleSidebar">
+        <RouterLink :to="{ name: 'home' }" class="logo d-flex align-items-center" :class="sidebarList.home" @click="toggleSidebar">
           <img src="/src/assets/logo.png" alt="" />
           <span class="d-none d-lg-block">OdysseyFrontiers</span>
         </RouterLink>
@@ -74,7 +76,7 @@ const toggleSidebar = () => {
               </li>
 
               <li>
-                <RouterLink :to="{ name: 'memberMyPage', params: {memberId: memberStore.memberInfo.memberId}  }" class="dropdown-item d-flex align-items-center"
+                <RouterLink :to="{ name: 'memberMyPage', params: {memberId : memberId}  }" class="dropdown-item d-flex align-items-center"
                   :class="sidebarList.mypage">
 
                   <i class="bi bi-person"></i>
@@ -87,7 +89,7 @@ const toggleSidebar = () => {
               </li>
 
               <li>
-                <RouterLink to="/" class="dropdown-item d-flex align-items-center" aria-current="page"
+                <RouterLink :to="{ name: 'home' }" class="dropdown-item d-flex align-items-center" aria-current="page"
                   :class="sidebarList.home">
                   <i class="bi bi-house"></i>
                   <span>home</span>
@@ -108,7 +110,7 @@ const toggleSidebar = () => {
               </li>
 
               <li>
-                <router-link to="/" @click.prevent="logout" class="dropdown-item d-flex align-items-center"
+                <router-link :to="{ name: 'home' }" @click.prevent="logout" class="dropdown-item d-flex align-items-center"
                   href="/member/logout">
                   <i class="bi bi-box-arrow-right"></i>
                   <span>로그아웃</span>
@@ -166,7 +168,7 @@ const toggleSidebar = () => {
           </RouterLink>
         </li>
         <li class="nav-item" v-if="memberStore.isLogin">
-          <RouterLink :to="{ name: 'memberMyPage' , params: {memberId: memberStore.memberInfo.memberId} }" class="nav-link" :class="sidebarList.mypage"
+          <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : memberId} }" class="nav-link" :class="sidebarList.mypage"
             @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>

@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("login");
+sidebarStore.open = false;
 
 
 import { ref, watch } from "vue";

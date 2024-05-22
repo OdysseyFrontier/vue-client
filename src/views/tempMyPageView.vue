@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("mypage");
+sidebarStore.open = false;
 </script>
 
 <template>

@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("attraction");
+sidebarStore.open = false;
 
 import UpdatePlanTimeLine from "@/components/plan/UpdatePlanTimeLine.vue";
 import UpdatePlanning from "@/components/plan/UpdatePlanning.vue";

@@ -99,14 +99,14 @@ export const useMemberStore = defineStore('memberStore', () => {
               }
               alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.")
               isLogin.value = false
-              userInfo.value = null
+              memberInfo.value = null
               isValidToken.value = false
               router.push({ name: "memberLogin" })
             },
             (error) => {
               console.error(error)
               isLogin.value = false
-              userInfo.value = null
+              memberInfo.value = null
             }
           )
         }
