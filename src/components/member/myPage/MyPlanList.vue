@@ -29,7 +29,8 @@ import { useMemberStore } from '@/stores/member';
 import { getMyMakePlans, getMyLikePlans } from '@/api/plan';
 
 const store = useMemberStore();
-const memberId = store.memberInfo?.memberId || 1;
+console.log(store.memberInfo)
+const memberId = store.memberInfo.memberId
 console.log(memberId);
 
 const state = reactive({
@@ -39,9 +40,11 @@ const state = reactive({
 });
 
 const fetchMyPlanList = () => {
+  console.log("123213")
   getMyMakePlans(
     memberId,
     ({ data }) => {
+      console.log("1234")
       state.myPlans = data;
       console.log(state.myPlans);
     },
@@ -55,6 +58,7 @@ const fetchMyLikeList = () => {
   getMyLikePlans(
     memberId,
     ({ data }) => {
+      console.log("123")
       state.likedPlans = data;
       console.log(state.likedPlans);
     },

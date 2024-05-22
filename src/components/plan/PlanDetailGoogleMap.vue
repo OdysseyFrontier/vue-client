@@ -19,8 +19,7 @@ watchEffect(() => {
         return;
     }
 
-    console.log(planDetails.value);
-    console.log("1111111");
+
 
     // Calculate center and markers
     const totalLat = planDetails.value.reduce((acc, curr) => acc + curr.attractionInfo.latitude, 0);

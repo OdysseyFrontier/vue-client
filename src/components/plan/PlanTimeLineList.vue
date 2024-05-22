@@ -30,8 +30,9 @@ const sortAttractions = () => {
             return 1; // `a` should come after `b`
         } else if (!dateB) {
             return -1; // `b` should come after `a`
+        }else {
+            return 1;
         }
-        return 0;
     });
     timeLineAttractions.value = sorted;
 
@@ -43,6 +44,7 @@ const sortAttractions = () => {
 
 watch(usePlanStore().plannedAttractions, () => {
     console.log("update")
+    console.log(usePlanStore.plannedAttractions)
     sortAttractions();
     timeLineAttractions.value = usePlanStore().plannedAttractions;
 }, { immediate: true });
@@ -67,11 +69,8 @@ const updateAttraction = (updatedAttraction) => {
         if (planTimes.length) {
             const minTime = new Date(Math.min(...planTimes));
             const maxTime = new Date(Math.max(...planTimes));
-            
             usePlanStore().setStartTime(formatDateToLocalString(minTime));
             usePlanStore().setEndTime(formatDateToLocalString(maxTime));
-            console.log(minTime)
-            console.log(maxTime)
             console.log(usePlanStore().startTime)
             console.log(usePlanStore().endTime)
         }

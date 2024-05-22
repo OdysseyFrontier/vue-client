@@ -11,22 +11,17 @@ const planList = ref([])
 watchEffect(() => {
     // searchAttractionList가 비어 있는 경우 처리
     planList.value = usePlanListStore().planList;
-    console.log(planList.value);
 });
 
 const fetchPlanList = () => {
-    console.log("attr")
     getSearchPlan(
         0,
         0,
         0,
         "no",
         ({ data }) => {
-            console.log(data)
             usePlanListStore().setPlanList(data);
             planList.value = data;
-            console.log(planList.value);
-            console.log(usePlanListStore().planList);
         },
         (error) => {
             console.log(error);

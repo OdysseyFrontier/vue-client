@@ -6,45 +6,56 @@ import draggable from 'vuedraggable';
 
 const store = usePlanStore();
 const searchedAttractions = ref([]);
-const plannedAttractions = ref([]);
+const PlannedAttractions = ref([]);
+const flag = true;
 
 // Synchronize searchedAttractions with the store
 watch(() => store.searchedAttractions, (newVal) => {
     searchedAttractions.value = newVal;
 }, { immediate: true });
 
-// Synchronize plannedAttractions with the store
+
+// Synchronize PlannedAttr1actions with the store
+
 watch(() => store.plannedAttractions, (newVal) => {
+    if (!store.isUpdate) return;
+    console.log(store.plannedAttractions)
     console.log("pinia -> 1")
-    plannedAttractions.value = newVal;
+    PlannedAttractions.value = store.plannedAttractions;
+    console.log(store.plannedAttractions)
+    console.log(PlannedAttractions.value)
+    // if (flag) return;
+    // flag.value = true;
+    // PlannedAttractions.value = PlannedAttractions.value.map((attraction) => {
+    //     console.log(attraction.attractionInfo)
+    //     return attraction.attractionInfo
+    // })
+    // console.log(PlannedAttractions.value);
 }, { immediate: true });
 
-// Update the store whenever plannedAttractions changes
-watch(plannedAttractions, (newVal) => {
-    console.log(plannedAttractions.value)
-    // store.setPlannedAttractions(newVal);
+// watch([store.plannedAttractions], () => {
+//     PlannedAttractions.value = usePlanStore().plannedAttractions;
+//     console.log(PlannedAttractions.value);
+//     // if (flag) return;
+//     // flag.value = true;
+//     // PlannedAttractions.value = PlannedAttractions.value.map((attraction) => {
+//     //     console.log(attraction.attractionInfo)
+//     //     return attraction.attractionInfo
+//     // })
+//     // console.log(PlannedAttractions.value);
+// }, { immediate: true });
+
+
+// Update the store whenever PlannedAttractions changes
+watch(PlannedAttractions, (newVal) => {
+    store.setPlannedAttractions(newVal);
     // 왜 자동으로 되고 한번 더 되는거 같지?
 }, { deep: true });
 
 
 const deleteAttraction = (index) => {
-    plannedAttractions.value.splice(index, 1);
-    console.log("attractionzone deleted")
-    // store.setPlannedAttractions(plannedAttractions.value);
+    PlannedAttractions.value.splice(index, 1);
 };
-
-// watchEffect(() => {
-//     // searchAttractionList 값 가져오기
-//     searchedAttractions.value = usePlanStore().searchedAttractions;
-// });
-
-// watchEffect(() => {
-//     plannedAttractions.value = usePlanStore().plannedAttractions;
-//     usePlanStore().setplannedAttractions(plannedAttractions.value);
-//     console.log(plannedAttractions.value)
-// });
-
-
 
 </script>
 
@@ -57,7 +68,7 @@ const deleteAttraction = (index) => {
                     <h3>검색 된 장소</h3>
                     <p>드래그로 옮겨 보세요.</p>
                     <draggable class="dragArea list-group custom-border flex-grow-1" :list="searchedAttractions"
-                        :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="name">
+                        :group="{ name: 'people', pull: 'clone', put: false }" item-key="name">
                         <template #item="{ element }">
                             <div class="list-group-item">
                                 <AttractionItem :attraction="element" />
@@ -68,8 +79,8 @@ const deleteAttraction = (index) => {
                 <div class="col-6 flex-grow-1" style="height: 60rem;">
                     <h3>계획 장소</h3>
                     <p>아래에 추가 됩니다.</p>
-                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="plannedAttractions"
-                        :group="{ name: 'people', pull: true, put: true }" @change="log" item-key="name">
+                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="PlannedAttractions"
+                        :group="{ name: 'people', pull: true, put: true }" item-key="name">
                         <template #item="{ element }">
                             <div class="list-group-item">
                                 <button @click="deleteAttraction(index)" class="btn btn-danger btn-sm">Delete</button>

@@ -40,7 +40,16 @@ import PlanTimeLineList from "@/components/plan/PlanTimeLineList.vue";
 </template>
 
 <style scoped>
-/* 필요한 추가 스타일링이 있다면 여기에 작성합니다. */
+/* 기본적인 미디어 쿼리를 추가하여 더 작은 화면에서 레이아웃을 조정합니다. */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    .col-12, .col-lg-6 {
+        height: auto; /* 높이 자동 조정 */
+    }
+}
+
 .bg-light {
     background-color: #f8f9fa !important;
 }
@@ -50,7 +59,12 @@ import PlanTimeLineList from "@/components/plan/PlanTimeLineList.vue";
 }
 
 .flex-grow-1 {
-    overflow-y: auto;
-    /* 스크롤이 내부에서 발생하도록 설정 */
+    overflow-y: auto; /* 스크롤이 내부에서 발생하도록 설정 */
+    height: 100%; /* 전체 높이를 부모에 맞춤 */
+}
+
+/* 스크롤이 필요한 영역에 대해 스크롤바 표시 설정 */
+.flex-grow-1 {
+    overflow-y: scroll;
 }
 </style>

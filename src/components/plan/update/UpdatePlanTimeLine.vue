@@ -1,8 +1,9 @@
 <template>
     <div class="container mt-5">
+        <h3> 타임라인 </h3>
         <div class="timeline">
             <div class="line"></div>
-            <div v-for="(attraction, index) in timeLineAttractions" :key="attraction.id" class="timeline-entry"
+            <div v-for="(attraction, index) in usePlanStore().plannedAttractions" :key="attraction.id" class="timeline-entry"
                 :class="{ 'left': index % 2 === 0, 'right': index % 2 !== 0 }">
                 <PlanTimeLine :attraction="attraction" :is-left="index % 2 === 0" :index="index"
                     @update="updateAttraction" @delete="deleteAttraction" />
@@ -12,7 +13,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch,watchEffect } from 'vue';
 import PlanTimeLine from '@/components/plan/PlanTimeLine.vue';
 import { usePlanStore } from '@/stores/plan';
 
@@ -30,17 +31,66 @@ const sortAttractions = () => {
             return 1;
         } else if (!dateB) {
             return -1;
+        } else {
+            return 0;
         }
-        return 0;
     });
+
     timeLineAttractions.value = sorted;
-    store.setPlannedAttractions(timeLineAttractions.value);
+    store.setPlannedAttractions(sorted);
+    console.log(timeLineAttractions.value);
 };
 
-watch(store.updatePlan.plannedAttractions, () => {
+watch(usePlanStore().plannedAttractions, () => {
     sortAttractions();
-    timeLineAttractions.value = store.updatePlan.plannedAttractions;
-}, { immediate: true });
+})
+// watch([usePlanStore().plannedAttractions] () => {
+//     console.log("watch plan")
+//     if (!store.isUpdate) return;
+//     console.log("update")
+//     console.log(usePlanStore().plannedAttractions)
+//     timeLineAttractions.value = usePlanStore().plannedAttractions;
+//     sortAttractions(); 
+    // timeLineAttractions.value = usePlanStore().plannedAttractions;
+    // console.log(timeLineAttractions.value); // 변환된 배열 출력
+
+    // timeLineAttractions.value = timeLineAttractions.value.map(attraction => {
+    //     // Check if attractionInfo is null or undefined
+    //     if (!attraction.attractionInfo) {
+    //         return attraction; // or return an empty object {}, depending on what's expected
+    //     }
+
+    //     // If attractionInfo is valid, return the formatted object
+    //     return {
+    //         firstImage: attraction.attractionInfo.firstImage,
+    //         title: attraction.attractionInfo.title,
+    //         add1: attraction.attractionInfo.add1,
+    //         description: attraction.description,
+    //         planTime: attraction.planTime ? formatDateTimeLocal(attraction.planTime) : null,
+    //     };
+    // });
+
+
+// }, { immediate: true });
+
+function formatDateTimeLocal(dateArray) {
+    if (dateArray.length !== 5) {
+        console.error("Invalid date array length:", dateArray.length);
+        return ''; // Return empty if the dateArray is not valid
+    }
+
+    // Extracting each component from the dateArray
+    const [year, month, day, hour, minute] = dateArray;
+
+    // Formatting each component to ensure it has the correct number of digits
+    // and concatenating them into a datetime-local compatible string
+    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const formattedTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+
+    // Combining date and time with 'T' as required by the datetime-local input type
+    return `${formattedDate}T${formattedTime}`;
+}
+
 
 const formatDateToLocalString = (date) => {
     return date.toLocaleDateString('en-CA');
@@ -51,7 +101,9 @@ const updateAttraction = (updatedAttraction) => {
     if (index !== -1) {
         timeLineAttractions.value[index] = updatedAttraction;
         sortAttractions();
-        const planTimes = timeLineAttractions.value.filter(attraction => attraction.planTime).map(attraction => new Date(attraction.planTime));
+        const planTimes = timeLineAttractions.value.
+            filter(attraction => attraction.planTime)
+            .map(attraction => new Date(attraction.planTime));
 
         if (planTimes.length) {
             const minTime = new Date(Math.min(...planTimes));
@@ -65,7 +117,10 @@ const updateAttraction = (updatedAttraction) => {
 const deleteAttraction = (index) => {
     timeLineAttractions.value.splice(index, 1);
     sortAttractions();
-    const planTimes = timeLineAttractions.value.filter(attraction => attraction.planTime).map(attraction => new Date(attraction.planTime));
+
+    const planTimes = timeLineAttractions.value
+        .filter(attraction => attraction.planTime)
+        .map(attraction => new Date(attraction.planTime));
 
     if (planTimes.length) {
         const minTime = new Date(Math.min(...planTimes));

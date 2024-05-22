@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
 
 const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
 
@@ -40,6 +40,9 @@ const updateAttraction = () => {
     });
 };
 
+onMounted(() => {
+    console.log(props.attraction)
+})
 const deleteAttraction = () => {
     emits('delete', props.index);
 };
