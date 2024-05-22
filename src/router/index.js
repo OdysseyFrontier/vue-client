@@ -75,7 +75,7 @@ const router = createRouter({
       component: () => import('@/components/attraction/AttractionDetail.vue')
     },
     {
-      path: "/memberMyPage",
+      path: "/memberMyPage/:memberId",
       name: "memberMyPage",
       // beforeEnter: onlyAuthUser,
       component: () => import("@/views/MemberMyPageView.vue"),
@@ -84,6 +84,11 @@ const router = createRouter({
           path: "/planList",
           name: "MyPlanList",
           component: () => import("@/components/member/myPage/MyPlanList.vue"),
+        },
+        {
+          path: "/memberHotPlace/:memberId",
+          name: "memberHotPlace",
+          component: () => import("@/components/hotplace/memberHotPlaceList.vue"),
         },
         {
           path: "info",
@@ -199,30 +204,6 @@ const router = createRouter({
           beforeEnter: onlyAuthUser,
           component: () => import("@/components/hotplace/HotPlaceModify.vue"),
         },
-        // {
-        //   path: "view/:hotPlaceId",
-        //   name: "hotPlaceDetail",
-        //   component: () =>
-        //     import(
-        //       /* webpackChunkName: "board" */ "@/components/hotplace/HotPlaceDetail"
-        //     ),
-        // },
-        // {
-        //   path: "write",
-        //   name: "hotPlaceWrite",
-        //   component: () =>
-        //     import(
-        //       /* webpackChunkName: "community" */ "@/components/hotplace/HotPlaceWrite"
-        //     ),
-        // },
-        // {
-        //   path: "view/hotPlace/:hotPlaceArticleId",
-        //   name: "hotPlaceArticleView",
-        //   component: () =>
-        //     import(
-        //       /* webpackChunkName: "board" */ "@/components/hotplace/HotPlaceArticlesItemDetail"
-        //     ),
-        // },
       ],
     },
     //hotplace 수정중 -----

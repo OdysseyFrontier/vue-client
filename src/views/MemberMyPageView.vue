@@ -1,9 +1,21 @@
 <script setup>
 import MyInfo from "@/components/member/myPage/MyInfo.vue";
 import { useSidebarStore } from "@/stores/sidebar.js";
+import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member"
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("mypage");
+
+const route = useRoute();
+const router = useRouter();
+
+const memberStore = useMemberStore();
+
+const { memberId } = route.params;
+
+
+
 </script>
 
 <template>
@@ -23,7 +35,7 @@ sidebarStore.changesSidebarState("mypage");
               </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'MyPlanList' }" class="nav-link">
+              <RouterLink :to="{ name: 'memberHotPlace' , params: {memberId} }" class="nav-link">
                 핫플레이스
               </RouterLink>
             </li>
@@ -34,7 +46,7 @@ sidebarStore.changesSidebarState("mypage");
               </RouterLink>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" v-if="memberStore.memberInfo.memberId == memberId">
               <RouterLink :to="{ name: 'myInfoModify' }" class="nav-link">
                 회원 정보 수정
               </RouterLink>

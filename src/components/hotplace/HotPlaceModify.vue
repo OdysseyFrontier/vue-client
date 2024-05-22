@@ -117,7 +117,7 @@ function execDaumPostcode() {
       if(data.roadAddress)
         hotplace.value.addr1 = data.roadAddress
       
-      hotplace.value.sido = data.sido
+      hotplace.value.sidoCode = data.sidoCode
 
       kakaoAddress(data.address);
       flag.value = true
