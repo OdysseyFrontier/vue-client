@@ -4,6 +4,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("hotplace");
+sidebarStore.open = false;
 
 import SearchHotPlace from "@/components/hotplace/SearchHotPlace.vue";
 
@@ -142,7 +143,7 @@ setTimeout(()=>{
         </ul>
 
         <div class="row portfolio-container">
-          <div v-if="hotPlaces == null"> 게시글이 없습니다. </div>
+          <div v-if="hotPlaces.length == 0" style="text-Align: center"> 등록된 핫플레이스가 없습니다. </div>
           <HotPlaceListItem v-for="hotplace in hotPlaces" :key="hotplace.contentId" :hotplace="hotplace" />
 
 

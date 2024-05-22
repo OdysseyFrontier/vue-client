@@ -5,6 +5,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("attraction");
+sidebarStore.open = false;
 
 import PlanDetailInfo from "@/components/plan/PlanDetailInfo.vue";
 import PlanDetailGoogleMap from "@/components/plan/PlanDetailGoogleMap.vue";

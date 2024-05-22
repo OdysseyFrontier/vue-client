@@ -4,6 +4,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("home");
+sidebarStore.open = false;
 </script>
 
 <template>

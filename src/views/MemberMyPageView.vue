@@ -6,13 +6,18 @@ import { useMemberStore } from "@/stores/member"
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("mypage");
+sidebarStore.open = false;
 
 const route = useRoute();
 const router = useRouter();
 
 const memberStore = useMemberStore();
 
-const { memberId } = route.params;
+let { memberId } = route.params;
+
+if(memberId == "me"){
+  memberId = memberStore.memberInfo.memberId
+}
 
 
 
