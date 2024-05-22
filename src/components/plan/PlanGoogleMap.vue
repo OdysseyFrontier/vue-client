@@ -7,10 +7,10 @@ import { usePlanStore } from '@/stores/plan';
 
 // const store = usePlanStore();
 
-const init_center = ref({ lat: 36.1061824, lng: 128.4227797 })
+const center = ref({ lat: 36.1061824, lng: 128.4227797 })
 const zoom = ref(15)
 const markers = ref([])
-
+const currentLocation = ref([]);
 watchEffect(() => {
   // searchedAttractions 값 가져오기
 
@@ -29,14 +29,14 @@ watchEffect(() => {
   const centerLat = (minLat - maxLat) / 2
   const centerLng = (minLng - maxLng) / 2
   const center = Math.abs(centerLat / 2 + centerLng) * 100
-  // init_center.value = { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 }
+  // center.value = { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 }
 
   const totalLat = searchedAttractions.reduce((acc, curr) => acc + curr.latitude, 0)
   const totalLng = searchedAttractions.reduce((acc, curr) => acc + curr.longitude, 0)
   const avgLat = totalLat / searchedAttractions.length
   const avgLng = totalLng / searchedAttractions.length
 
-  init_center.value = { lat: avgLat, lng: avgLng }
+  center.value = { lat: avgLat, lng: avgLng }
 
   if (center < 10) {
     zoom.value = 11
@@ -62,6 +62,34 @@ watchEffect(() => {
     markers.value.push(marker)
   })
 })
+
+
+const getCurrentLocation = () => {
+  if (confirm('현재 위치를 사용하시겠습니까?')) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, longitude);
+          currentLocation.value = { lat: latitude, lng: longitude };
+          center.value = { lat: latitude, lng: longitude };
+          console.log(center.value);
+          zoom.value = 12;
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  }
+};
 
 // setMarkers() {
 //   const response = await fetch("https://jsonplaceholder.typicode.com/todos/");
@@ -100,16 +128,15 @@ watchEffect(() => {
   id="map" 
   style="width: 100%; height: 500px;" 
   :zoom="17" 
-  :center="init_center">
+  :center="center">
   </GoogleMap>
 
 </template> -->
 
 
 <template>
-  <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY" 
-  id="map" style="width: 100%; height: 100%;" :zoom="zoom"
-    :center="init_center">
+  <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY" id="map" style="width: 100%; height: 100%;" :zoom="zoom"
+    :center="center">
 
     <MarkerCluster>
       <Marker v-for="(marker, index) in markers" :key="index" :options="marker.options" />
@@ -118,4 +145,3 @@ watchEffect(() => {
 </template>
 
 <style scoped></style>
-

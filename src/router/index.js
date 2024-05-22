@@ -99,6 +99,22 @@ const router = createRouter({
       component: () => import("@/views/MyMemberListView.vue"),
     },
     {
+      path: "/memberSearch",
+      name: "memberSearch",
+      // beforeEnter: onlyAuthUser,
+      component: () => import("@/components/member/MemberSearch.vue"),
+    },
+    {
+      path: "/myFollowerList",
+      name: "myFollowerList",
+      component: () => import("@/components/member/myPage/MyFollowerList.vue"),
+    },
+    {
+      path: "/myFollowingList",
+      name: "myFollowingList",
+      component: () => import("@/components/member/myPage/MyFollowingList.vue"),
+    },
+    {
       path: "/board",
       name: "board",
       // beforeEnter: onlyAuthUser,

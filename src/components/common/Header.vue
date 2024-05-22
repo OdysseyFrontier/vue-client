@@ -30,8 +30,8 @@ const toggleSidebar = () => {
         <RouterLink to="/" class="logo d-flex align-items-center" :class="sidebarList.home" @click="toggleSidebar">
           <img src="/src/assets/logo.png" alt="" />
           <span class="d-none d-lg-block">OdysseyFrontiers</span>
-                </RouterLink>
-        
+        </RouterLink>
+
         <!-- <a href="/" class="logo d-flex align-items-center">
           <img src="/src/assets/logo.png" alt="" />
           <span class="d-none d-lg-block">OdysseyFrontiers</span>
@@ -72,11 +72,8 @@ const toggleSidebar = () => {
 
               <li>
 
-                <RouterLink
-                  :to="{ name: 'memberMyPage' }"
-                  class="dropdown-item d-flex align-items-center"
-                  :class="sidebarList.mypage"
-                >
+                <RouterLink :to="{ name: 'memberMyPage' }" class="dropdown-item d-flex align-items-center"
+                  :class="sidebarList.mypage">
 
                   <i class="bi bi-person"></i>
                   <span>마이 페이지</span>
@@ -160,21 +157,24 @@ const toggleSidebar = () => {
         </li>
 
         <li class="nav-item">
-          <RouterLink :to="{ name: 'attraction' }" class="nav-link" :class="sidebarList.attraction" @click="toggleSidebar">
+          <RouterLink :to="{ name: 'attraction' }" class="nav-link" :class="sidebarList.attraction"
+            @click="toggleSidebar">
             <i class="bi bi-search"></i>
             <span>관광지 검색</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage" @click="toggleSidebar">
+          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage"
+            @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink :to="{ name: 'myMemberList' }" class="nav-link" :class="sidebarList.myMemberList" @click="toggleSidebar">
-            <i class="bi bi-person"></i>
-            <span>MyMemberListView</span>
+          <RouterLink :to="{ name: 'memberSearch' }" class="nav-link" :class="sidebarList.memberSearch"
+            @click="toggleSidebar">
+            <i class="bi bi-search"></i>
+            <span>회원 검색</span>
           </RouterLink>
         </li>
         <!-- End 여행정보공유 Nav -->

@@ -9,7 +9,7 @@ const defaultProfile = {
   image: defaultImg,
   posts: 100,
   followers: 300,
-  following: 300,
+  followings: 300,
   description: "",
 };
 
@@ -20,12 +20,9 @@ const memberProfile = reactive({
   image: member.image || defaultProfile.image,
   posts: member.posts || defaultProfile.posts,
   followers: member.followers || defaultProfile.followers,
-  following: member.following || defaultProfile.following,
+  followings: member.followings || defaultProfile.followings,
   description: member.description || defaultProfile.description,
 });
-
-
-
 
 
 </script>
@@ -49,8 +46,12 @@ const memberProfile = reactive({
         </div>
         <div class="d-flex justify-content-between align-items-center">
           <div><strong>게시물</strong> {{ memberProfile.posts }}</div>
-          <div><strong>팔로워</strong> {{ memberProfile.followers }}</div>
-          <div><strong>팔로우</strong> {{ memberProfile.following }}</div>
+          <RouterLink :to="{ name: 'myFollowerList' }" class="nav-link">
+            <strong>팔로워</strong> {{ memberProfile.followers }}
+          </RouterLink>
+          <RouterLink :to="{ name: 'myFollowingList' }" class="nav-link">
+            <strong>팔로잉</strong> {{ memberProfile.followings }}
+          </RouterLink>
         </div>
         <p class="user-description mt-2">{{ memberProfile.description }}</p>
       </div>

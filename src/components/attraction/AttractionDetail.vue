@@ -1,11 +1,15 @@
 <template>
     <div class="container mt-4" v-if="attraction">
         <div class="card">
-            <div class="position-relative">
-                <img :src="currentImage" class="card-img-top" alt="Attraction Image">
-                <button @click="prevImage" class="btn btn-primary position-absolute start-0 top-50">‹</button>
-                <button @click="nextImage" class="btn btn-primary position-absolute end-0 top-50">›</button>
-            </div>
+
+            <template v-if="currentImage">
+                <div class="position-relative">
+                    <img :src="currentImage" class="card-img-top" alt="Attraction Image">
+                    <button @click="prevImage" class="btn btn-primary position-absolute start-0 top-50">‹</button>
+                    <button @click="nextImage" class="btn btn-primary position-absolute end-0 top-50">›</button>
+                </div>
+            </template>
+
             <div class="card-body">
                 <h5 class="card-title">{{ attraction.title }}</h5>
                 <p class="card-text">{{ attraction.addr1 }} {{ attraction.addr2 }}</p>

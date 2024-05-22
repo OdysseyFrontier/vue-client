@@ -4,7 +4,10 @@
       <h5>{{ member.name }}</h5>
       <p>{{ member.email }}</p>
     </div>
-    <button class="btn btn-outline-primary" @click="toggleFollow">
+    <button v-if="member.memberId === currentMemberId" class="btn btn-outline-secondary" disabled>
+      ME
+    </button>
+    <button v-else class="btn btn-outline-primary" @click="toggleFollow">
       {{ member.following ? '언팔로우' : '팔로우' }}
     </button>
   </div>
@@ -21,19 +24,20 @@ const props = defineProps({
     type: Object,
     required: true,
     default: () => ({
-      id: 0,
+      memberId: 0,
       name: '',
       email: '',
       following: false,
       profileImage: defaultImg
     })
-  }
+  },
+  currentMemberId: Number
 });
 
 const emit = defineEmits(['toggle-follow']);
 
 const toggleFollow = () => {
-  emit('toggle-follow', props.member.id);
+  emit('toggle-follow', props.member.memberId);
 };
 </script>
 

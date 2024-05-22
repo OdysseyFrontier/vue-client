@@ -8,11 +8,13 @@ import { usePlanStore } from '@/stores/plan';
 const init_center = ref({ lat: 36.1061824, lng: 128.4227797 });
 const zoom = ref(15);
 const markers = ref([]);
+const flag = ref(false);
 
 watchEffect(() => {
+    flag.value = false;
     const store = usePlanStore();
     const planDetails = store.planDetails;
-    
+
     if (!planDetails.value || planDetails.value.length === 0) {
         return;
     }
@@ -50,18 +52,18 @@ watchEffect(() => {
             title: detail.attractionInfo.title,
         }
     }));
+
+    flag.value = true;
 });
 </script>
 
 <template>
-  <GoogleMap :api-key="VITE_GOOGLE_MAP_API_KEY" 
-  id="map" style="width: 100%; height: 100%;" :zoom="zoom"
-    :center="init_center">
-
-    <MarkerCluster>
-      <Marker v-for="(marker, index) in markers" :key="index" :options="marker.options" />
-    </MarkerCluster>
-  </GoogleMap>
+    <GoogleMap v-if="flag" :api-key="VITE_GOOGLE_MAP_API_KEY" id="map" style="width: 100%; height: 100%;" :zoom="zoom"
+        :center="init_center">
+        <MarkerCluster>
+            <Marker v-for="(marker, index) in markers" :key="index" :options="marker.options" />
+        </MarkerCluster>
+    </GoogleMap>
 </template>
 
 <style scoped></style>

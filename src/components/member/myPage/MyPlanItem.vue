@@ -1,9 +1,9 @@
 <script setup>
-  const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
+const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
 
-    defineProps({
-      plan: Object
-    });
+defineProps({
+  plan: Object
+});
 </script>
 
 
@@ -13,6 +13,9 @@
     <div class="plan-details">
       <h3>{{ plan.title }}</h3>
       <p>{{ plan.description }}</p>
+      <RouterLink :to="{ name: 'PlanDetail', params: { planId: plan.planId } }" class="btn btn-primary mt-2">
+        상세보기
+      </RouterLink>
     </div>
   </div>
 </template>

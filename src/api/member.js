@@ -49,6 +49,21 @@ async function searchMembers(searchQuery, success, fail) {
   await local.get(`/member/search/${searchQuery}`).then(success).catch(fail);
 }
 
+async function searchAllMembers(success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/search/all`).then(success).catch(fail);
+}
+
+async function searchMembersByLoginMemberId(searchQuery, loginMemberId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/search/${searchQuery}/${loginMemberId}`).then(success).catch(fail);
+}
+
+async function searchAllMembersByLoginMemberId(loginMemberId, success, fail) {
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+  await local.get(`/member/search/all/${loginMemberId}`).then(success).catch(fail);
+}
+
 async function followMember(followerId, followingId, success, fail) {
   local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
   await local.post(`/member/${followerId}/follow/${followingId}`).then(success).catch(fail);
@@ -62,10 +77,14 @@ async function unfollowMember(followerId, followingId, success, fail) {
 
 
 
-export { memberConfirm, findById, tokenRegeneration, logout, idCheck, join,
+export {
+  memberConfirm, findById, tokenRegeneration, logout, idCheck, join,
   getFollowers,
   getFollowing,
+  searchAllMembers,
   searchMembers,
+  searchMembersByLoginMemberId,
+  searchAllMembersByLoginMemberId,
   followMember,
   unfollowMember
- };
+};
