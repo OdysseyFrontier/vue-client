@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive, ref, onMounted } from "vue";
 import { useMemberStore } from '@/stores/member';
-import { getMemberInfo } from "@/api/member.js";
+import { getMemberInfo, followMember, unfollowMember } from "@/api/member.js";
 
 const store = useMemberStore();
 
@@ -64,6 +64,31 @@ const defaultProfile = {
 //   followings: member.followings || defaultProfile.followings,
 //   description: member.description || defaultProfile.description,
 // });
+const follow = async() => {
+  await followMember(store.memberInfo.memberId, memberId,
+                () => {
+                    // member.following = true; // Update state on success
+                    console.log('Follow successful');
+                    getInfo()
+                },
+                error => {
+                    console.error('Failed to follow:', error);
+                }
+            );
+};
+
+const unfollow = async() => {
+  await unfollowMember(store.memberInfo.memberId, memberId,
+                () => {
+                    // member.following = false; // Update state on success
+                    console.log('Unfollow successful');
+                    getInfo()
+                },
+                error => {
+                    console.error('Failed to unfollow:', error);
+                }
+            );
+};
 
 
 </script>
@@ -81,10 +106,10 @@ const defaultProfile = {
           <RouterLink :to="{ name: 'myInfoModify' }" class="btn btn-sm btn-outline-secondary text-nowrap" v-if="memberId == store.memberInfo.memberId">
             프로필 편집
           </RouterLink>
-          <button v-if="memberId != store.memberInfo.memberId && memberProfile.isFollowing">
+          <button class="btn btn-outline-danger" @click="unfollow" v-if="memberId != 'me' && memberId != store.memberInfo.memberId && !memberProfile.following">
             언팔로우
           </button>
-          <button v-if="memberId != store.memberInfo.memberId && !memberProfile.isFollowing">
+          <button class="btn btn-outline-primary" @click="follow" v-if="memberId != 'me' && memberId != store.memberInfo.memberId && memberProfile.following">
             팔로우
           </button>
           <!-- <button class="btn btn-sm btn-outline-secondary text-nowrap">
