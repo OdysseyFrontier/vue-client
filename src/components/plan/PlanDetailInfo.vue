@@ -76,7 +76,10 @@ onMounted(() => {
         <p class="card-text">{{ plan.description }}</p>
       </div>
       <div class="form-actions">
-        <button type="button" class="btn btn-primary">계획 수정</button>
+        <RouterLink :to="{ name: 'PlanUpdate', params: { planId: plan.planId } }"
+          class="btn btn-sm btn-outline-secondary text-nowrap">
+          계획 수정
+        </RouterLink>
       </div>
     </div>
     <!-- Plan Details Cards -->

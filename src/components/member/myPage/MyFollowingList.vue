@@ -25,7 +25,6 @@ const searchQuery = ref('');
 
 const toggleFollow = async memberId => {
     const member = followings.value.find(m => m.memberId === memberId);
-    console.log(member);
     if (member) {
         if (member.following) {
             // Call unfollow
