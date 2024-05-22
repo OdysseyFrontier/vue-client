@@ -96,7 +96,7 @@ function execDaumPostcode() {
       if(data.roadAddress)
         params.value.addr1 = data.roadAddress
 
-      params.value.sido = data.sido
+      params.value.sidoCode = data.sidoCode
 
       console.log(data);
       kakaoAddress(data.roadAddress);

@@ -7,6 +7,9 @@ const memberStore = useMemberStore();
 const sidebarStore = useSidebarStore();
 
 const memberInfo = memberStore.memberInfo;
+// if(memberInfo == ""){
+//   memberInfo.memberId = 1
+// }
 
 const sidebarList = ref(sidebarStore.sidebarList);
 
@@ -71,8 +74,7 @@ const toggleSidebar = () => {
               </li>
 
               <li>
-
-                <RouterLink :to="{ name: 'memberMyPage' }" class="dropdown-item d-flex align-items-center"
+                <RouterLink :to="{ name: 'memberMyPage', params: {memberId: memberStore.memberInfo.memberId}  }" class="dropdown-item d-flex align-items-center"
                   :class="sidebarList.mypage">
 
                   <i class="bi bi-person"></i>
@@ -163,8 +165,8 @@ const toggleSidebar = () => {
             <span>관광지 검색</span>
           </RouterLink>
         </li>
-        <li class="nav-item">
-          <RouterLink :to="{ name: 'memberMyPage' }" class="nav-link" :class="sidebarList.mypage"
+        <li class="nav-item" v-if="memberStore.isLogin">
+          <RouterLink :to="{ name: 'memberMyPage' , params: {memberId: memberStore.memberInfo.memberId} }" class="nav-link" :class="sidebarList.mypage"
             @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>
