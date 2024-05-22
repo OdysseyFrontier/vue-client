@@ -172,6 +172,12 @@ const router = createRouter({
           // beforeEnter: onlyAuthUser,
           component: () => import("@/components/hotplace/HotPlaceWrite.vue"),
         },
+        {
+          path: "modify/:contentId",
+          name: "hotPlaceModify",
+          beforeEnter: onlyAuthUser,
+          component: () => import("@/components/hotplace/HotPlaceModify.vue"),
+        },
         // {
         //   path: "view/:hotPlaceId",
         //   name: "hotPlaceDetail",

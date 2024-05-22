@@ -1,45 +1,63 @@
 <script setup>
 import { ref, watchEffect, reactive } from "vue";
-import { GoogleMap, Marker, MarkerCluster, InfoWindow } from "vue3-google-map";
+import { GoogleMap, Marker, MarkerCluster } from "vue3-google-map";
 import axios from "axios";
 import EXIF from "exif-js";
 import { useMemberStore } from "@/stores/member";
-import { useRouter } from "vue-router";
+
 const { VITE_VUE_APP_KAKAO_REST_API_KEY, VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
+import { useRoute, useRouter } from "vue-router";
+  import { getModifyHotPlace, deleteHotPlace} from "@/api/hotplace";
 
-const router = useRouter();
-const memberStore = useMemberStore();
+    const route = useRoute();
+    const router = useRouter();
 
-const params = ref({
-  memberId : memberStore.memberInfo.memberId,
-  contentTypeId: 0,
-  title: "",
-  addr1: "",
-  tel: "",
-  latitude: "",
-  longitude: "",
-  homepage: "",
-  overview: "",
-  sidoCode: 1,
-  gugunCode: 1,
-});
-const selectedFile = ref(null);
-const location = ref({
-  latitude: "",
-  longitude: "",
-});
-const locationAvailable = ref(false);
-const mapCenter = ref({ lat: 36.1061824, lng: 128.4227797 }); // Default to London
-const address = ref("");
-const markerKey = ref(0);
+    const { contentId } = route.params;
+    
+    const hotplace = ref({});
+    const flag = ref(false)
+    const markerKey = ref(0)
 
-let options = reactive({
-  position: mapCenter.value,
-  title: "선택한 위치",
+    function moveList() {
+        router.push({ name: "hotPlaceList2" });
+    }
+
+    const selectedFile = ref(null);
+    const location = ref({});
+    const locationAvailable = ref(false);
+    const mapCenter = ref({ });
+    const address = ref("");
+
+    const options = reactive({
+    title: "선택한 위치",
   draggable:true,
-});
+    });
 
-const previewUrl = ref(null); // 미리보기 URL 상태 추가
+    const previewUrl = ref(null);
+
+    getModifyHotPlace(
+        contentId,
+        ({ data }) => {
+        hotplace.value = data;
+
+        location.value.latitude = hotplace.value.latitude
+        location.value.longitude = hotplace.value.longitude
+
+        mapCenter.value = {lat: Number(hotplace.value.latitude), lng : Number(hotplace.value.longitude)}
+        options.position= mapCenter.value
+        
+            markerKey.value++
+        flag.value = true
+        previewUrl.value = hotplace.value.firstImage
+
+        // hotplace.value.sidoCode = hotplace.value.sidoCode.split(' ')[0] 
+        },
+        (error) => {
+        console.error(error);
+        }
+    );
+
+
 const onFileChange = (event) => {
   if (!event.target.files.length) {
     previewUrl.value = ""
@@ -58,6 +76,7 @@ const onFileChange = (event) => {
 };
 
 const extractLocation = (file) => {
+    flag.value = false
   const reader = new FileReader();
   reader.onload = (e) => {
     const arrayBuffer = e.target.result;
@@ -75,8 +94,10 @@ const extractLocation = (file) => {
         location.value = { latitude, longitude };
         locationAvailable.value = true;
         mapCenter.value = { lat: latitude, lng: longitude };
-        markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+
         options.position = { lat: latitude, lng: longitude };
+
+        flag.value = true
       } else {
         alert("No GPS data found in image.");
         locationAvailable.value = false;
@@ -88,18 +109,18 @@ const extractLocation = (file) => {
 
 //다음 주소 검색
 function execDaumPostcode() {
-  new window.daum.Postcode({
-    oncomplete: (data) => {
-      console.log("주소검색");
-      if(data.jibunAddress)
-        params.value.addr1 = data.jibunAddress
+    new window.daum.Postcode({
+        oncomplete: (data) => {
+        flag.value = false
+        if(data.jibunAddress)
+        hotplace.value.addr1 = data.jibunAddress
       if(data.roadAddress)
-        params.value.addr1 = data.roadAddress
+        hotplace.value.addr1 = data.roadAddress
+      
+      hotplace.value.sido = data.sido
 
-      params.value.sido = data.sido
-
-      console.log(data);
-      kakaoAddress(data.roadAddress);
+      kakaoAddress(data.address);
+      flag.value = true
     },
   }).open();
 
@@ -120,13 +141,18 @@ function kakaoAddress(address) {
     })
     .then((res) => {
       const roadAddress = res.data.documents[0].address;
+    //   console.log(roadAddress.x);
+    //   mapCenter.value.lat = Number(roadAddress.x);
+    //   mapCenter.value.lng = Number(roadAddress.y);
+    //   location.value = { latitude: roadAddress.x, longitude: roadAddress.y };
+    //   locationAvailable.value = true;
 
-      console.log(roadAddress)
-
-      
-      // mapCenter.value.lat = Number(roadAddress.x);
-      // mapCenter.value.lng = Number(roadAddress.y);
-      const lat = Number(roadAddress.y);
+    //   options.value.position = {
+    //     lat: Number(roadAddress.x),
+    //     lng: Number(roadAddress.y),
+    //   };
+    //   triggerRerender();
+    const lat = Number(roadAddress.y);
       const lng = Number(roadAddress.x);
 
       mapCenter.value = { lat: Number(roadAddress.y), lng : Number(roadAddress.x) };
@@ -152,6 +178,7 @@ const triggerRerender = () => {
 
 // 맵클릭했을 때 마커 움직이는 함수
 const onMapClick = (event) => {
+    flag.value = false
   const { latLng } = event;
   const lat = latLng.lat();
   const lng = latLng.lng();
@@ -159,12 +186,13 @@ const onMapClick = (event) => {
   mapCenter.value = { lat, lng };
   locationAvailable.value = true;
 
-  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
   options.position = { lat, lng };
+  markerKey.value++; // Increase the marker key to force Vue to re-render the Marker component
+
   //   options.value.position = { lat: lat, lng: lng };
+  flag.value = true
   reverseGeocode(lat, lng);
 };
-
 
 // 마커를 드래그해서 놓았을 때 호출되는 함수
 const onMarkerDragEnd = (event) => {
@@ -185,7 +213,7 @@ const onMarkerDragEnd = (event) => {
   reverseGeocode(lat, lng);
 };
 
-const uploadFile = async () => {
+const updateHotPlace = async () => {
   if (!selectedFile.value) {
     alert("사진을 첨부해주세요.");
     return;
@@ -196,12 +224,12 @@ const uploadFile = async () => {
     return;
   }
 
-  if (params.value.contentTypeId == 0) {
+  if (hotplace.value.contentTypeId == 0) {
     alert("카테고리를 선택해주세요.");
     return;
   }
 
-  if (params.value.title.length == 0) {
+  if (hotplace.value.title.length == 0) {
     alert("제목을 작성해주세요.");
     return;
   }
@@ -211,37 +239,37 @@ const uploadFile = async () => {
   const formData = new FormData();
   formData.append("file", selectedFile.value);
 
-  params.value.latitude = location.value.latitude;
-  params.value.longitude = location.value.longitude;
+  hotplace.value.latitude = location.value.latitude;
+  hotplace.value.longitude = location.value.longitude;
   // formData.append('hotplaceDto', params.value);
   // formData.append('latitude', location.value.latitude);
   // formData.append('longitude', location.value.longitude);
   // formData.append('longitude', location.value.longitude);
-  if(params.value.sidoCode == "경기"){
-        params.value.sidoCode = "경기도"
-      }else if(params.value.sidoCode == "강원특별자치도"){
-        params.value.sidoCode = "강원도"
-      }else if(params.value.sidoCode == "충북"){
-        params.value.sidoCode = "충청북도"
-      }else if(params.value.sidoCode == "충남"){
-        params.value.sidoCode = "충청남도"
-      }else if(params.value.sidoCode == "경북"){
-        params.value.sidoCode = "경상북도"
-      }else if(params.value.sidoCode == "경남"){
-        params.value.sidoCode = "경상남도"
-      }else if(params.value.sidoCode == "전북특별자치도"){
-        params.value.sidoCode = "전라북도"
-      }else if(params.value.sidoCode == "전남"){
-        params.value.sidoCode = "전라남도"
-      }else if(params.value.sidoCode == "제주특별자치도"){
-        params.value.sidoCode = "제주도"
+ if(hotplace.value.sidoCode == "경기"){
+        hotplace.value.sidoCode = "경기도"
+      }else if(hotplace.value.sidoCode == "강원특별자치도"){
+        hotplace.value.sidoCode = "강원도"
+      }else if(hotplace.value.sidoCode == "충북"){
+        hotplace.value.sidoCode = "충청북도"
+      }else if(hotplace.value.sidoCode == "충남"){
+        hotplace.value.sidoCode = "충청남도"
+      }else if(hotplace.value.sidoCode == "경북"){
+        hotplace.value.sidoCode = "경상북도"
+      }else if(hotplace.value.sidoCode == "경남"){
+        hotplace.value.sidoCode = "경상남도"
+      }else if(hotplace.value.sidoCode == "전북특별자치도"){
+        hotplace.value.sidoCode = "전라북도"
+      }else if(hotplace.value.sidoCode == "전남"){
+        hotplace.value.sidoCode = "전라남도"
+      }else if(hotplace.value.sidoCode == "제주특별자치도"){
+        hotplace.value.sidoCode = "제주도"
       }
 
-  formData.append("sidocode", new Blob([params.value.sidoCode], { type: "application/json" }));
+  formData.append("sidocode", new Blob([hotplace.value.sidoCode], { type: "application/json" }));
 
-  params.value.sidoCode = 1
+//   hotplace.value.sidoCode = 1
   const hotplaceDto = JSON.stringify({
-    ...params.value,
+    ...hotplace.value,
   });
 
   formData.append("hotplaceDto", new Blob([hotplaceDto], { type: "application/json" }));
@@ -249,8 +277,8 @@ const uploadFile = async () => {
 console.log(formData);
 
   try {
-    const response = await axios.post(
-      "http://localhost/hotplace/write",
+    const response = await axios.put(
+      "http://localhost/hotplace/modify",
       formData,
       {
         headers: {
@@ -262,7 +290,7 @@ console.log(formData);
     alert("File uploaded successfully.");
     router.push({
       name: "hotPlaceDetail",
-      params: { contentId: response.data },
+      params: { contentId: hotplace.value.contentId },
     });
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -270,9 +298,7 @@ console.log(formData);
   }
 };
 
-function moveList() {
-        router.push({ name: "hotPlaceList2" });
-    }
+
 
 
     const reverseGeocode = (latitude, longitude) => {
@@ -293,31 +319,31 @@ function moveList() {
 
       if(regionInfo.address){
 
-        params.value.sidoCode = regionInfo.address.region_1depth_name;
-      if(params.value.sidoCode == "경기"){
-        params.value.sidoCode = "경기도"
-      }else if(params.value.sidoCode == "강원특별자치도"){
-        params.value.sidoCode = "강원도"
-      }else if(params.value.sidoCode == "충북"){
-        params.value.sidoCode = "충청북도"
-      }else if(params.value.sidoCode == "충남"){
-        params.value.sidoCode = "충청남도"
-      }else if(params.value.sidoCode == "경북"){
-        params.value.sidoCode = "경상북도"
-      }else if(params.value.sidoCode == "경남"){
-        params.value.sidoCode = "경상남도"
-      }else if(params.value.sidoCode == "전북특별자치도"){
-        params.value.sidoCode = "전라북도"
-      }else if(params.value.sidoCode == "전남"){
-        params.value.sidoCode = "전라남도"
-      }else if(params.value.sidoCode == "제주특별자치도"){
-        params.value.sidoCode = "제주도"
+        hotplace.value.sidoCode = regionInfo.address.region_1depth_name;
+      if(hotplace.value.sidoCode == "경기"){
+        hotplace.value.sidoCode = "경기도"
+      }else if(hotplace.value.sidoCode == "강원특별자치도"){
+        hotplace.value.sidoCode = "강원도"
+      }else if(hotplace.value.sidoCode == "충북"){
+        hotplace.value.sidoCode = "충청북도"
+      }else if(hotplace.value.sidoCode == "충남"){
+        hotplace.value.sidoCode = "충청남도"
+      }else if(hotplace.value.sidoCode == "경북"){
+        hotplace.value.sidoCode = "경상북도"
+      }else if(hotplace.value.sidoCode == "경남"){
+        hotplace.value.sidoCode = "경상남도"
+      }else if(hotplace.value.sidoCode == "전북특별자치도"){
+        hotplace.value.sidoCode = "전라북도"
+      }else if(hotplace.value.sidoCode == "전남"){
+        hotplace.value.sidoCode = "전라남도"
+      }else if(hotplace.value.sidoCode == "제주특별자치도"){
+        hotplace.value.sidoCode = "제주도"
       }
 
-      // params.value.gugunCode = regionInfo.address.region_2depth_name;
-      params.value.addr1 = regionInfo.address.address_name; // Update address
+      // hotplace.value.gugunCode = regionInfo.address.region_2depth_name;
+      hotplace.value.addr1 = regionInfo.address.address_name; // Update address
       if(regionInfo.road_address)
-        params.value.zipCode = regionInfo.road_address.zone_no; // Update zipCode
+        hotplace.value.zipCode = regionInfo.road_address.zone_no; // Update zipCode
 
       }else{
         alert("위치를 다시 선택해주세요.")
@@ -330,20 +356,17 @@ function moveList() {
     });
 };
 
-setTimeout(()=>{
-
-//  marker.addListener("click", toggleBounce);
-
-//  function toggleBounce() {
-//   if (marker.getAnimation() !== null) {
-//     marker.setAnimation(null);
-//   } else {
-//     marker.setAnimation(google.maps.Animation.BOUNCE);
-//   }
-// }
-})
-
-const infowindow = ref(true)
+function onDeleteHotPlace() {
+        deleteHotPlace(
+            contentId,
+            (response) => {
+            if (response.status == 200) moveList();
+            },
+            (error) => {
+            console.error(error);
+            }
+        );
+    }
 </script>
 
 <template>
@@ -352,9 +375,8 @@ const infowindow = ref(true)
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
-          <div>{{ params.sidoCode }}</div>
-          <div>{{ params.gugunCode }}</div>
-          <div>{{ options }}</div>
+          <div>{{ hotplace.sidoCode }}</div>
+          <div>{{ hotplace.gugunCode }}</div>
           <div>
             주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!
           </div>
@@ -363,30 +385,17 @@ const infowindow = ref(true)
             :api-key="VITE_GOOGLE_MAP_API_KEY"
             id="map"
             :center="mapCenter"
-            :zoom="10"
+            :zoom="15"
             style="height: 400px; width: 100%"
             @click="onMapClick"
           >
-            <Marker :options="options" :key="markerKey" @dragend="onMarkerDragEnd">
-              <InfoWindow v-model="infowindow">
-                <div id="content">선택한 지역입니다.</div>
-              </InfoWindow>
-            </Marker>
+            <Marker :options="options" :key="markerKey" @dragend="onMarkerDragEnd"/>
           </GoogleMap>
 
           <button class="btn btn-secondary mt10" @click="execDaumPostcode">
             주소검색
           </button>
 
-          <!-- <GoogleMap
-            :api-key="VITE_GOOGLE_MAP_API_KEY"
-            id="map"
-            style="width: 100%; height: 500px"
-            :zoom="zoom"
-            :center="init_center"
-          >
-            <Marker :options="options" />
-          </GoogleMap> -->
         </div>
 
         <div class="col-lg-6">
@@ -420,7 +429,7 @@ const infowindow = ref(true)
                       name="category"
                       aria-label="카테고리 선택"
                       required
-                      v-model="params.contentTypeId"
+                      v-model="hotplace.contentTypeId"
                     >
                       <option value="0" hidden disabled selected>
                         카테고리를 선택해주세요.
@@ -448,7 +457,7 @@ const infowindow = ref(true)
                       class="form-control"
                       id="title"
                       value="제목"
-                      v-model="params.title"
+                      v-model="hotplace.title"
                     />
                   </div>
                 </div>
@@ -463,7 +472,7 @@ const infowindow = ref(true)
                       class="form-control"
                       id="content"
                       style="height: 100px"
-                      v-model="params.overview"
+                      v-model="hotplace.overview"
                       placeholder="내용을 입력해주세요."
                     ></textarea>
                   </div>
@@ -477,9 +486,10 @@ const infowindow = ref(true)
                     <input
                       name="address"
                       type="text"
-                      class="form-control"
+                      class="read form-control"
                       id="Address"
-                      v-model="params.addr1"
+                      v-model="hotplace.addr1"
+                      readonly
                     />
                   </div>
                 </div>
@@ -494,7 +504,7 @@ const infowindow = ref(true)
                       type="text"
                       class="form-control"
                       id="Phone"
-                      v-model="params.tel"
+                      v-model="hotplace.tel"
                     />
                   </div>
                 </div>
@@ -510,7 +520,7 @@ const infowindow = ref(true)
                       class="form-control"
                       id="Homepage"
                       placeholder="https://Homepage.com/#"
-                      v-model="params.homepage"
+                      v-model="hotplace.homepage"
                     />
                   </div>
                 </div>
@@ -520,9 +530,12 @@ const infowindow = ref(true)
           </div>
           <div class="align-right mt10 mb10">
     
-            <button class="btn btn-primary me-1" @click="uploadFile">
-      작성
+            <button class="btn btn-primary me-1" @click="updateHotPlace">
+      수정
     </button>
+    <button class="btn btn-danger me-1" @click="onDeleteHotPlace">
+                삭제
+              </button>
     <button class="btn btn-secondary" @click="moveList">
       목록
     </button>
@@ -556,7 +569,7 @@ const infowindow = ref(true)
 
 
 
-i {
+i, .read {
   cursor: pointer;
 }
 
