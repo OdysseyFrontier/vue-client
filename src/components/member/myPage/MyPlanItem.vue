@@ -9,7 +9,12 @@ defineProps({
 
 <template>
   <div class="plan-item">
-    <img :src="defaultImg" alt="Plan Thumbnail" class="plan-image">
+    <template v-if="plan.images.length == 0">
+      <img :src="defaultImg" alt="Plan Thumbnail" class="plan-image">
+    </template>
+    <template v-else>
+      <img :src="plan.images[0]" alt="Plan Thumbnail" class="plan-image">
+    </template>
     <div class="plan-details">
       <h3>{{ plan.title }}</h3>
       <p>{{ plan.description }}</p>

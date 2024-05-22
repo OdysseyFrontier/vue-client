@@ -18,6 +18,7 @@
       <plan-item v-for="plan in plansToShow" :key="plan.planId" :plan="plan" class="col-xs-12 col-sm-6 col-md-4 p-1">
         <h6 class="card-subtitle mb-2 text-muted ">{{ formatPlanTime(plan.planTime) }}</h6>
       </plan-item>
+      <div v-if="plansToShow.length == 0" style="text-Align: center"> 계획이 없습니다. </div>
     </div>
   </div>
 </template>
@@ -25,12 +26,11 @@
 <script setup>
 import { onMounted, reactive, computed } from 'vue';
 import PlanItem from '@/components/member/myPage/MyPlanItem.vue';
-import { useMemberStore } from '@/stores/member';
 import { getMyMakePlans, getMyLikePlans } from '@/api/plan';
+import { useRoute } from "vue-router";
 
-const store = useMemberStore();
-console.log(store.memberInfo)
-const memberId = store.memberInfo.memberId
+const route = useRoute();
+let { memberId } = route.params;
 console.log(memberId);
 
 const state = reactive({

@@ -58,7 +58,6 @@ const toggleFollow = async memberId => {
 };
 
 async function fetchSearchMembers() {
-    console.log(12323123)
     console.log(searchQuery.value)
 
     searchMembersByLoginMemberId(
@@ -75,6 +74,7 @@ async function fetchSearchMembers() {
 }
 
 function fetchAllMembers() {
+    searchAllMembersByLoginMemberId(
     loginMemberId,
         ({ data }) => {
             memberList.value = data;
@@ -83,15 +83,17 @@ function fetchAllMembers() {
         (error) => {
             console.log(searchQuery.value)
             console.log(error);
-        };
+        }
+    );
 }
 
 watch(searchQuery, () => {
     console.log(searchQuery.value)
-    if (searchQuery.value == "") {
+    if (searchQuery.value == "" || searchQuery.value == " " || searchQuery.value.length == 0) {
         fetchAllMembers();
+    } else {
+        fetchSearchMembers();
     }
-    fetchSearchMembers();
 });
 
 onMounted(() => {

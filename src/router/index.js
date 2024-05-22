@@ -81,7 +81,7 @@ const router = createRouter({
       component: () => import("@/views/MemberMyPageView.vue"),
       children: [
         {
-          path: "/planList",
+          path: "/myPlanList/:memberId",
           name: "MyPlanList",
           component: () => import("@/components/member/myPage/MyPlanList.vue"),
         },
@@ -115,12 +115,12 @@ const router = createRouter({
       component: () => import("@/components/member/MemberSearch.vue"),
     },
     {
-      path: "/myFollowerList",
+      path: "/myFollowerList/:memberId",
       name: "myFollowerList",
       component: () => import("@/components/member/myPage/MyFollowerList.vue"),
     },
     {
-      path: "/myFollowingList",
+      path: "/myFollowingList/:memberId",
       name: "myFollowingList",
       component: () => import("@/components/member/myPage/MyFollowingList.vue"),
     },

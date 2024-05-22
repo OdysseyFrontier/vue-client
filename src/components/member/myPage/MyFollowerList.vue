@@ -24,17 +24,20 @@ import MyFollowerListItem from '@/components/member/myPage/MyFollowerListItem.vu
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
-const router = useRouter();
+const store = useMemberStore();
 
 let { memberId } = route.params;
+if(memberId == "me"){
+  memberId = store.memberInfo.memberId
+}
 
-const store = useMemberStore();
-const loginMemberId = memberId;
+// const memberId = store.memberInfo?.memberId || 1;
+// const memberId = memberId;
 const followers = ref({});
 const searchQuery = ref('');
 
 async function fetchMembers() {
-    getFollowers(loginMemberId,
+    getFollowers(memberId,
         response => {
             followers.value = response.data;
         },
@@ -47,7 +50,7 @@ async function fetchMembers() {
 const deleteFollowing = async (followingId) => {
     try {
         // Assuming store.memberInfo.memberId is the ID of the currently logged-in user
-        await unfollowMember(loginMemberId, followingId,
+        await unfollowMember(memberId, followingId,
             () => {
                 // Remove the unfollowed member from the list
                 const index = followers.value.findIndex(member => member.memberId === followingId);
@@ -69,7 +72,7 @@ const follow = async (memberId) => {
     const member = followers.value.find(m => m.memberId === memberId);
     if (member) {
         // Call follow
-        await followMember(loginMemberId, memberId,
+        await followMember(memberId, memberId,
             () => {
                 member.following = true; // Update state on success
                 console.log('Follow successful');

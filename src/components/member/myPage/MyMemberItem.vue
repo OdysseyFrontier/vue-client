@@ -1,13 +1,12 @@
 <template>
   <div class="member-item d-flex justify-content-between align-items-center p-2 border-bottom">
     <div>
-      <h5>{{ member.name }}</h5>
       <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : member.memberId} }">
 
-        <h5>{{ member.name }}</h5>
+        <h5>{{ member.name }} ( {{member.emailId}} )</h5>
       </RouterLink>
 
-      <p>{{ member.email }}</p>
+      <p></p>
     </div>
     <button v-if="member.memberId === currentMemberId" class="btn btn-outline-secondary" disabled>
       ME

@@ -35,7 +35,7 @@ if(memberId == "me"){
         <div class="col-12 section bottom-section">
           <ul class="nav nav-tabs nav-tabs-bordered">
             <li class="nav-item">
-              <RouterLink :to="{ name: 'MyPlanList' }" class="nav-link">
+              <RouterLink :to="{ name: 'MyPlanList', params: {memberId} }" class="nav-link">
                 계획
               </RouterLink>
             </li>

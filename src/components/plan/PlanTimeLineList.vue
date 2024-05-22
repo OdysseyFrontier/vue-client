@@ -66,6 +66,7 @@ const updateAttraction = (updatedAttraction) => {
             .filter(attraction => attraction.planTime)
             .map(attraction => new Date(attraction.planTime));
 
+        console.log("planTimes:", planTimes);
         if (planTimes.length) {
             const minTime = new Date(Math.min(...planTimes));
             const maxTime = new Date(Math.max(...planTimes));
@@ -73,6 +74,11 @@ const updateAttraction = (updatedAttraction) => {
             usePlanStore().setEndTime(formatDateToLocalString(maxTime));
             console.log(usePlanStore().startTime)
             console.log(usePlanStore().endTime)
+        }
+        else {
+            console.log("시간 없음")
+            usePlanStore().setStartTime(null);
+            usePlanStore().setEndTime(null);
         }
     }
 };

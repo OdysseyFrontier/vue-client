@@ -82,7 +82,6 @@ function formatDateTimeLocal(dateArray) {
     // Extracting each component from the dateArray
     const [year, month, day, hour, minute] = dateArray;
 
-    // Formatting each component to ensure it has the correct number of digits
     // and concatenating them into a datetime-local compatible string
     const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const formattedTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;

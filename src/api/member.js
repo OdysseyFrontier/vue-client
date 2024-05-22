@@ -77,7 +77,7 @@ async function unfollowMember(followerId, followingId, success, fail) {
 
 // 특정 회원 정보 가져오기
 async function getMemberInfo(param, success, fail) {
-  await local.get(`/member/meberInfo`, { params: param }).then(success).catch(fail);
+  await local.get(`/member/memberInfo`, { params: param }).then(success).catch(fail);
 }
 
 function updateMemberInfo(memberInfo, success, fail) {

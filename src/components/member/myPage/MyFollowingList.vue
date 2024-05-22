@@ -10,7 +10,7 @@
             <button class="btn btn-primary" @click="filterFollowings">검색</button>
         </div>
         <div class="member-list">
-            <MyMemberItem v-for="member in followings" :key="member.memberId" :current-member-id="loginMemberId"
+            <MyMemberItem v-for="member in followings" :key="member.memberId" :current-member-id="memberId"
                 :member="member" @toggle-follow="toggleFollow" />
         </div>
     </div>
@@ -25,12 +25,14 @@ import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
+const store = useMemberStore();
 
 let { memberId } = route.params;
+if(memberId == "me"){
+  memberId = store.memberInfo.memberId
+}
 
-
-const store = useMemberStore();
-const loginMemberId = store.memberInfo?.memberId || 1;
+// const memberId = store.memberInfo?.memberId || 1;
 const followings = ref({});
 const searchQuery = ref('');
 
@@ -39,7 +41,7 @@ const toggleFollow = async memberId => {
     if (member) {
         if (member.following) {
             // Call unfollow
-            await unfollowMember(loginMemberId, memberId,
+            await unfollowMember(memberId, memberId,
                 () => {
                     member.following = false; // Update state on success
                     console.log('Unfollow successful');
@@ -50,7 +52,7 @@ const toggleFollow = async memberId => {
             );
         } else {
             // Call follow
-            await followMember(loginMemberId, memberId,
+            await followMember(memberId, memberId,
                 () => {
                     member.following = true; // Update state on success
                     console.log('Follow successful');
@@ -66,7 +68,7 @@ const toggleFollow = async memberId => {
 
 
 async function fetchMembers() {
-    getFollowing(loginMemberId,
+    getFollowing(memberId,
         response => {
             console.log('Fetched members');
             console.log(response.data);
