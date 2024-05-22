@@ -1,10 +1,12 @@
 <script setup>
-import {ref, onMounted} from "vue"
+import {ref, onMounted, reactive} from "vue"
 import Swiper from 'swiper';
 import { Autoplay, Pagination } from 'swiper/modules';
 import "swiper/css"
 import 'swiper/css/autoplay';
 import 'swiper/css/pagination';
+import { GoogleMap, Marker } from "vue3-google-map";
+const { VITE_GOOGLE_MAP_API_KEY } = import.meta.env;
 
 
 setTimeout(()=>{
@@ -29,7 +31,7 @@ setTimeout(()=>{
 
 
   import { useRoute, useRouter } from "vue-router";
-  import { detailHotPlace, likeHotPlace, deleteLikeHotPlace, } from "@/api/hotplace";
+  import { detailHotPlace, likeHotPlace, deleteLikeHotPlace, deleteHotPlace} from "@/api/hotplace";
   import { useMemberStore } from "@/stores/member"
 
     const route = useRoute();
@@ -59,8 +61,7 @@ function likeToggle(flag) {
     (response) => {
         console.log(response.data);
       let msg = "좋아요 누름 처리시 문제 발생했습니다.";
-      if (response.status == 201) msg = "좋아요 누름이 완료되었습니다.";
-      alert(msg);
+      if (response.status != 201) alert(msg);
       hotplace.value.likes++;
     },
     (error) => console.error(error)
@@ -71,13 +72,16 @@ function likeToggle(flag) {
     (response) => {
         console.log(response.data);
       let msg = "좋아요 취소 누름 처리시 문제 발생했습니다.";
-      if (response.status == 200) msg = "좋아요 취소 누름이 완료되었습니다.";
-      alert(msg);
+      if (response.status != 200) alert(msg);
       hotplace.value.likes--;
     },
     (error) => console.error(error)
   );
     }}
+
+    const mapCenter = ref({ lat: 36.1061824, lng: 128.4227797 });
+    const options = ref({})
+    const key = ref(0);
 
     onMounted(() => {
         getHotplace();
@@ -92,8 +96,16 @@ function likeToggle(flag) {
             console.log(hotplace.value);
             if(hotplace.value.isLike){
             isLike.value = true;
-        }
+            }
 
+        mapCenter.value = {lat: Number(hotplace.value.latitude), lng : Number(hotplace.value.longitude)}
+
+            options.value={
+              position : mapCenter.value,
+              title: "위치"
+            }
+
+            key.value++
         param.value.contentId = hotplace.value.contentId;
 
        if(hotplace.value.contentTypeId == "12"){
@@ -128,21 +140,22 @@ function likeToggle(flag) {
         router.push({ name: "hotPlaceList2" });
     }
 
-    // function moveModify() {
-    //     router.push({ name: "hotPlaceModify", params: { contentId } });
-    // }
 
-    // function onDeleteArticle() {
-    //     deleteHotplace(
-    //         contentId,
-    //         (response) => {
-    //         if (response.status == 200) moveList();
-    //         },
-    //         (error) => {
-    //         console.error(error);
-    //         }
-    //     );
-    // }
+    function moveModify() {
+        router.push({ name: "hotPlaceModify", params: { contentId } });
+    }
+
+    function onDeleteHotPlace() {
+        deleteHotPlace(
+            contentId,
+            (response) => {
+            if (response.status == 200) moveList();
+            },
+            (error) => {
+            console.error(error);
+            }
+        );
+    }
 </script>
 
 
@@ -161,28 +174,37 @@ function likeToggle(flag) {
 
         <div class="row gy-4">
 
-          <div class="col-lg-8">
-            <div class="portfolio-details-slider swiper">
-              <div class="swiper-wrapper align-items-center">
+          <div class="col-lg-6">
+            <GoogleMap
+            :api-key="VITE_GOOGLE_MAP_API_KEY"
+            :center="mapCenter"
+            :zoom="15"
+            style="height: 400px; width: 100%"
+          >
+            <Marker :options="options" :key="key" v-if="mapCenter.lat && mapCenter.lng"/>
+          </GoogleMap>
+<div class="portfolio-details-slider swiper mt10">
+                <div class="swiper-wrapper align-items-center">
 
-                <div class="swiper-slide">
-                  <img :src="hotplace.firstImage" alt="">
+                  <div class="swiper-slide">
+                    <img :src="hotplace.firstImage" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="/src/assets/portfolio/portfolio-details-2.jpg" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="/src/assets/portfolio/portfolio-details-3.jpg" alt="">
+                  </div>
+
                 </div>
-
-                <div class="swiper-slide">
-                  <img src="/src/assets/portfolio/portfolio-details-2.jpg" alt="">
-                </div>
-
-                <div class="swiper-slide">
-                  <img src="/src/assets/portfolio/portfolio-details-3.jpg" alt="">
-                </div>
-
+                <div class="swiper-pagination"></div>
               </div>
-              <div class="swiper-pagination"></div>
-            </div>
+          
           </div>
 
-          <div class="col-lg-4">
+          <div class="col-lg-6">
             <div class="portfolio-info">
               <div class="d-flex">
                 <!-- <i class="bi bi-person-check-fill"></i> : 200
@@ -197,17 +219,45 @@ function likeToggle(flag) {
                 <li><strong>Category</strong> : {{category}}</li>
                 <li><strong>작성자</strong> : {{hotplace.name}}</li>
                 <li><strong>작성일</strong> : {{hotplace.createdTime}}</li>
-                <li><strong>내용</strong> : {{hotplace.overview}}</li>
                 <li><strong>주소</strong> : {{hotplace.addr1}} {{hotplace.addr2}}</li>
                 <li v-if="hotplace.tel"><strong>전화번호</strong> : {{hotplace.tel}}</li>
                 <li v-if="hotplace.homepage"><strong>홈페이지</strong>: <a :href="hotplace.homepage">{{hotplace.homepage}}</a></li>
+                <li><strong>내용</strong> : {{hotplace.overview}}</li>
               </ul>
             </div>
-            <div class="portfolio-description">
-              <h2>This is an example of portfolio detail</h2>
-              <p>
-                Autem ipsum nam porro corporis rerum. Quis eos dolorem eos itaque inventore commodi labore quia quia. Exercitationem repudiandae officiis neque suscipit non officia eaque itaque enim. Voluptatem officia accusantium nesciunt est omnis tempora consectetur dignissimos. Sequi nulla at esse enim cum deserunt eius.
-              </p>
+
+            <div class="align-right mt10 mb10">
+              <button class="btn btn-primary me-1" @click="moveModify" v-if="hotplace.memberId === memberStore.memberInfo.memberId">
+                수정
+              </button>
+              <button class="btn btn-danger me-1" @click="onDeleteHotPlace" v-if="hotplace.memberId === memberStore.memberInfo.memberId">
+                삭제
+              </button>
+              <button class="btn btn-secondary" @click="moveList">
+                목록
+              </button>
+            </div>
+
+              <div class="portfolio-description">
+                <!-- <h2></h2> -->
+                <!-- <div class="portfolio-details-slider swiper">
+                <div class="swiper-wrapper align-items-center">
+
+                  <div class="swiper-slide">
+                    <img :src="hotplace.firstImage" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="/src/assets/portfolio/portfolio-details-2.jpg" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="/src/assets/portfolio/portfolio-details-3.jpg" alt="">
+                  </div>
+
+                </div>
+                <div class="swiper-pagination"></div>
+              </div> -->
             </div>
           </div>
 
@@ -219,6 +269,11 @@ function likeToggle(flag) {
 </template>
 
 <style scoped>
+.align-right{text-align:right !important;}
+
+.mt10{margin-top:10px !important;}
+.mb10{margin-bottom:10px !important;}
+
 i {cursor: pointer;}
 
 /**

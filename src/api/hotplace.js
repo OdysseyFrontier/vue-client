@@ -18,6 +18,11 @@ const local = localAxios();
         await local.get(`/hotplace/${contentId}`).then(success).catch(fail);
     }
 
+    async function getModifyHotPlace(contentId, success, fail) {
+        local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
+        await local.get(`/hotplace/modify/${contentId}`).then(success).catch(fail);
+    }
+
     function likeHotPlace(param, success, fail) {
         local.post(`/hotplace/like`, JSON.stringify(param)).then(success).catch(fail);
     }
@@ -39,17 +44,19 @@ const local = localAxios();
     //     local.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
     // }
     
-    // function deleteArticle(boardno, success, fail) {
-    //     local.delete(`/board/${boardno}`).then(success).catch(fail);
-    // }
+    function deleteHotPlace(contentId, success, fail) {
+        local.delete(`/hotplace/${contentId}`).then(success).catch(fail);
+    }
 
 export {
     getSidos,
     getGuguns,
     listHotPlace,
     detailHotPlace,
+    getModifyHotPlace,
     likeHotPlace,
-    deleteLikeHotPlace
+    deleteLikeHotPlace,
+    deleteHotPlace
     // listArticle,
     // detailArticle,
     // registArticle,
