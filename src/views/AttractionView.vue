@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("attraction");
+sidebarStore.open = false;
 
 import SearchingAttraction from "@/components/attraction/SearchingAttraction.vue";
 import AttractionCategory from "@/components/attraction/AttractionCategoryList.vue";

@@ -5,6 +5,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("planList");
+sidebarStore.open = false;
 </script>
 
 <template>

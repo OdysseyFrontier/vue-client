@@ -75,7 +75,18 @@ async function unfollowMember(followerId, followingId, success, fail) {
   await local.post(`/member/${followerId}/unfollow/${followingId}`).then(success).catch(fail);
 }
 
+// 특정 회원 정보 가져오기
+async function getMemberInfo(param, success, fail) {
+  await local.get(`/member/meberInfo`, { params: param }).then(success).catch(fail);
+}
 
+function updateMemberInfo(memberInfo, success, fail) {
+  local.put(`/member`, JSON.stringify(memberInfo)).then(success).catch(fail);
+}
+
+async function MemberHotPlaceList(memberId, success, fail) {
+  await local.get(`/member/hotplace?memberId=${memberId}`).then(success).catch(fail);
+}
 
 export {
   memberConfirm, findById, tokenRegeneration, logout, idCheck, join,
@@ -86,5 +97,8 @@ export {
   searchMembersByLoginMemberId,
   searchAllMembersByLoginMemberId,
   followMember,
-  unfollowMember
+  unfollowMember,
+  getMemberInfo,
+  updateMemberInfo,
+  MemberHotPlaceList
 };

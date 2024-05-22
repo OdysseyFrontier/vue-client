@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("join");
+sidebarStore.open = false;
 
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -80,6 +81,18 @@ function joinMember() {
     },
     (error) => console.error(error)
   );
+}
+
+function execDaumPostcode() {
+  new window.daum.Postcode({
+    oncomplete: (data) => {
+      console.log("주소검색");
+      if(data.jibunAddress)
+      joinMemberInfo.value.address = data.jibunAddress
+      if(data.roadAddress)
+      joinMemberInfo.value.address = data.roadAddress
+    },
+  }).open();
 }
 
 setTimeout(() => {
@@ -242,42 +255,26 @@ setTimeout(() => {
                     </div>
 
                     <div class="col-12">
-                      <label for="memberAddress1"
-                        >우편번호
-                        <span class="text-muted">&nbsp;(선택사항)</span>
-                        <span class="text-muted">
+                      <label for="MemberAddress"
+                        >주소<span class="text-muted"
+                          >&nbsp;(선택사항)</span>
+                          <span class="text-muted">
                           <button
                             type="button"
                             class="btn"
                             id="check_btn"
-                            onclick="execDaumPostcode()"
+                            @click="execDaumPostcode"
                           >
                             찾기
                           </button>
                         </span>
-                      </label>
+                        </label>
                       <input
                         type="text"
                         class="form-control"
-                        id="memberAddress1"
-                        name="memberAddress1"
-                        placeholder="찾기를 눌러 주소를 입력하세요"
-                        value=""
-                      />
-                    </div>
-
-                    <div class="col-12">
-                      <label for="MemberAddress2"
-                        >주소<span class="text-muted"
-                          >&nbsp;(선택사항)</span
-                        ></label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="memberAddress2"
-                        name="memberAddress2"
-                        placeholder="주소를 입력해주세요."
+                        id="memberAddress"
+                        name="memberAddress"
+                        placeholder="주소를 직접 입력하거나 찾기를 눌러주세요."
                         v-model="joinMemberInfo.address"
                       />
                     </div>

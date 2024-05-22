@@ -8,6 +8,7 @@ import { getPlan } from '@/api/plan';
 const dataFetched = ref(false); // Define a reactive variable to track data fetching
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("attraction");
+sidebarStore.open = false;
 
 import UpdatePlanTimeLine from "@/components/plan/update/UpdatePlanTimeLine.vue";
 import UpdatePlanning from "@/components/plan/update/UpdatePlanning.vue";

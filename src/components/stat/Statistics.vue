@@ -80,6 +80,7 @@ export default {
   setup() {
     const sidebarStore = useSidebarStore();
     sidebarStore.changesSidebarState("stat");
+    sidebarStore.open = false;
 
     const currentTab = ref("popular-attractions");
     return { currentTab };

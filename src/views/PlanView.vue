@@ -3,6 +3,7 @@ import { useSidebarStore } from "@/stores/sidebar.js";
 
 const sidebarStore = useSidebarStore();
 sidebarStore.changesSidebarState("plan");
+sidebarStore.open = false;
 
 import SearchingBar from "@/components/plan/SearchingBar.vue";
 import PlanGoogleMap from "@/components/plan/PlanGoogleMap.vue";
