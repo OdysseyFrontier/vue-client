@@ -61,6 +61,8 @@ async function fetchMembers() {
             console.log('Fetched members');
             console.log(response.data);
             followings.value = response.data;
+            followings.value.forEach(member => member.following = true);
+            console.log(followings.value);
         },
         error => {
             console.error('Failed to fetch followers:', error);

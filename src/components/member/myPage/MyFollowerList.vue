@@ -6,10 +6,8 @@
             <button class="btn btn-primary" @click="filterFollowers">검색</button>
         </div>
         <div class="member-list">
-            <MyMemberItem v-for="member in followers" :key="member.memberId" :member="member"
-                @toggle-follow="toggleFollow" />
-            <MyFollowingListItem v-for="member in followings" :key="member.memberId" :member="member"
-                @deleteFollowing="deleteFollowing" />
+            <MyFollowerListItem v-for="member in followers" :key="member.memberId" :member="member"
+                @deleteFollowing="deleteFollowing" @follow="follow" />
         </div>
     </div>
 </template>
@@ -17,16 +15,16 @@
 <script setup>
 import { ref, watchEffect, onMounted } from 'vue';
 import { useMemberStore } from '@/stores/member';
-import { getFollowers, followMember, unfollowMember } from '@/api/member';
-import MyFollowingListItem from '@/components/member/myPage/MyFollowingListItem.vue';
+import { getFollowers, unfollowMember, followMember } from '@/api/member';
+import MyFollowerListItem from '@/components/member/myPage/MyFollowerListItem.vue';
 
 const store = useMemberStore();
-const memberId = store.memberInfo?.memberId || 1;
+const loginMemberId = store.memberInfo?.memberId || 1;
 const followers = ref({});
 const searchQuery = ref('');
 
 async function fetchMembers() {
-    getFollowers(memberId,
+    getFollowers(loginMemberId,
         response => {
             followers.value = response.data;
         },
@@ -39,12 +37,12 @@ async function fetchMembers() {
 const deleteFollowing = async (followingId) => {
     try {
         // Assuming store.memberInfo.memberId is the ID of the currently logged-in user
-        await unfollowMember(memberId, followingId,
+        await unfollowMember(loginMemberId, followingId,
             () => {
                 // Remove the unfollowed member from the list
-                const index = followings.value.findIndex(member => member.memberId === followingId);
+                const index = followers.value.findIndex(member => member.memberId === followingId);
                 if (index !== -1) {
-                    followings.value.splice(index, 1);
+                    followers.value.splice(index, 1);
                 }
                 console.log('Unfollow successful');
             },
@@ -57,35 +55,21 @@ const deleteFollowing = async (followingId) => {
     }
 };
 
-
-// const toggleFollow = async memberId => {
-//     const member = followers.value.find(m => m.memberId === memberId);
-//     if (member) {
-//         if (member.following) {
-//             // Call unfollow
-//             await unfollowMember(store.memberInfo.memberId, memberId,
-//                 () => {
-//                     member.following = false; // Update state on success
-//                     console.log('Unfollow successful');
-//                 },
-//                 error => {
-//                     console.error('Failed to unfollow:', error);
-//                 }
-//             );
-//         } else {
-//             // Call follow
-//             await followMember(store.memberInfo.memberId, memberId,
-//                 () => {
-//                     member.following = true; // Update state on success
-//                     console.log('Follow successful');
-//                 },
-//                 error => {
-//                     console.error('Failed to follow:', error);
-//                 }
-//             );
-//         }
-//     }
-// };
+const follow = async (memberId) => {
+    const member = followers.value.find(m => m.memberId === memberId);
+    if (member) {
+        // Call follow
+        await followMember(loginMemberId, memberId,
+            () => {
+                member.following = true; // Update state on success
+                console.log('Follow successful');
+            },
+            error => {
+                console.error('Failed to follow:', error);
+            }
+        );
+    }
+};
 
 function filterFollowers() {
     if (searchQuery.value) {
