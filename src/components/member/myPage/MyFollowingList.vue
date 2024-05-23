@@ -1,9 +1,9 @@
 <template>
     <div class="container mt-4">
-        <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : 'me'} }">
+        <RouterLink :to="{ name: 'memberMyPage', params: { memberId: 'me' } }">
             <i class="bi bi-caret-left-fill"></i>
             <span>뒤로가기</span>
-          </RouterLink>
+        </RouterLink>
         <h2 class="my-3">팔로잉 목록</h2>
         <div class="search-bar mb-3 d-flex">
             <input type="text" class="form-control me-2" placeholder="검색" v-model="searchQuery">
@@ -28,20 +28,20 @@ const router = useRouter();
 const store = useMemberStore();
 
 let { memberId } = route.params;
-if(memberId == "me"){
-  memberId = store.memberInfo.memberId
+if (memberId == "me") {
+    memberId = store.memberInfo.memberId
 }
 
 // const memberId = store.memberInfo?.memberId || 1;
 const followings = ref({});
 const searchQuery = ref('');
 
-const toggleFollow = async memberId => {
-    const member = followings.value.find(m => m.memberId === memberId);
+const toggleFollow = async memberId1 => {
+    const member = followings.value.find(m => m.memberId === memberId1);
     if (member) {
         if (member.following) {
             // Call unfollow
-            await unfollowMember(memberId, memberId,
+            await unfollowMember(memberId, memberId1,
                 () => {
                     member.following = false; // Update state on success
                     console.log('Unfollow successful');
@@ -52,7 +52,7 @@ const toggleFollow = async memberId => {
             );
         } else {
             // Call follow
-            await followMember(memberId, memberId,
+            await followMember(memberId, memberId1,
                 () => {
                     member.following = true; // Update state on success
                     console.log('Follow successful');
@@ -102,14 +102,14 @@ onMounted(() => {
 
 <style scoped>
 a {
-  /* color: #4154f1; */
-  color: black;
-  text-decoration: none;
+    /* color: #4154f1; */
+    color: black;
+    text-decoration: none;
 }
 
 a:hover {
-  color: #717ff5;
-  text-decoration: none;
+    color: #717ff5;
+    text-decoration: none;
 }
 
 .member-list {

@@ -13,13 +13,13 @@ const router = useRouter();
 
 const memberStore = useMemberStore();
 
-let { memberId } = route.params;
+let { memberId } = route.params || 0;
 
-if(memberId == "me"){
+if (memberId == "me") {
   memberId = memberStore.memberInfo.memberId
 }
 
-
+console.log(memberId)
 
 </script>
 
@@ -35,12 +35,12 @@ if(memberId == "me"){
         <div class="col-12 section bottom-section">
           <ul class="nav nav-tabs nav-tabs-bordered">
             <li class="nav-item">
-              <RouterLink :to="{ name: 'MyPlanList', params: {memberId} }" class="nav-link">
+              <RouterLink :to="{ name: 'MyPlanList', params: { memberId } }" class="nav-link">
                 계획
               </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'memberHotPlace' , params: {memberId} }" class="nav-link">
+              <RouterLink :to="{ name: 'memberHotPlace', params: { memberId } }" class="nav-link">
                 핫플레이스
               </RouterLink>
             </li>
@@ -51,7 +51,7 @@ if(memberId == "me"){
               </RouterLink>
             </li>
 
-            <li class="nav-item" v-if="memberStore.memberInfo.memberId == memberId">
+            <li class="nav-item" v-if="memberStore.memberInfo && memberStore.memberInfo.memberid == memberId">
               <RouterLink :to="{ name: 'myInfoModify' }" class="nav-link">
                 회원 정보 수정
               </RouterLink>

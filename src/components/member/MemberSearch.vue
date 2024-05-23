@@ -25,7 +25,7 @@ sidebarStore.open = false;
 const store = useMemberStore();
 const memberList = ref([]);
 const searchQuery = ref('');
-const loginMemberId = store.memberInfo?.memberId || 1;
+const loginMemberId = store.memberInfo?.memberId || 0;
 
 const toggleFollow = async memberId => {
     const member = memberList.value.find(m => m.memberId === memberId);
@@ -75,7 +75,7 @@ async function fetchSearchMembers() {
 
 function fetchAllMembers() {
     searchAllMembersByLoginMemberId(
-    loginMemberId,
+        loginMemberId,
         ({ data }) => {
             memberList.value = data;
             console.log(memberList.value);
@@ -91,7 +91,8 @@ watch(searchQuery, () => {
     console.log(searchQuery.value)
     if (searchQuery.value == "" || searchQuery.value == " " || searchQuery.value.length == 0) {
         fetchAllMembers();
-    } else {
+    }
+    else {
         fetchSearchMembers();
     }
 });

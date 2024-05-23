@@ -13,12 +13,12 @@ const router = useRouter();
 let { memberId } = route.params;
 
 const param = ref({
-  memberId : store.memberInfo.memberId,
+  memberId: store.memberInfo.memberId,
   targetId: memberId
 })
 
 onMounted(() => {
-  if(memberId == "me"){
+  if (memberId == "me") {
     memberId = store.memberInfo.memberId
     param.value.targetId = memberId
   }
@@ -32,7 +32,7 @@ const getInfo = async () => {
   console.log("서버에서 회원 정보 얻어오자!!!", param.value);
   getMemberInfo(
     param.value,
-    ( response ) => {
+    (response) => {
       console.log(response.data)
       memberProfile.value = response.data;
       console.log(memberProfile.value)
@@ -64,30 +64,30 @@ const defaultProfile = {
 //   followings: member.followings || defaultProfile.followings,
 //   description: member.description || defaultProfile.description,
 // });
-const follow = async() => {
+const follow = async () => {
   await followMember(store.memberInfo.memberId, memberId,
-                () => {
-                    // member.following = true; // Update state on success
-                    console.log('Follow successful');
-                    getInfo()
-                },
-                error => {
-                    console.error('Failed to follow:', error);
-                }
-            );
+    () => {
+      // member.following = true; // Update state on success
+      console.log('Follow successful');
+      getInfo()
+    },
+    error => {
+      console.error('Failed to follow:', error);
+    }
+  );
 };
 
-const unfollow = async() => {
+const unfollow = async () => {
   await unfollowMember(store.memberInfo.memberId, memberId,
-                () => {
-                    // member.following = false; // Update state on success
-                    console.log('Unfollow successful');
-                    getInfo()
-                },
-                error => {
-                    console.error('Failed to unfollow:', error);
-                }
-            );
+    () => {
+      // member.following = false; // Update state on success
+      console.log('Unfollow successful');
+      getInfo()
+    },
+    error => {
+      console.error('Failed to unfollow:', error);
+    }
+  );
 };
 
 
@@ -103,13 +103,16 @@ const unfollow = async() => {
       <div class="col">
         <div class="d-flex align-items-center mb-2">
           <h1 class="me-3 text-nowrap">{{ memberProfile.name }}</h1>
-          <RouterLink :to="{ name: 'myInfoModify' }" class="btn btn-sm btn-outline-secondary text-nowrap" v-if="memberId == store.memberInfo.memberId">
+          <RouterLink :to="{ name: 'myInfoModify' }" class="btn btn-sm btn-outline-secondary text-nowrap"
+            v-if="memberId == store.memberInfo.memberId">
             프로필 편집
           </RouterLink>
-          <button class="btn btn-outline-danger" @click="unfollow" v-if="memberId != 'me' && memberId != store.memberInfo.memberId && !memberProfile.following">
+          <button class="btn btn-outline-danger" @click="unfollow"
+            v-if="memberId != 'me' && memberId != store.memberInfo.memberId && !memberProfile.following">
             언팔로우
           </button>
-          <button class="btn btn-outline-primary" @click="follow" v-if="memberId != 'me' && memberId != store.memberInfo.memberId && memberProfile.following">
+          <button class="btn btn-outline-primary" @click="follow"
+            v-if="memberId != 'me' && memberId != store.memberInfo.memberId && memberProfile.following">
             팔로우
           </button>
           <!-- <button class="btn btn-sm btn-outline-secondary text-nowrap">

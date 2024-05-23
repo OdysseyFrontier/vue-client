@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-4">
-        <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : 'me'} }">
+        <RouterLink :to="{ name: 'memberMyPage', params: { memberId: 'me' } }">
             <i class="bi bi-caret-left-fill"></i>
             <span>뒤로가기</span>
         </RouterLink>
@@ -27,8 +27,8 @@ const route = useRoute();
 const store = useMemberStore();
 
 let { memberId } = route.params;
-if(memberId == "me"){
-  memberId = store.memberInfo.memberId
+if (memberId == "me") {
+    memberId = store.memberInfo.memberId
 }
 
 // const memberId = store.memberInfo?.memberId || 1;
@@ -39,6 +39,7 @@ const searchQuery = ref('');
 async function fetchMembers() {
     getFollowers(memberId,
         response => {
+            console.log(response.data);
             followers.value = response.data;
         },
         error => {
@@ -68,11 +69,11 @@ const deleteFollowing = async (followingId) => {
     }
 };
 
-const follow = async (memberId) => {
-    const member = followers.value.find(m => m.memberId === memberId);
+const follow = async (memberId1) => {
+    const member = followers.value.find(m => m.memberId === memberId1);
     if (member) {
         // Call follow
-        await followMember(memberId, memberId,
+        await followMember(memberId, memberId1,
             () => {
                 member.following = true; // Update state on success
                 console.log('Follow successful');
@@ -104,14 +105,14 @@ onMounted(() => {
 
 <style scoped>
 a {
-  /* color: #4154f1; */
-  color: black;
-  text-decoration: none;
+    /* color: #4154f1; */
+    color: black;
+    text-decoration: none;
 }
 
 a:hover {
-  color: #717ff5;
-  text-decoration: none;
+    color: #717ff5;
+    text-decoration: none;
 }
 
 .member-list {

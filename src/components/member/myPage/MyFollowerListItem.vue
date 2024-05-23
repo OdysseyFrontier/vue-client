@@ -1,11 +1,15 @@
 <template>
   <div class="member-item d-flex justify-content-between align-items-center p-2 border-bottom">
-    <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : member.memberId} }">
-      <h5>{{ member.name }} ( {{member.emailId}} )</h5>
+    <RouterLink :to="{ name: 'memberMyPage', params: { memberId: member.memberId } }">
+      <h5>{{ member.name }} ( {{ member.emailId }} )</h5>
+      <!-- {{ member }} -->
     </RouterLink>
-    <template v-if="!member.following">
+    <!-- <template v-if="member.following == true">
       <button class="btn btn-outline-primary" @click="follow">팔로우</button>
     </template>
+<template v-else>
+
+    </template> -->
     <button class="btn btn-outline-danger" @click="deleteFollowing">삭제</button>
   </div>
 </template>
@@ -41,7 +45,6 @@ const follow = () => {
 </script>
 
 <style scoped>
-
 .member-item {
   margin-bottom: 10px;
 }
