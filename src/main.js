@@ -12,6 +12,7 @@ import "bootstrap";
 
 import 'glightbox/dist/css/glightbox.min.css'
 
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const app = createApp(App)
 

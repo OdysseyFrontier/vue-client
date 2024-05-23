@@ -6,7 +6,8 @@
 <div class="container mt-4">
     <div class="card">
             <div class="card-body">
-              <h5 class="card-title">구경하세요!</h5>
+              <!-- <h5 class="card-title">구경하세요!</h5> -->
+              <h5 class="card-title pt-0"></h5>
 
               <!-- Slides with captions -->
               <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -17,24 +18,27 @@
                 </div>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img src="/src/assets/silde1.jpg" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
+                    <img src="/src/assets/slide1.png" class="d-block w-100" alt="...">
+                    <!-- <div class="carousel-caption d-none d-md-block">
                       <h5>First slide label</h5>
                       <p>Some representative placeholder content for the first slide.</p>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="carousel-item">
-                    <img src="/src/assets/slide2.jpg" class="d-block w-100" alt="...">
+                    <img src="/src/assets/slide2.png" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
-                      <h5>Second slide label</h5>
-                      <p>Some representative placeholder content for the second slide.</p>
+                      <h5>HotPlace</h5>
+                      <!-- <button class="btn btn-outline-secondary">바로가기</button> -->
+                      <!-- <h5>Second slide label</h5>
+                      <p>Some representative placeholder content for the second slide.</p> -->
                     </div>
                   </div>
                   <div class="carousel-item">
                     <img src="/src/assets/slide3.png" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Third slide label</h5>
-                      <p>Some representative placeholder content for the third slide.</p>
+                    <div class="carousel-caption d-none d-md-block align-left">
+                      <!-- <button class="btn btn-outline-secondary">바로가기</button> -->
+                      <!-- <h5>여행 계획 가기</h5> -->
+                      <!-- <p>Some representative placeholder content for the third slide.</p> -->
                     </div>
                   </div>
                 </div>
@@ -56,7 +60,7 @@
 </template>
 
 <style scoped>
-
+.align-left{text-align:left !important;}
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
