@@ -15,6 +15,7 @@ const router = useRouter();
 const articles = ref([])
 const currentPage = ref(1)
 const totalPage = ref(0)
+const totalCount = ref(0)
 const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
 const param = ref({
     type: "",
@@ -66,6 +67,7 @@ const getArticleList = () => {
       articles.value = data.articles;
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
+      totalCount.value = data.totalCount;
     },
     (error) => {
       console.log(error);
@@ -116,7 +118,7 @@ const moveWrite = () => {
                 <div class="inner">
 
                     <div class="table-search-wrap">
-                        <p class="page-txt"><span class="ft-blue">총 {{ articles.length }}건</span><span class="ml10 ft-gray">{{ currentPage }} /
+                        <p class="page-txt"><span class="ft-blue">총 {{ totalCount }}건</span><span class="ml10 ft-gray">{{ currentPage }} /
                                 {{ totalPage }}페이지</span></p>
                         <div class="table-search">
                             <select id="tgtTypeCd" name="tgtTypeCd" title="검색어 분류 선택" @change="funChgTgtTypeCd()" v-model="tgtTypeCd"

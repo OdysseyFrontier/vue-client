@@ -145,13 +145,13 @@ const router = createRouter({
         {
           path: "boardDetail/:boardno",
           name: "boardDetail",
-          // beforeEnter: onlyAuthUser,
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardDetail.vue"),
         },
         {
           path: "write",
           name: "boardWrite",
-          // beforeEnter: onlyAuthUser,
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/boardWrite.vue"),
         },
         {
@@ -185,6 +185,7 @@ const router = createRouter({
         {
           path: "detail/:contentId",
           name: "hotPlaceDetail",
+          beforeEnter: onlyAuthUser,
           component: () =>
             import(
               /* webpackChunkName: "community" */ "@/components/hotplace/HotPlaceDetail.vue"
@@ -201,12 +202,14 @@ const router = createRouter({
         {
           path: "write",
           name: "hotPlaceWrite",
+          beforeEnter: onlyAuthUser,
           // beforeEnter: onlyAuthUser,
           component: () => import("@/components/hotplace/HotPlaceWrite.vue"),
         },
         {
           path: "modify/:contentId",
           name: "hotPlaceModify",
+          beforeEnter: onlyAuthUser,
           beforeEnter: onlyAuthUser,
           component: () => import("@/components/hotplace/HotPlaceModify.vue"),
         },

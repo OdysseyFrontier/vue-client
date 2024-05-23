@@ -117,7 +117,7 @@ function formatDate(dateArray) {
                 <div class="row bg-light p-3">
                     <UpdatePlanning />
                 </div>
-                <div class="row bg-white p-3 flex-grow-1" style="height: 45rem;">
+                <div class="row bg-white p-3 flex-grow-1" style="height: 60rem;">
                     <UpdatePlanTimeLine />
                 </div>
             </template>

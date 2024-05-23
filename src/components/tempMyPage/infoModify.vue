@@ -77,7 +77,7 @@ setTimeout(() => {
   <div class="tab-pane profile-edit pt-3" id="profile-edit">
     <!-- Profile Edit Form -->
     <form id="main" class="needs-validation" novalidate>
-      <div class="row mb-3">
+      <!-- <div class="row mb-3">
         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label"
           >Profile Image</label
         >
@@ -98,7 +98,7 @@ setTimeout(() => {
             ></a>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="row mb-3">
         <label for="fullName" class="col-md-4 col-lg-3 col-form-label"

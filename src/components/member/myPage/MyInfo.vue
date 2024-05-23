@@ -44,7 +44,7 @@ const getInfo = async () => {
 };
 
 
-const defaultImg = "src/assets/fighting.jpg";
+const defaultImg = "/src/assets/ggo.png";
 const defaultProfile = {
   name: "sihyun",
   image: defaultImg,
