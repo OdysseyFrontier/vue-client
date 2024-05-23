@@ -28,16 +28,15 @@ const deleteAttraction = () => {
 </script>
 
 <template>
-    <!-- <button @click="deleteItem" class="btn btn-danger btn-sm">Delete</button> -->
+    <!-- <button @click="deleteItem" class="btn btn-danger btn-sm">Deleㅔte</button> -->
     <template v-if="index != null || index">
         <button @click="deleteAttraction()" class="btn btn-danger btn-sm">Delete</button>
     </template>
-    {{ index }}
+    <br/>
     {{ attraction.title }}
     <br />
     {{ attraction.addr1 }}
-
-</template>
+    </template>
 
 <style scoped>
 /* .list-group-item {

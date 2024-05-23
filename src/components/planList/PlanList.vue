@@ -22,6 +22,7 @@ const fetchPlanList = () => {
         ({ data }) => {
             usePlanListStore().setPlanList(data);
             planList.value = data;
+            console.log(data);
         },
         (error) => {
             console.log(error);

@@ -33,7 +33,7 @@ import PlanTimeLineList from "@/components/plan/PlanTimeLineList.vue";
             <div class="row bg-light p-3">
                 <InputPlanning />
             </div>
-            <div class="row bg-white p-3 flex-grow-1" style="height: 45rem;">
+            <div class="row bg-white p-3 flex-grow-1" style="height: 70rem;">
                 <PlanTimeLineList />
             </div>
         </div>

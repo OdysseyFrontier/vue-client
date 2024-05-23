@@ -8,7 +8,7 @@ const props = defineProps({
 
 // 기본 이미지를 사용하기 위해 컴퓨티드 속성 사용
 const imageUrl = computed(() => {
-  return props.plan.image ? props.plan.image : defaultImg;
+  return props.plan.images ? props.plan.images[0] : defaultImg;
 });
 
 // 설명이 50자 이상일 경우 자르기
