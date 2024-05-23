@@ -1182,8 +1182,8 @@ img {
 
 .table-btn {
     display: inline-block;
-    padding: 13px 40px;
-    font-size: 18px;
+    padding: 10px 20px;
+    font-size: 15px;
     color:#fff;
     text-align: center;
     border-radius: 5px;
