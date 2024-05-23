@@ -251,7 +251,7 @@ console.log(formData);
 
   try {
     const response = await axios.post(
-      "http://localhost/hotplace/write",
+      "http://192.168.0.8/hotplace/write",
       formData,
       {
         headers: {
