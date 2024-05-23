@@ -1,8 +1,59 @@
 <script setup>
+import { computed, reactive, ref, onMounted } from "vue";
 import { useMemberStore } from "@/stores/member"
-const memberStore = useMemberStore();
+import { useRoute } from "vue-router";
+import { getMemberInfo } from "@/api/member.js";
 
-const memberInfo = memberStore.memberInfo
+const route = useRoute();
+
+const memberStore = useMemberStore();
+const memberInfo = ref(memberStore.memberInfo)
+
+
+let { memberId } = route.params;
+
+
+const param = ref({
+  memberId : memberStore.memberInfo.memberId,
+  targetId: memberId
+})
+
+onMounted(() => {
+  if(memberId == "me"){
+    memberId = memberStore.memberInfo.memberId
+    param.value.targetId = memberId
+}else{
+  getInfo();
+}
+});
+
+
+const memberProfile = ref({})
+const getInfo = async () => {
+  console.log("서버에서 회원 정보 얻어오자!!!", param.value);
+  getMemberInfo(
+    param.value,
+    ( response ) => {
+      console.log(response.data)
+      memberInfo.value = response.data;
+      console.log(memberInfo.value)
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+
+const defaultImg = "src/assets/fighting.jpg";
+const defaultProfile = {
+  name: "sihyun",
+  image: defaultImg,
+  posts: 100,
+  followers: 300,
+  followings: 300,
+  description: "",
+};
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-4">
-        <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : 'me'} }">
+        <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : memberId} }">
             <i class="bi bi-caret-left-fill"></i>
             <span>뒤로가기</span>
         </RouterLink>

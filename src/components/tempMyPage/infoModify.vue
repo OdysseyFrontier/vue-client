@@ -2,19 +2,22 @@
 import {ref} from 'vue'
 import { useMemberStore } from "@/stores/member"
 import { updateMemberInfo } from "@/api/member.js";
+import { useRoute, useRouter } from "vue-router";
 
 const memberStore = useMemberStore();
 
 const memberInfo = ref(memberStore.memberInfo)
 
+const router = useRouter();
+
 function updateMember() {
   updateMemberInfo(
     memberInfo.value,
     (response) => {
-      console.log(response.data);
+      // console.log(response.data);
       let msg = "정보 수정 처리시 문제 발생했습니다.";
-      if (response.status == 201) msg = "정보 수정이 완료되었습니다.";
-      memberStore.getMemberInfo(sessionStorage.getItem[accessToken])
+      if (response.status == 200) msg = "정보 수정이 완료되었습니다.";
+      // memberStore.getMemberInfo(sessionStorage.getItem[accessToken])
       
       alert(msg);
       router.push({
