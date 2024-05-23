@@ -1,6 +1,7 @@
 <script setup>
-defineProps({
+const props = defineProps({
     attraction: Object,
+    index: Number,
 });
 
 
@@ -14,9 +15,12 @@ const truncateDescription = (description) => {
     }
 };
 
-// const deleteItem = () => {
-//     emits('deleteAttraction', props.index);
-// };
+
+const emits = defineEmits(['deleteAttraction']);
+
+const deleteAttraction = () => {
+    emits('deleteAttraction', props.index);
+};
 
 // const defalutImg = "https://a0.muscache.com/im/pictures/miso/Hosting-1050570021780851760/original/d2fdb32c-56d4-4947-b8f6-705ff5e6cc08.jpeg?im_w=720";
 
@@ -25,7 +29,10 @@ const truncateDescription = (description) => {
 
 <template>
     <!-- <button @click="deleteItem" class="btn btn-danger btn-sm">Delete</button> -->
-
+    <template v-if="index != null || index">
+        <button @click="deleteAttraction()" class="btn btn-danger btn-sm">Delete</button>
+    </template>
+    {{ index }}
     {{ attraction.title }}
     <br />
     {{ attraction.addr1 }}

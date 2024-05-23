@@ -6,31 +6,43 @@ import draggable from 'vuedraggable';
 
 const store = usePlanStore();
 const searchedAttractions = ref([]);
-const plannedAttractions = ref([]);
+// const plannedAttractions = ref([]);
+let idNum = 0;
 
-// Synchronize searchedAttractions with the store
-watch(() => store.searchedAttractions, (newVal) => {
+watch(() => usePlanStore().searchedAttractions, (newVal) => {
+    idNum = 0
     searchedAttractions.value = newVal;
+    console.log("search attraction watch")
 }, { immediate: true });
 
-// Synchronize plannedAttractions with the store
-watch(() => store.plannedAttractions, (newVal) => {
-    console.log("pinia -> 1")
-    plannedAttractions.value = newVal;
-}, { immediate: true });
+// watch(plannedAttractions.value, (newVal) => {
+//     idNum = 0;
+//     store.plannedAttractions = newVal;
+//     console.log("pinia -> 2")
+// }, { deep: true });
 
-// Update the store whenever plannedAttractions changes
-watch(plannedAttractions, (newVal) => {
-    console.log(plannedAttractions.value)
-    // store.setPlannedAttractions(newVal);
-    // 왜 자동으로 되고 한번 더 되는거 같지?
+// watch(() => store.plannedAttractions, (newVal) => {
+//     idNum = 0;
+//     console.log("pinia -> 1")
+// }, { immediate: true });
+
+watch(store, () => {
+    console.log("store.plannedAttractions 바뀜")
+    idNum = 0;
+    console.log(store.plannedAttractions);
 }, { deep: true });
 
+const log = () => {
+    console.log("부름 : " + idNum);
+    idNum = 0;
+    // console.log(index)
+    // store.plannedAttractions.splice(index, 1);
+};
 
 const deleteAttraction = (index) => {
-    plannedAttractions.value.splice(index, 1);
-    console.log("attractionzone deleted")
-    // store.setPlannedAttractions(plannedAttractions.value);
+    idNum = 0
+    console.log(index)
+    store.plannedAttractions.splice(index, 1);
 };
 
 // watchEffect(() => {
@@ -68,12 +80,13 @@ const deleteAttraction = (index) => {
                 <div class="col-6 flex-grow-1" style="height: 60rem;">
                     <h3>계획 장소</h3>
                     <p>아래에 추가 됩니다.</p>
-                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="plannedAttractions"
-                        :group="{ name: 'people', pull: true, put: true }" @change="log" item-key="name">
+                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="store.plannedAttractions"
+                        :group="{ name: 'people', pull: true, put: true }" item-key="item" @change="log" @end="log"
+                        @start="log" @remove="log" @update="log">
                         <template #item="{ element }">
                             <div class="list-group-item">
-                                <button @click="deleteAttraction(index)" class="btn btn-danger btn-sm">Delete</button>
-                                <AttractionItem :attraction="element" />
+                                <AttractionItem :attraction="element" :index=idNum++
+                                    @deleteAttraction="deleteAttraction" />
                             </div>
                         </template>
                     </draggable>

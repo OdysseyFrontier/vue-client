@@ -1,8 +1,9 @@
 <template>
     <div class="container mt-5">
+        <h3> 타임라인 </h3>
         <div class="timeline">
             <div class="line"></div>
-            <div v-for="(attraction, index) in timeLineAttractions" :key="attraction.id" class="timeline-entry"
+            <div v-for="(attraction, index) in store.plannedAttractions" :key="attraction.id" class="timeline-entry"
                 :class="{ 'left': index % 2 === 0, 'right': index % 2 !== 0 }">
                 <PlanTimeLine :attraction="attraction" :is-left="index % 2 === 0" :index="index"
                     @update="updateAttraction" @delete="deleteAttraction" />
@@ -12,7 +13,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import PlanTimeLine from '@/components/plan/PlanTimeLine.vue';
 import { usePlanStore } from '@/stores/plan';
 
@@ -20,34 +21,31 @@ const store = usePlanStore();
 const timeLineAttractions = ref([]);
 
 const sortAttractions = () => {
-    const sorted = [...timeLineAttractions.value].sort((a, b) => {
+    const sorted = [...store.plannedAttractions].sort((a, b) => {
         const dateA = a.planTime ? new Date(a.planTime) : null;
         const dateB = b.planTime ? new Date(b.planTime) : null;
 
         if (dateA && dateB) {
             return dateA - dateB;
         } else if (!dateA) {
-            return 1; // `a` should come after `b`
+            return 1;
         } else if (!dateB) {
-            return -1; // `b` should come after `a`
-        }else {
+            return -1;
+        } else {
             return 1;
         }
     });
-    timeLineAttractions.value = sorted;
-
-    console.log("sort하는중:");
-    console.log("Sorted attractions:");
-    console.log(timeLineAttractions.value);
-    store.setPlannedAttractions(timeLineAttractions.value);
+    console.log(sorted)
+    store.plannedAttractions = sorted;
+    console.log(store.plannedAttractions);
 };
 
-watch(usePlanStore().plannedAttractions, () => {
-    console.log("update")
-    console.log(usePlanStore.plannedAttractions)
-    sortAttractions();
-    timeLineAttractions.value = usePlanStore().plannedAttractions;
-}, { immediate: true });
+// watch(usePlanStore().plannedAttractions, () => {
+//     console.log("update")
+//     console.log(usePlanStore.plannedAttractions)
+//     sortAttractions();
+//     timeLineAttractions.value = usePlanStore().plannedAttractions;
+// }, { immediate: true });
 
 
 const formatDateToLocalString = (date) => {
@@ -55,56 +53,53 @@ const formatDateToLocalString = (date) => {
 };
 
 const updateAttraction = (updatedAttraction) => {
+    console.log(store.plannedAttractions)
+    console.log("업데이트")
+    console.log(updatedAttraction);
     const index = updatedAttraction.index;
-    if (index !== -1) {
-        timeLineAttractions.value[index] = updatedAttraction;
-        sortAttractions();
-        console.log('Updated Attractions:', timeLineAttractions.value);
+    console.log(updatedAttraction.index);
 
-        // Calculate the minimum and maximum planTime
-        const planTimes = timeLineAttractions.value
+    if (index !== -1) {
+        // store.plannedAttractions[index] = updatedAttraction;
+        store.plannedAttractions[index] = JSON.parse(JSON.stringify(updatedAttraction));
+
+        sortAttractions();
+
+        console.log("1123")
+        const planTimes = store.plannedAttractions
             .filter(attraction => attraction.planTime)
             .map(attraction => new Date(attraction.planTime));
 
-        console.log("planTimes:", planTimes);
         if (planTimes.length) {
             const minTime = new Date(Math.min(...planTimes));
             const maxTime = new Date(Math.max(...planTimes));
-            usePlanStore().setStartTime(formatDateToLocalString(minTime));
-            usePlanStore().setEndTime(formatDateToLocalString(maxTime));
-            console.log(usePlanStore().startTime)
-            console.log(usePlanStore().endTime)
+            store.setStartTime(formatDateToLocalString(minTime));
+            store.setEndTime(formatDateToLocalString(maxTime));
         }
         else {
-            console.log("시간 없음")
-            usePlanStore().setStartTime(null);
-            usePlanStore().setEndTime(null);
+            store.setStartTime(null);
+            store.setEndTime(null);
         }
+        console.log("1231241")
     }
+    console.log(store.plannedAttractions);
 };
 
 const deleteAttraction = (index) => {
-    console.log('Delete index:', index);
-    console.log('Before deletion:', timeLineAttractions.value);
-    timeLineAttractions.value.splice(index, 1);
-    sortAttractions();
+    store.plannedAttractions.splice(index, 1);
 
-    console.log('After deletion:', timeLineAttractions.value);
-
-    // Calculate the minimum and maximum planTime
-    const planTimes = timeLineAttractions.value
+    const planTimes = store.PlannedAttractions
         .filter(attraction => attraction.planTime)
         .map(attraction => new Date(attraction.planTime));
 
     if (planTimes.length) {
         const minTime = new Date(Math.min(...planTimes));
         const maxTime = new Date(Math.max(...planTimes));
-
-        usePlanStore().setStartTime(formatDateToLocalString(minTime));
-        usePlanStore().setEndTime(formatDateToLocalString(maxTime));
+        store.setStartTime(formatDateToLocalString(minTime));
+        store.setEndTime(formatDateToLocalString(maxTime));
     } else {
-        usePlanStore().setStartTime(null);
-        usePlanStore().setEndTime(null);
+        store.setStartTime(null);
+        store.setEndTime(null);
     }
 };
 </script>

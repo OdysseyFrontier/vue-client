@@ -6,7 +6,7 @@
             <p>{{ attraction.addr1 }}</p>
             <input type="datetime-local" class="form-control mb-2" v-model="attractionPlanTime"
                 @change="updateAttraction" />
-            <textarea placeholder="간단메모..." class="form-control mb-2 custom-textarea" v-model="attraction.description"
+            <textarea placeholder="간단메모..." class="form-control mb-2 custom-textarea" v-model="attractionDescription"
                 @input="updateAttraction"></textarea>
             <button class="btn btn-danger w-100" @click="deleteAttraction">삭제하기</button>
         </div>
@@ -14,6 +14,11 @@
 </template>
 
 <script setup>
+import { usePlanStore } from '@/stores/plan';
+const store = usePlanStore();
+
+
+
 import { ref, watchEffect, onMounted } from 'vue';
 
 const defaultImg = "src/assets/attraction/defaultAttractionImg.png";
@@ -26,24 +31,46 @@ const props = defineProps({
 
 const emits = defineEmits(['update', 'delete']);
 
-const attractionPlanTime = ref(props.attraction.planTime || '');
+const attractionPlanTime = ref('');
+const attractionDescription = ref('');
+
 
 watchEffect(() => {
-    attractionPlanTime.value = props.attraction.planTime || '';
+    console.log("line watch description")
+    attractionDescription.value = props.attraction.description;
+});
+
+watchEffect(() => {
+    console.log("line watch planTime")
+    attractionPlanTime.value = props.attraction.planTime;
 });
 
 const updateAttraction = () => {
+    console.log(props.index)
+    console.log(props.attraction)
+    console.log("--------------------------------")
+
+    const updatedAttraction = JSON.parse(JSON.stringify(props.attraction));
+    updatedAttraction.planTime = attractionPlanTime.value;
+    updatedAttraction.description = attractionDescription.value;
     emits('update', {
-        ...props.attraction,
-        planTime: attractionPlanTime.value,
+        // ...props.attraction,
+        // planTime: attractionPlanTime.value,
+        ...updatedAttraction,
         index: props.index,
     });
+
+    attractionPlanTime.value = ""
+    // props.attraction.description = ""
+    // attraction.description = " "
 };
 
 onMounted(() => {
-    console.log(props.attraction)
+    attractionPlanTime.value = props.attraction.planTime;
+    attractionDescription.value = props.attraction.description;
 })
 const deleteAttraction = () => {
+    console.log("delete")
     emits('delete', props.index);
 };
 </script>

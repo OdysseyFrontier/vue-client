@@ -6,55 +6,32 @@ import draggable from 'vuedraggable';
 
 const store = usePlanStore();
 const searchedAttractions = ref([]);
-const PlannedAttractions = ref([]);
-const flag = true;
-
+const plannedAttractions = ref([]);
+let idNum = 0;
 // Synchronize searchedAttractions with the store
-watch(() => store.searchedAttractions, (newVal) => {
+watch(() => usePlanStore().searchedAttractions, (newVal) => {
+    idNum = 0
     searchedAttractions.value = newVal;
 }, { immediate: true });
 
 
-// Synchronize PlannedAttr1actions with the store
-
-watch(() => store.plannedAttractions, (newVal) => {
-    if (!store.isUpdate) return;
-    console.log(store.plannedAttractions)
-    console.log("pinia -> 1")
-    PlannedAttractions.value = store.plannedAttractions;
-    console.log(store.plannedAttractions)
-    console.log(PlannedAttractions.value)
-    // if (flag) return;
-    // flag.value = true;
-    // PlannedAttractions.value = PlannedAttractions.value.map((attraction) => {
-    //     console.log(attraction.attractionInfo)
-    //     return attraction.attractionInfo
-    // })
-    // console.log(PlannedAttractions.value);
-}, { immediate: true });
-
-// watch([store.plannedAttractions], () => {
-//     PlannedAttractions.value = usePlanStore().plannedAttractions;
-//     console.log(PlannedAttractions.value);
-//     // if (flag) return;
-//     // flag.value = true;
-//     // PlannedAttractions.value = PlannedAttractions.value.map((attraction) => {
-//     //     console.log(attraction.attractionInfo)
-//     //     return attraction.attractionInfo
-//     // })
-//     // console.log(PlannedAttractions.value);
-// }, { immediate: true });
-
-
-// Update the store whenever PlannedAttractions changes
-watch(PlannedAttractions, (newVal) => {
-    store.setPlannedAttractions(newVal);
-    // 왜 자동으로 되고 한번 더 되는거 같지?
+watch(store, () => {
+    console.log("store.plannedAttractions 바뀜")
+    idNum = 0;
 }, { deep: true });
+
+const log = () => {
+    console.log("부름 : " + idNum);
+    idNum = 0;
+    // console.log(index)
+    // store.plannedAttractions.splice(index, 1);
+};
 
 
 const deleteAttraction = (index) => {
-    PlannedAttractions.value.splice(index, 1);
+    idNum = 0
+    console.log(index)
+    store.plannedAttractions.splice(index, 1);
 };
 
 </script>
@@ -79,12 +56,13 @@ const deleteAttraction = (index) => {
                 <div class="col-6 flex-grow-1" style="height: 60rem;">
                     <h3>계획 장소</h3>
                     <p>아래에 추가 됩니다.</p>
-                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="PlannedAttractions"
-                        :group="{ name: 'people', pull: true, put: true }" item-key="name">
+                    <draggable class="dragArea list-group custom-border flex-grow-1" :list="store.plannedAttractions"
+                        :group="{ name: 'people', pull: true, put: true }" item-key="name" @change="log" @end="log"
+                        @start="log" @remove="log" @update="log">
                         <template #item="{ element }">
                             <div class="list-group-item">
-                                <button @click="deleteAttraction(index)" class="btn btn-danger btn-sm">Delete</button>
-                                <AttractionItem :attraction="element" />
+                                <AttractionItem :attraction="element" :index=idNum++
+                                    @deleteAttraction="deleteAttraction" />
                             </div>
                         </template>
                     </draggable>

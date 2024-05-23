@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
+import { usePlanStore } from '@/stores/plan';
 
 const onlyAuthUser = async (to, from, next) => {
   const memberStore = useMemberStore();
@@ -269,6 +270,11 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.afterEach((to, from) => {
+  const planStore = usePlanStore();
+  planStore.reset(); // 상태 초기화
 });
 
 export default router;

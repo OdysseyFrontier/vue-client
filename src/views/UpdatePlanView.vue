@@ -24,7 +24,7 @@ function formatDateTimeLocal(dateArray) {
         console.error("Invalid date array");
         return ''; // Return empty if the dateArray is not valid
     }
-    if (dateArray.length !== 5){
+    if (dateArray.length !== 5) {
         console.error("Invalid date array length:", dateArray.length);
         return ''; // Return empty if the dateArray is not valid
     }
@@ -42,45 +42,46 @@ function formatDateTimeLocal(dateArray) {
 }
 
 onMounted(() => {
-  const planId = router.currentRoute.value.params.planId;
-  getPlan(planId, (response) => {
-    console.log(response.data);
-    const updatePlan = response.data;
-    let planDetails = response.data.planDetails.sort((a, b) => new Date(a.planTime) - new Date(b.planTime));
-    console.log(planDetails);
+    const planId = router.currentRoute.value.params.planId;
+    getPlan(planId, (response) => {
+        console.log(response.data);
+        const updatePlan = response.data;
+        let planDetails = response.data.planDetails.sort((a, b) => new Date(a.planTime) - new Date(b.planTime));
+        console.log(planDetails);
 
-    const details = planDetails.map(detail => {
-        console.log(detail)
-        return {
-            ...detail.attractionInfo,
-            description: detail.description,
-            contentId : detail.contentId,
-            planDetailId : detail.planDetailId,
-            planTime : formatDateTimeLocal(detail.planTime)
+        const details = planDetails.map(detail => {
+            console.log(detail)
+            return {
+                ...detail.attractionInfo,
+                description: detail.description,
+                contentId: detail.contentId,
+                planDetailId: detail.planDetailId,
+                planTime: formatDateTimeLocal(detail.planTime)
+            }
+        });
+        console.log(details)
+
+        planDetails = details;
+        console.log("planDetails")
+        usePlanStore().setPlannedAttractions(planDetails);
+
+        if (updatePlan.startTime && !isNaN(new Date(updatePlan.startTime).valueOf())) {
+            usePlanStore().setStartTime(formatDate(updatePlan.startTime));
         }
+
+        if (updatePlan.endTime && !isNaN(new Date(updatePlan.endTime).valueOf())) {
+            usePlanStore().setEndTime(formatDate(updatePlan.endTime));
+        }
+
+        // inputPlanName.value = updatePlan.value.title;
+        // inputPlanDescription.value = updatePlan.value.description;
+
+        store.isUpdate = true;
+        console.log("view complete")
+        dataFetched.value = true; // Set dataFetched to true after data is fetched
+    }, (error) => {
+        console.error('Failed to fetch plan', error);
     });
-    console.log(details)
-
-    planDetails = details;
-    usePlanStore().setPlannedAttractions(planDetails);
-
-    if (updatePlan.startTime && !isNaN(new Date(updatePlan.startTime).valueOf())) {
-        usePlanStore().setStartTime(formatDate(updatePlan.startTime));
-    }
-
-    if (updatePlan.endTime && !isNaN(new Date(updatePlan.endTime).valueOf())) {
-        usePlanStore().setEndTime(formatDate(updatePlan.endTime));
-    }
-
-    // inputPlanName.value = updatePlan.value.title;
-    // inputPlanDescription.value = updatePlan.value.description;
-
-    store.isUpdate = true;
-    console.log("view complete")
-    dataFetched.value = true; // Set dataFetched to true after data is fetched
-  }, (error) => {
-    console.error('Failed to fetch plan', error);
-  });
 });
 
 function formatDate(dateArray) {
@@ -102,22 +103,23 @@ function formatDate(dateArray) {
             </div>
             <template v-if="dataFetched">
 
-            <div class="row" style="height: 60rem;">
-                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="bg-white p-6" style="height: 60rem;">
-                    <UpdateAttractionZone />
-                </div>
-                <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="p-3">
-                    <div class="bg-white p-3" style="height: 60rem;">
-                        <UpdatePlanGoogleMap />
+                <div class="row" style="height: 60rem;">
+                    <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="bg-white p-6"
+                        style="height: 60rem;">
+                        <UpdateAttractionZone />
+                    </div>
+                    <div :class="{ 'col-lg-6': true, 'col-12': $mq === 'xl' }" class="p-3">
+                        <div class="bg-white p-3" style="height: 60rem;">
+                            <UpdatePlanGoogleMap />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row bg-light p-3">
-                <UpdatePlanning />
-            </div>
-            <div class="row bg-white p-3 flex-grow-1" style="height: 45rem;">
-                <UpdatePlanTimeLine />
-            </div>
+                <div class="row bg-light p-3">
+                    <UpdatePlanning />
+                </div>
+                <div class="row bg-white p-3 flex-grow-1" style="height: 45rem;">
+                    <UpdatePlanTimeLine />
+                </div>
             </template>
         </div>
     </div>
@@ -130,8 +132,11 @@ function formatDate(dateArray) {
     .row {
         flex-direction: column;
     }
-    .col-12, .col-lg-6 {
-        height: auto; /* 높이 자동 조정 */
+
+    .col-12,
+    .col-lg-6 {
+        height: auto;
+        /* 높이 자동 조정 */
     }
 }
 
@@ -144,8 +149,10 @@ function formatDate(dateArray) {
 }
 
 .flex-grow-1 {
-    overflow-y: auto; /* 스크롤이 내부에서 발생하도록 설정 */
-    height: 100%; /* 전체 높이를 부모에 맞춤 */
+    overflow-y: auto;
+    /* 스크롤이 내부에서 발생하도록 설정 */
+    height: 100%;
+    /* 전체 높이를 부모에 맞춤 */
 }
 
 /* 스크롤이 필요한 영역에 대해 스크롤바 표시 설정 */

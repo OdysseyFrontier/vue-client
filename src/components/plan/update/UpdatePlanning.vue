@@ -46,44 +46,44 @@ const inputEndDate = ref("");
 const inputPlanDescription = ref("");
 
 onMounted(() => {
-  const planId = router.currentRoute.value.params.planId;
-  getPlan(planId, (response) => {
-    console.log(response.data);
-    updatePlan.value = response.data;
-    planDetails.value = response.data.planDetails.sort((a, b) => new Date(a.planTime) - new Date(b.planTime));
-    console.log(planDetails.value);
+    const planId = router.currentRoute.value.params.planId;
+    getPlan(planId, (response) => {
+        console.log(response.data);
+        updatePlan.value = response.data;
+        planDetails.value = response.data.planDetails.sort((a, b) => new Date(a.planTime) - new Date(b.planTime));
+        console.log(planDetails.value);
 
-    const details = planDetails.value.map(detail => {
-        console.log(detail)
-        return {
-            ...detail.attractionInfo,
-            description: detail.description,
-            contentId : detail.contentId,
-            planDetailId : detail.planDetailId,
-            planTime : formatDateTimeLocal(detail.planTime)
+        const details = planDetails.value.map(detail => {
+            console.log(detail)
+            return {
+                ...detail.attractionInfo,
+                description: detail.description,
+                contentId: detail.contentId,
+                planDetailId: detail.planDetailId,
+                planTime: formatDateTimeLocal(detail.planTime) || "",
 
+            }
+        });
+        console.log(details)
+
+        planDetails.value = details;
+        usePlanStore().setPlannedAttractions(planDetails.value);
+
+        if (updatePlan.value.startTime && !isNaN(new Date(updatePlan.value.startTime).valueOf())) {
+            usePlanStore().setStartTime(formatDate(updatePlan.value.startTime));
         }
+
+        if (updatePlan.value.endTime && !isNaN(new Date(updatePlan.value.endTime).valueOf())) {
+            usePlanStore().setEndTime(formatDate(updatePlan.value.endTime));
+        }
+
+        inputPlanName.value = updatePlan.value.title;
+        inputPlanDescription.value = updatePlan.value.description;
+
+        store.isUpdate = true;
+    }, (error) => {
+        console.error('Failed to fetch plan', error);
     });
-    console.log(details)
-
-    planDetails.value = details;
-    usePlanStore().setPlannedAttractions(planDetails.value);
-
-    if (updatePlan.value.startTime && !isNaN(new Date(updatePlan.value.startTime).valueOf())) {
-        usePlanStore().setStartTime(formatDate(updatePlan.value.startTime));
-    }
-
-    if (updatePlan.value.endTime && !isNaN(new Date(updatePlan.value.endTime).valueOf())) {
-        usePlanStore().setEndTime(formatDate(updatePlan.value.endTime));
-    }
-
-    inputPlanName.value = updatePlan.value.title;
-    inputPlanDescription.value = updatePlan.value.description;
-
-    store.isUpdate = true;
-  }, (error) => {
-    console.error('Failed to fetch plan', error);
-  });
 });
 
 function formatDateTimeLocal(dateArray) {
@@ -91,7 +91,7 @@ function formatDateTimeLocal(dateArray) {
         console.error("Invalid date array");
         return ''; // Return empty if the dateArray is not valid
     }
-    if (dateArray.length !== 5){
+    if (dateArray.length !== 5) {
         console.error("Invalid date array length:", dateArray.length);
         return ''; // Return empty if the dateArray is not valid
     }
@@ -128,7 +128,7 @@ function formatDateTimeLocal(dateArray) {
 
 //         usePlanStore().setPlannedAttractions(updatePlan.planDetails);
 //         console.log(usePlanStore().plannedAttractions);
-    
+
 //         if (updatePlan.startTime && !isNaN(new Date(updatePlan.startTime).valueOf())) {
 //             usePlanStore().setStartTime(formatDate(updatePlan.startTime));
 //         }
@@ -167,7 +167,7 @@ const handleUpdatePlan = async () => {
         planDetails: usePlanStore().plannedAttractions.map(attraction => ({
             contentId: attraction.contentId,
             name: attraction.name,
-            planTime: attraction.planTime,
+            planTime: attraction.planTime || " ",
             description: attraction.description
         }))
     };
@@ -184,7 +184,7 @@ const handleUpdatePlan = async () => {
         alert('Failed to update plan');
     };
 
-    modifyPlan(updatePlan.value.planId,planDto, success, fail);
+    modifyPlan(updatePlan.value.planId, planDto, success, fail);
     console.log(planDto)
 };
 </script>

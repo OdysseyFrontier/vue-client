@@ -20,7 +20,7 @@ export const usePlanStore = defineStore('plan', () => {
         console.log(plannedAttractions.value);
     }, { deep: true });
 
-    function setUpdatePlan(plan){
+    function setUpdatePlan(plan) {
         updatePlan.value = plan;
     }
     function setPlanDetails(details) {
@@ -61,6 +61,18 @@ export const usePlanStore = defineStore('plan', () => {
         }
     }
 
+    function reset() {
+        searchedAttractions.value = [];
+        plannedAttractions.value = [];
+        startTime.value = null;
+        endTime.value = null;
+        title.value = null;
+        description.value = null;
+        planDetails.value = [];
+        isUpdate.value = false;
+        updatePlan.value = [];
+    }
+
     return {
         isUpdate,
         startTime,
@@ -80,6 +92,7 @@ export const usePlanStore = defineStore('plan', () => {
         addPlannedAttraction,
         removeSearchedAttraction,
         updatePlannedAttraction,
-        
+        reset
+
     };
 });

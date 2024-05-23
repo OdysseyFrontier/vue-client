@@ -10,47 +10,45 @@ const zoom = ref(15);
 const markers = ref([]);
 const flag = ref(false);
 
+
 watchEffect(() => {
     if (!usePlanStore().isUpdate) return;
-
     flag.value = false;
-    const store = usePlanStore();
-    const planDetails = store.planDetails;
 
-    if (!planDetails.value || planDetails.value.length === 0) {
+    if (!usePlanStore().plannedAttractions || usePlanStore().plannedAttractions.length == 0) {
         return;
     }
 
-    
+    console.log(usePlanStore().plannedAttractions)
 
     // Calculate center and markers
-    const totalLat = planDetails.value.reduce((acc, curr) => acc + curr.attractionInfo.latitude, 0);
-    const totalLng = planDetails.value.reduce((acc, curr) => acc + curr.attractionInfo.longitude, 0);
-    const avgLat = totalLat / planDetails.value.length;
-    const avgLng = totalLng / planDetails.value.length;
+    const totalLat = usePlanStore().plannedAttractions.reduce((acc, curr) => acc + curr.latitude, 0);
+    const totalLng = usePlanStore().plannedAttractions.reduce((acc, curr) => acc + curr.longitude, 0);
+    const avgLat = totalLat / usePlanStore().plannedAttractions.length;
+    const avgLng = totalLng / usePlanStore().plannedAttractions.length;
 
     init_center.value = { lat: avgLat, lng: avgLng };
 
-    const minLat = Math.min(...planDetails.value.map(detail => detail.attractionInfo.latitude));
-    const maxLat = Math.max(...planDetails.value.map(detail => detail.attractionInfo.latitude));
-    const minLng = Math.min(...planDetails.value.map(detail => detail.attractionInfo.longitude));
-    const maxLng = Math.max(...planDetails.value.map(detail => detail.attractionInfo.longitude));
+    const minLat = Math.min(...usePlanStore().plannedAttractions.map(attraction => attraction.latitude));
+    const maxLat = Math.max(...usePlanStore().plannedAttractions.map(attraction => attraction.latitude));
+    const minLng = Math.min(...usePlanStore().plannedAttractions.map(attraction => attraction.longitude));
+    const maxLng = Math.max(...usePlanStore().plannedAttractions.map(attraction => attraction.longitude));
     const centerLat = (minLat - maxLat) / 2;
     const centerLng = (minLng - maxLng) / 2;
     const center = Math.abs(centerLat / 2 + centerLng) * 100;
 
     if (center < 10) {
-        zoom.value = 11;
+        zoom.value = 14;
     } else if (center < 15) {
-        zoom.value = 9;
+        zoom.value = 10;
     } else {
-        zoom.value = 7;
+        zoom.value = 8;
     }
 
-    markers.value = planDetails.value.map(detail => ({
+    markers.value = usePlanStore().plannedAttractions.map(attraction => ({
         options: {
-            position: { lat: detail.attractionInfo.latitude, lng: detail.attractionInfo.longitude },
-            title: detail.attractionInfo.title,
+            position: { lat: attraction.latitude, lng: attraction.longitude },
+            title: attraction.title,
         }
     }));
 
