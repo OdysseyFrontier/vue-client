@@ -73,6 +73,16 @@ const toggleSidebar = () => {
               </li>
               <li>
                 <hr class="dropdown-divider" />
+                <li>
+                  <RouterLink :to="{ name: 'home' }" class="dropdown-item d-flex align-items-center" aria-current="page"
+                    :class="sidebarList.home">
+                    <i class="bi bi-house"></i>
+                    <span>home</span>
+                  </RouterLink>
+                </li>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
               </li>
 
               <li>
@@ -83,19 +93,9 @@ const toggleSidebar = () => {
                   <span>마이 페이지</span>
                 </RouterLink>
               </li>
+              
 
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li>
-                <RouterLink :to="{ name: 'home' }" class="dropdown-item d-flex align-items-center" aria-current="page"
-                  :class="sidebarList.home">
-                  <i class="bi bi-house"></i>
-                  <span>home</span>
-                </RouterLink>
-              </li>
-              <li>
+              <!-- <li>
                 <hr class="dropdown-divider" />
               </li>
 
@@ -104,7 +104,7 @@ const toggleSidebar = () => {
                   <i class="bi bi-question-circle"></i>
                   <span>문의사항</span>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <hr class="dropdown-divider" />
               </li>
@@ -192,7 +192,7 @@ const toggleSidebar = () => {
         </li>
         <!-- End stat Nav -->
 
-        <li class="nav-heading">Pages</li>
+        <li class="nav-heading" v-if="!memberStore.isLogin">Pages</li>
 
         <!-- <li class="nav-item">
           <RouterLink :to="{ name: 'tempMyPage' }" class="nav-link" :class="sidebarList.mypage" @click="toggleSidebar">
@@ -201,21 +201,21 @@ const toggleSidebar = () => {
           </RouterLink>
         </li> -->
 
-        <li class="nav-item" v-if="memberStore.isLogin">
+        <!-- <li class="nav-item" v-if="memberStore.isLogin">
           <RouterLink :to="{ name: 'memberMyPage' , params: {memberId : memberId} }" class="nav-link" :class="sidebarList.mypage"
             @click="toggleSidebar">
             <i class="bi bi-person"></i>
             <span>마이 페이지</span>
           </RouterLink>
-        </li>
+        </li> -->
         <!-- End Profile Page Nav -->
-
+<!-- 
         <li class="nav-item">
           <a class="nav-link collapsed" href="#">
             <i class="bi bi-question-circle"></i>
             <span>문의사항</span>
           </a>
-        </li>
+        </li> -->
         <!-- End F.A.Q Page Nav -->
 
         <li class="nav-item" v-if="!memberStore.isLogin">
@@ -242,12 +242,12 @@ const toggleSidebar = () => {
         </li>
         <!-- End Join Page Nav -->
 
-        <li class="nav-item" v-if="memberStore.isLogin">
+        <!-- <li class="nav-item" v-if="memberStore.isLogin">
           <a class="nav-link collapsed" href="/member/delete">
             <i class="bi bi-person-dash"></i>
             <span>회원탈퇴</span>
           </a>
-        </li>
+        </li> -->
         <!-- End 회원탈퇴 Page Nav -->
       </ul>
     </aside>
