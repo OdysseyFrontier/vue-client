@@ -8,6 +8,7 @@ const local = localAxios();
     }
     
     function detailArticle(boardno, success, fail) {
+        local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
         local.get(`/board/${boardno}`).then(success).catch(fail);
     }
     

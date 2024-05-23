@@ -211,7 +211,7 @@ function likeToggle(flag) {
                 <pre> </pre>
                 <i class="bi bi-heart-fill"></i> : 12 -->
                 <i v-if="!isLike" @click="likeToggle(true)" class="bi bi-heart ms-auto fs-5"></i>
-                <i v-if="isLike" @click="likeToggle(false)" class="bi bi-heart-fill ms-auto fs-5"></i>
+                <i v-if="isLike" @click="likeToggle(false)" class="bi bi-heart-fill ms-auto fs-5 text-danger"></i>
               </div>
               <h3>{{hotplace.title}}</h3>
               <pre class="a">조회수 : {{hotplace.hit}}   좋아요 : {{hotplace.likes}}</pre>

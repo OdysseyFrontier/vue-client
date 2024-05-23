@@ -35,8 +35,9 @@ const markerKey = ref(0);
 
 let options = reactive({
   position: mapCenter.value,
-  title: "선택한 위치",
+  title: "위치를 선택해주세요",
   draggable:true,
+  // animation: google.maps.Animation.BOUNCE,
 });
 
 const previewUrl = ref(null); // 미리보기 URL 상태 추가
@@ -352,9 +353,7 @@ const infowindow = ref(true)
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
-          <div>{{ params.sidoCode }}</div>
-          <div>{{ params.gugunCode }}</div>
-          <div>{{ options }}</div>
+          <!-- <div>{{ params.gugunCode }}</div> -->
           <div>
             주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!
           </div>
@@ -369,7 +368,8 @@ const infowindow = ref(true)
           >
             <Marker :options="options" :key="markerKey" @dragend="onMarkerDragEnd">
               <InfoWindow v-model="infowindow">
-                <div id="content">선택한 지역입니다.</div>
+                <div id="content" v-if="markerKey!=0">선택한 지역입니다.</div>
+                <div id="content" v-if="markerKey==0">위치를 선택해주세요</div>
               </InfoWindow>
             </Marker>
           </GoogleMap>

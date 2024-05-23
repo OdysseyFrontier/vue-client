@@ -91,6 +91,11 @@ const router = createRouter({
           component: () => import("@/components/hotplace/memberHotPlaceList.vue"),
         },
         {
+          path: "/memberLikeHotPlaceList/:memberId",
+          name: "memberLikeHotPlaceList",
+          component: () => import("@/components/member/myPage/memberLikeHotPlaceList.vue"),
+        },
+        {
           path: "info",
           name: "myInfo",
           component: () => import("@/components/tempMyPage/info.vue"),

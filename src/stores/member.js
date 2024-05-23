@@ -21,6 +21,7 @@ export const useMemberStore = defineStore('memberStore', () => {
   const isLoginError = ref(false)
   const memberInfo = ref(null)
   const isValidToken = ref(false)
+  const memberName = ref("사용자")
 
 
   const memberLogin = async (loginMember) => {
@@ -57,6 +58,7 @@ export const useMemberStore = defineStore('memberStore', () => {
       (response) => {
         if (response.status === httpStatusCode.OK) {
           memberInfo.value = response.data.memberInfo
+          memberName.value = memberInfo.value.name
           console.log(memberInfo.value)
         } else {
           console.log("유저 정보 없음!!!!")
@@ -101,12 +103,14 @@ export const useMemberStore = defineStore('memberStore', () => {
               isLogin.value = false
               memberInfo.value = null
               isValidToken.value = false
+              memberName.value = "사용자"
               router.push({ name: "memberLogin" })
             },
             (error) => {
               console.error(error)
               isLogin.value = false
               memberInfo.value = null
+              memberName.value = "사용자"
             }
           )
         }
@@ -123,6 +127,7 @@ export const useMemberStore = defineStore('memberStore', () => {
           isLogin.value = false
           memberInfo.value = null
           isValidToken.value = false
+          memberName.value = "사용자"
 
           sessionStorage.removeItem("accessToken")
           sessionStorage.removeItem("refreshToken")
@@ -141,6 +146,7 @@ export const useMemberStore = defineStore('memberStore', () => {
     isLoginError,
     memberInfo,
     isValidToken,
+    memberName,
     memberLogin,
     getMemberInfo,
     tokenRegenerate,

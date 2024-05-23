@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <a class="navbar-brand" href="#">통계 대시보드</a>
-    </nav>
+    </nav> -->
 
     <div class="container mt-4">
       <ul class="nav nav-pills mb-3">
@@ -89,6 +89,11 @@ export default {
 </script>
 
 <style>
+a {
+  cursor: pointer;
+}
+
+
 .navbar {
   margin-bottom: 20px;
 }

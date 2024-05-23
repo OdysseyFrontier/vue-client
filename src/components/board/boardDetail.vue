@@ -76,10 +76,10 @@
                        <span class="ml10">|</span>
                        <span class="ml10">{{article.hit}}</span>           
                    </th>
-                   <th>
+                   <!-- <th>
                     <i class="bi bi-heart"></i>
                     <i class="bi bi-heart-fill"></i>
-                   </th>
+                   </th> -->
                </tr>
            </thead>
            <tbody>

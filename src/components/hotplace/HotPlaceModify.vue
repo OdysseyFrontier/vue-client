@@ -375,8 +375,8 @@ function onDeleteHotPlace() {
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6">
-          <div>{{ hotplace.sidoCode }}</div>
-          <div>{{ hotplace.gugunCode }}</div>
+          <!-- <div>{{ hotplace.sidoCode }}</div> -->
+          <!-- <div>{{ hotplace.gugunCode }}</div> -->
           <div>
             주소검색을 통해 검색하거나 지도에서 클릭하여 위치를 지정해주세요!
           </div>

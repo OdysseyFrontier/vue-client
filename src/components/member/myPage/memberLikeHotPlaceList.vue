@@ -1,36 +1,26 @@
 
 <script setup>
-import { useSidebarStore } from "@/stores/sidebar.js";
-
-const sidebarStore = useSidebarStore();
-sidebarStore.changesSidebarState("hotplace");
-sidebarStore.open = false;
-
-import SearchHotPlace from "@/components/hotplace/SearchHotPlace.vue";
-
 import Isotope from "isotope-layout"
 import GLightbox from "glightbox"
 
-
-
 import { ref, onMounted, watchEffect } from 'vue'
-import { useRouter } from "vue-router";
-import { useHotPlaceStore } from '@/stores/hotplace.js';
+import { useRouter, useRoute } from "vue-router";
 import HotPlaceListItem from '@/components/hotplace/item/HotPlaceListItem.vue'
-import { listHotPlace } from "@/api/hotplace.js";
+import { MemberLikeHotPlaceList } from "@/api/member.js";
+import { useMemberStore } from '@/stores/member';
+
+const store = useMemberStore();
 
 const router = useRouter();
-let store = useHotPlaceStore();
+const route = useRoute();
 
 const hotPlaces = ref([])
 
-watchEffect(() => {
-    if (!useHotPlaceStore().searchAttractionList) {
-        return;
-    }
+let { memberId } = route.params;
+if(memberId == "me"){
+    memberId = store.memberInfo.memberId
+}
 
-    hotPlaces.value = useHotPlaceStore().searchAttractionList;
-});
 
 onMounted(() => {
   getHotPlaceList();
@@ -40,13 +30,11 @@ onMounted(() => {
 const param = ref({});
 
 const getHotPlaceList = () => {
-  console.log("서버에서 글목록 얻어오자!!!", param.value);
-  listHotPlace(
-    param.value,
+  console.log("서버에서 회원의 핫플레이스 리스트 얻어오자!!!", memberId);
+  MemberLikeHotPlaceList(
+    memberId,
     ( response ) => {
-      console.log(response.data)
       hotPlaces.value = response.data;
-      console.log(hotPlaces.value)
     },
     (error) => {
       console.log(error);
@@ -55,19 +43,9 @@ const getHotPlaceList = () => {
 };
 
 
-const moveWrite = () => {
-  router.push({ name: "hotPlaceWrite" });
-};
+
 
 setTimeout(()=>{
-/**
-* Template Name: Laura
-* Template URL: https://bootstrapmade.com/laura-free-creative-bootstrap-theme/
-* Updated: Mar 17 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 (function() {
   "use strict";
 
@@ -75,7 +53,6 @@ setTimeout(()=>{
    * Porfolio isotope and filter
    */
   let portfolioContainer = document.querySelector('.portfolio-container');
-    console.log("1")
     if (portfolioContainer) {
       let portfolioIsotope = new Isotope(portfolioContainer, {
         itemSelector: '.portfolio-item'
@@ -118,19 +95,19 @@ setTimeout(()=>{
     <!-- ======= My Portfolio Section ======= -->
     <section id="portfolio" class="portfolio">
       <div class="container">
-        <div class="align-right">
+        <!-- <div class="align-right">
           <button class="btn btn-outline-primary btn-sm" @click="moveWrite">핫플등록</button>
-        </div>
+        </div> -->
 
-        <div class="section-title">
+        <!-- <div class="section-title">
           <span>Hot Place</span>
           <h2>Hot Place</h2>
           <p>자신만의 장소를 공유해보세요!</p>
-        </div>
+        </div> -->
 
         <!-- <SearchHotPlace/> -->
 
-        <ul id="portfolio-flters" class="d-flex justify-content-center">
+        <ul id="portfolio-flters" class="d-flex justify-content-center" v-if="hotPlaces.length != 0">
           <li data-filter="*" class="filter-active">All</li>
           <li data-filter=".filter-12">관광지</li>
           <li data-filter=".filter-14">문화시설</li>
@@ -142,12 +119,10 @@ setTimeout(()=>{
           <li data-filter=".filter-39">음식점</li>
         </ul>
 
-        <div class="row portfolio-container">
-          <div v-if="hotPlaces.length == 0" style="text-Align: center"> 등록된 핫플레이스가 없습니다. </div>
+        <div v-if="hotPlaces.length == 0" style="text-Align: center"> 좋아요한 핫플레이스가 없습니다. </div>
+        
+        <div class="row portfolio-container" v-if="hotPlaces.length != 0">
           <HotPlaceListItem v-for="hotplace in hotPlaces" :key="hotplace.contentId" :hotplace="hotplace" />
-
-
-
         </div>
 
       </div>
@@ -226,7 +201,7 @@ h6 {
 # Sections General
 --------------------------------------------------------------*/
 section {
-  padding: 60px 0;
+  padding: 40px 0 20px;
 }
 
 .section-bg {

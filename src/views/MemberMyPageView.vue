@@ -46,6 +46,11 @@ if(memberId == "me"){
             </li>
 
             <li class="nav-item">
+              <RouterLink :to="{ name: 'memberLikeHotPlaceList' , params: {memberId} }" class="nav-link">
+                좋아요한 핫플레이스
+              </RouterLink>
+            </li>
+            <li class="nav-item">
               <RouterLink :to="{ name: 'myInfo' }" class="nav-link">
                 회원 정보 조회
               </RouterLink>

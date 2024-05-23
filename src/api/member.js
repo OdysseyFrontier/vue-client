@@ -88,6 +88,10 @@ async function MemberHotPlaceList(memberId, success, fail) {
   await local.get(`/member/hotplace?memberId=${memberId}`).then(success).catch(fail);
 }
 
+async function MemberLikeHotPlaceList(memberId, success, fail) {
+  await local.get(`/member/likehotplace?memberId=${memberId}`).then(success).catch(fail);
+}
+
 export {
   memberConfirm, findById, tokenRegeneration, logout, idCheck, join,
   getFollowers,
@@ -100,5 +104,6 @@ export {
   unfollowMember,
   getMemberInfo,
   updateMemberInfo,
-  MemberHotPlaceList
+  MemberHotPlaceList,
+  MemberLikeHotPlaceList
 };

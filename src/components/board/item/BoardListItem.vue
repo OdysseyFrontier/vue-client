@@ -20,8 +20,12 @@
         </a> -->
         </td>
         <td>
-        <a href=""
-            >{{ article.name }}</a>
+
+            <RouterLink :to="{ name: 'memberMyPage', params: {memberId : article.memberId}  }" >
+                  {{ article.name }}
+                </RouterLink>
+        <!-- <a href=""
+            >{{ article.name }}</a> -->
         </td>
         <td>{{article.registerTime}}</td>
     </tr>
@@ -30,7 +34,7 @@
 <style scoped>
 @charset "utf-8";
 
-.table-division {margin: 0 auto; width: 115px; border-radius: 5px; background-color:#fff;}
+.table-division {margin: 0 auto; text-align: center; width: 115px; border-radius: 5px; background-color:#fff;}
 .table-division1 {color:#41626f !important; border:1px solid #41626f !important;} /*이벤트*/
 .community {color:#007bab !important; border:1px solid #007bab !important;} /*서비스운영*/
 .notice {color:#c74b10 !important; border:1px solid #c74b10 !important;} /*행사*/
