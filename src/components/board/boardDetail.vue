@@ -91,12 +91,13 @@
                 </tr>
             </tbody>
         </table>
-        <div class="clearfix btn-wrap align-right mt30" v-if="article.memberId === memberStore.memberInfo.memberId">
-            <button class="table-btn btn-write btn_bbsList" @click="moveModify">수정</button>
-            <button class="table-btn btn-exit btn_bbsList" @click="onDeleteArticle">삭제</button>
+        <div class="clearfix btn-wrap align-right mt30" >
+            <button class="table-btn btn-write btn_bbsList" @click="moveModify" v-if="article.memberId === memberStore.memberInfo.memberId">수정</button>
+            <button class="table-btn btn btn-danger btn_bbsList" @click="onDeleteArticle" v-if="article.memberId === memberStore.memberInfo.memberId">삭제</button>
+            <button href="#" class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
         </div>
         
-        <h4 class="mt55">댓글</h4>
+        <!-- <h4 class="mt55">댓글</h4>
         <table class="table-type2">
             <caption>댓글 - 댓글 작성자, 내용으로 구성</caption>
             <thead>
@@ -112,7 +113,7 @@
                 <tr>
                     <td colspan="2" class="table-content">
                         
-                         <!-- 그 외 -->
+  
 <p class="0" style="letter-spacing: 0pt;"><span style="font-family: NanumSquare; font-size: 12pt;">도움이 되셨기를 바라며</span></p>
 <p class="0" style="letter-spacing: 0pt;"><span style="font-family: Noto Sans KR; font-size: 12pt;">추가 문의 사항이 있으시면 언제든 문의 남겨주시길 바랍니다</span></p>
 <p class="0"><span style="font-family: 굴림; font-size: 12pt;">&nbsp;</span></p>
@@ -131,14 +132,14 @@
                 <input  type="text" class="comment-input" name="searchKey" id="searchKey"
                 title="검색어입력" placeholder="댓글달기">
                 <button class="table-btn btn-write btn_bbsList">등록</button>
-            </div>
+            </div> -->
 
 
         
-        
+<!--         
         <div class="clearfix btn-wrap align-right mt30 mb30">
             <button href="#" class="table-btn btn-exit btn_bbsList" @click="moveList">목록</button>
-        </div>
+        </div> -->
     </div>
         </div>
     </div>
@@ -538,8 +539,8 @@ textarea { resize: vertical; }
 
 .table-btn {
     display: inline-block;
-    padding: 13px 40px;
-    font-size: 18px;
+    padding: 10px 20px;
+    font-size: 13px;
     color:#fff;
     text-align: center;
     border-radius: 5px;
@@ -640,7 +641,7 @@ textarea { resize: vertical; }
     .board .table-wrap h4 {margin: 0 0 0.5rem 0; font-size: 1.1rem;}
 
 	
-    .table-btn {padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 0.3rem;}
+    .table-btn {padding: 0.5rem 1.0rem; font-size: 0.8rem; border-radius: 0.3rem;}
     .btn-wrap .table-btn {margin-left: 0.5rem;}
 
 
