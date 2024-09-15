@@ -7,14 +7,6 @@ import { memberConfirm, findById, tokenRegeneration, logout } from "@/api/member
 import { httpStatusCode } from "@/util/http-status"
 
 export const useMemberStore = defineStore('memberStore', () => {
-  // const memberinfo = ref({
-  //   memberName:"ssafy"
-  // })
-  
-  // function update(info) {
-  //   memberinfo.value = info
-  // }
-
   const router = useRouter()
 
   const isLogin = ref(false)
