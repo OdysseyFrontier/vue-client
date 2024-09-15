@@ -197,37 +197,6 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         </div>
       </div>
 
-
-<!-- 
-      <div class="row mb-3">
-        <label for="Email" class="col-md-4 col-lg-3 col-form-label"
-          >이메일</label
-        >
-        <div class="col-md-8 col-lg-9 d-flex">
-          <input
-            name="emailId"
-            type="text"
-            class="form-control"
-            id="Email"
-            value="회원 emailId"
-            required
-          />
-          @
-          <select
-            class="form-select"
-            id="emaildomain"
-            name="emailDomain"
-            aria-label="이메일 도메인 선택"
-            required
-          >
-            <option value="ssafy.com">싸피</option>
-            <option value="google.com">구글</option>
-            <option value="naver.com">네이버</option>
-            <option value="kakao.com">카카오</option>
-          </select>
-        </div>
-      </div> -->
-
       <div class="text-center">
         <button type="submit" class="btn btn-primary">수정</button>
       </div>
