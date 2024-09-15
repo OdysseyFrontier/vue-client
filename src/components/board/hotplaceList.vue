@@ -132,7 +132,6 @@
                   <div data-v-1d897579="" class="position-relative">
                     <img
                       data-v-1d897579=""
-                      src="http://sem3.p.ssafy.io/trip_api//upload/img/221222/s_12355050535655.jpeg"
                       alt="Hotplace Image"
                       class="card-img"
                     />
